@@ -24,6 +24,7 @@ titles:
   fr-LU   : *FR
   # @end locale config
 key: page-about
+comments: false
 ---
 
 ![TeXt Theme](https://github.com/WestCreeper/westcreeper.github.io/blob/c5b2907ac0e612e5e39dbc52413278c6564a45a2/assets/images/avatar.png)
