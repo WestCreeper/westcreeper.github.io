@@ -2,7 +2,6 @@
 title: Hello World!
 tags: TeXt
 layout: article
-title: Page - Sidebar
 sidebar:
   nav: posts
 ---
