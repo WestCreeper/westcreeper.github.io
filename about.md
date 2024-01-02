@@ -26,7 +26,7 @@ titles:
 key: page-about
 ---
 
-
+![TeXt Theme](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/TeXt-home.jpg)
 
 初めまして、よろしくお願いいたします。
 ---
