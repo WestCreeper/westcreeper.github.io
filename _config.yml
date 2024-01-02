@@ -208,7 +208,7 @@ defaults:
     values:
       layout: article
       sidebar:
-          nav: layouts
+          nav: posts
       sharing: true
       license: true
       comments: true
