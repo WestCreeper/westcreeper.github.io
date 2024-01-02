@@ -26,7 +26,7 @@ titles:
 key: page-about
 ---
 
-![TeXt Theme](https://raw.githubusercontent.com/kitian616/jekyll-TeXt-theme/master/screenshots/TeXt-home.jpg)
+![TeXt Theme](https://github.com/WestCreeper/westcreeper.github.io/blob/c5b2907ac0e612e5e39dbc52413278c6564a45a2/assets/images/avatar.png)
 
 初めまして、よろしくお願いいたします。
 ---
