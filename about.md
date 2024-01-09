@@ -26,8 +26,7 @@ titles:
 key: page-about
 comments: false
 ---
-
-![TeXt Theme](https://github.com/WestCreeper/westcreeper.github.io/blob/c5b2907ac0e612e5e39dbc52413278c6564a45a2/assets/images/avatar.png)
-
-初めまして、よろしくお願いいたします。
+![mstile-310x310](https://github.com/WestCreeper/westcreeper.github.io/assets/112631080/391d3aee-963b-4ae9-b6db-c4f242048c61)
+# 欢迎来到长有仙人掌的西部
+在这里我会发一些随感，请多关照
 ---
