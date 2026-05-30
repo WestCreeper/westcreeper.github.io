@@ -1,52 +1,40 @@
 header:
   - titles:
-      # @start locale config
-      en      : &EN       Archive
-      en-GB   : *EN
-      en-US   : *EN
-      en-CA   : *EN
-      en-AU   : *EN
-      zh-Hans : &ZH_HANS  归档
-      zh      : *ZH_HANS
-      zh-CN   : *ZH_HANS
-      zh-SG   : *ZH_HANS
-      zh-Hant : &ZH_HANT  歸檔
-      zh-TW   : *ZH_HANT
-      zh-HK   : *ZH_HANT
-      ko      : &KO       아카이브
-      ko-KR   : *KO
-      fr      : &FR       Archives
-      fr-BE   : *FR
-      fr-CA   : *FR
-      fr-CH   : *FR
-      fr-FR   : *FR
-      fr-LU   : *FR
-      tr      : &TR       Arşivdekiler
-      # @end locale config
+      zh-Hans: 首页
+      zh-CN: 首页
+    url: /
+
+  - titles:
+      zh-Hans: 博客
+      zh-CN: 博客
     url: /archive.html
 
   - titles:
-      # @start locale config
-      en      : &EN       About
-      en-GB   : *EN
-      en-US   : *EN
-      en-CA   : *EN
-      en-AU   : *EN
-      zh-Hans : &ZH_HANS  关于
-      zh      : *ZH_HANS
-      zh-CN   : *ZH_HANS
-      zh-SG   : *ZH_HANS
-      zh-Hant : &ZH_HANT  關於
-      zh-TW   : *ZH_HANT
-      zh-HK   : *ZH_HANT
-      ko      : &KO       소개
-      ko-KR   : *KO
-      fr      : &FR       À propos
-      fr-BE   : *FR
-      fr-CA   : *FR
-      fr-CH   : *FR
-      fr-FR   : *FR
-      fr-LU   : *FR
-      tr      : &TR       Hakkında
-      # @end locale config
+      zh-Hans: SWF档案馆
+      zh-CN: SWF档案馆
+    url: /archive/
+
+  - titles:
+      zh-Hans: 汉化发布
+      zh-CN: 汉化发布
+    url: /releases/
+
+  - titles:
+      zh-Hans: 资源库
+      zh-CN: 资源库
+    url: /resources/
+
+  - titles:
+      zh-Hans: 留言板
+      zh-CN: 留言板
+    url: /guestbook/
+
+  - titles:
+      zh-Hans: 友情链接
+      zh-CN: 友情链接
+    url: /friends/
+
+  - titles:
+      zh-Hans: 关于
+      zh-CN: 关于
     url: /about.html
