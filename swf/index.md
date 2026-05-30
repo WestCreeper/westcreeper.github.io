@@ -1,7 +1,7 @@
 ---
 layout: page
 title: SWF档案馆
-permalink: /archive/
+permalink: /swf/
 ---
 
 # 🎮 SWF 档案馆
