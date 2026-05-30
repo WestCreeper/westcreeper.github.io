@@ -1,4 +1,14 @@
-- title: The Heist 2
-  slug: the-heist-2
-  category: action
-  file: The_Heist_2_CN.swf
+- id: the-heist-2
+  title: The Heist 2
+  year: 2008
+  type: Action
+  swf: /swf/games/the-heist-2/The_Heist_2_CN.swf
+  cover: /swf/games/the-heist-2/thumbnail.jpg
+  description: A classic Flash action game.
+- id: stealth-hunter-2
+  title: Stealth Hunter 2
+  year: 2008
+  type: Action
+  swf: /swf/games/stealth-hunter-2/Stealth_Hunter_2_CN.swf
+  cover: /swf/games/stealth-hunter-2/thumbnail.jpg
+  description: A classic Flash action game.
