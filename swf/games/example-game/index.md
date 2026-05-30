@@ -1,18 +1,18 @@
 ---
 layout: page
-title: Example Game
+title: The Heist 2
 permalink: /archive/games/example-game/
 ---
 
-# Example Game
+# The Heist 2
 
 ## 游戏信息
 
 - 类型：Flash Game
-- 作者：Unknown
+- 作者：JohnnyTwoShoes
 - 年代：2000s
 - 状态：可运行（Ruffle）
-
+- 原作链接：https://www.addictinggames.com/car/the-heist-2
 ---
 
 ## 🎮 在线游玩
@@ -32,7 +32,7 @@ window.addEventListener("load", () => {
     player.style.width = "800px";
     player.style.height = "600px";
 
-    player.load("game.swf");
+    player.load("The_Heist_2_CN.swf");
 });
 </script>
 
@@ -40,11 +40,8 @@ window.addEventListener("load", () => {
 
 ## 📦 游戏说明
 
-这里写游戏玩法说明。
+你是不是总爱惹麻烦？《大劫案2》为你带来更多任务、更多帮派控制权，当然还有更多高速追逐！有空吗？那就去犯罪吧！
 
 ---
 
 ## 🧠 备注
-
-- 使用 Ruffle 播放
-- 兼容 ActionScript 1/2/3（部分）
