@@ -4,18 +4,16 @@ title: SWF档案馆
 permalink: /archive/
 ---
 
-# SWF 档案馆
+# 🎮 SWF 档案馆
 
-欢迎来到 Flash 游戏档案系统。
+欢迎来到 Flash 游戏博物馆。
 
 ---
 
 ## 📂 游戏列表
 
-- [Example Game](/archive/games/example-game/)
-
----
-
-## 📌 说明
-
-所有游戏均通过 Ruffle 在线运行。
+<div class="game-grid">
+  {% for game in site.data.games %}
+    {% include game-card.html game=game %}
+  {% endfor %}
+</div>

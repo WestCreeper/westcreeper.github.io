@@ -1,0 +1,7 @@
+- id: example-game
+  title: Example Game
+  year: 2008
+  type: Action
+  swf: /archive/games/example-game/game.swf
+  cover: /assets/images/game/example.jpg
+  description: A classic Flash action game.
