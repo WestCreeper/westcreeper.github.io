@@ -23,3 +23,18 @@
     {%- endif -%}
   </div>
 {%- endif -%}
+{% assign games = site.data.games %}
+
+<ul>
+  <li>SWF档案馆
+    <ul>
+      {% for game in games %}
+      <li>
+        <a href="{{ '/archive/games/' | append: game.slug | append: '/' }}">
+          {{ game.title }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </li>
+</ul>

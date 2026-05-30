@@ -32,7 +32,7 @@ window.addEventListener("load", () => {
     player.style.width = "800px";
     player.style.height = "600px";
    
-    const swfUrl = "https://westcreeper.github.io/swf/games/the-heist-2/The_Heist_2_CN.swf";
+    const swfUrl = "/swf/games/the-heist-2/The_Heist_2_CN.swf";
     player.load(swfUrl);
 });
 </script>

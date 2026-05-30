@@ -9,6 +9,7 @@ header:
 
   - titles:
       zh-Hans: SWF档案馆
+        children: []
     url: /swf/
 
   - titles:

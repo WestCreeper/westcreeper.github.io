@@ -1,7 +1,4 @@
-- id: example-game
-  title: Example Game
-  year: 2008
-  type: Action
-  swf: /archive/games/example-game/game.swf
-  cover: /assets/images/game/example.jpg
-  description: A classic Flash action game.
+- title: The Heist 2
+  slug: the-heist-2
+  category: action
+  file: The_Heist_2_CN.swf
