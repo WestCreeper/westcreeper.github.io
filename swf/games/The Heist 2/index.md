@@ -1,7 +1,7 @@
 ---
 layout: page
 title: The Heist 2
-permalink: /archive/games/example-game/
+permalink: /archive/games/The Heist 2/
 ---
 
 # The Heist 2
