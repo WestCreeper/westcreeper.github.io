@@ -32,7 +32,7 @@ window.addEventListener("load", () => {
     player.style.width = "800px";
     player.style.height = "600px";
    
-    const swfUrl = "/swf/games/stealth-hunter-2/Stealth_Hunter_2_CN";
+    const swfUrl = "/swf/games/stealth-hunter-2/Stealth_Hunter_2_CN.swf";
     player.load(swfUrl);
 });
 </script>
