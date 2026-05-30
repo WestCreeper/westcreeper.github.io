@@ -1,7 +1,7 @@
 ---
 layout: page
 title: The Heist 2
-permalink: /archive/games/The Heist 2/
+permalink: /archive/games/the-heist-2/
 ---
 
 # The Heist 2
@@ -31,8 +31,9 @@ window.addEventListener("load", () => {
 
     player.style.width = "800px";
     player.style.height = "600px";
-
-    player.load("https://github.com/WestCreeper/westcreeper.github.io/blob/20ff00797d9cd1e1b498edfe3c5e824a3609872e/swf/games/The%20Heist%202/The_Heist_2_CN.swf");
+   
+    const swfUrl = "https://westcreeper.github.io/swf/games/the-heist-2/The_Heist_2_CN.swf";
+    player.load(swfUrl);
 });
 </script>
 
