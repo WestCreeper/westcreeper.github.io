@@ -11,7 +11,7 @@ permalink: /swf/
 ---
 
 ## 📂 游戏列表
-
+<div id="particles-js"></div>
 <div class="game-grid">
   {% for game in site.data.games %}
     {% include game-card.html game=game %}

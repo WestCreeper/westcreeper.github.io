@@ -25,4 +25,45 @@
 .game-info {
   padding: 8px;
 }
+body {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.game-card {
+  transition: all 0.25s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+a {
+  transition: 0.2s;
+}
+
+a:hover {
+  text-shadow: 0 0 8px rgba(100,200,255,0.8);
+}
+header {
+  backdrop-filter: blur(10px);
+  background: rgba(20,20,20,0.6);
+}
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
 /* end custom scss snippet */
