@@ -1,10 +1,8 @@
 ---
-layout: page
+layout: simple
 title: 友情链接
 permalink: /friends/
 ---
-
-# 友情链接
 
 ## Flash相关
 

@@ -1,0 +1,5 @@
+{% assign post = include.post %}
+<article class="post-row" {% if include.filterable %}data-filter-item data-category="{{ post.tags | join: '|' | escape }}" data-search="{{ post.title | escape }} {{ post.description | default: post.excerpt | strip_html | normalize_whitespace | truncate: 300 | escape }}"{% endif %}>
+  <a class="post-art post-art--{{ forloop.index | modulo: 4 }}" href="{{ post.url | relative_url }}" tabindex="-1" aria-hidden="true"><span>{{ post.tags | first | default: '随笔' }}</span>{% include studio/icon.html name='book' %}<b>{{ post.date | date: '%Y' }}</b></a>
+  <div class="post-row-content"><div class="post-meta"><span>{{ post.tags | first | default: '随笔' }}</span><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%Y.%m.%d' }}</time></div><h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3><p>{{ post.description | default: post.excerpt | strip_html | normalize_whitespace | truncate: 105 }}</p><a class="read-link" href="{{ post.url | relative_url }}" aria-label="阅读：{{ post.title | escape }}">继续阅读 <span aria-hidden="true">↗</span></a></div>
+</article>

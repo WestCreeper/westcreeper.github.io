@@ -1,0 +1,173 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="600"
+  height="440"
+  viewBox="0 0 600 440"
+>
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0v24" fill="none" stroke="#d9dfd1" stroke-width=".8" />
+    </pattern>
+    <pattern id="scan" width="4" height="5" patternUnits="userSpaceOnUse">
+      <path d="M0 0h4" stroke="#183e33" opacity=".2" />
+    </pattern>
+  </defs>
+  <rect x="16" y="28" width="570" height="380" rx="24" fill="#eef0e5" />
+  <rect x="16" y="28" width="570" height="380" rx="24" fill="url(#grid)" />
+  <circle cx="320" cy="220" r="168" fill="#e3e9d7" />
+  <ellipse cx="313" cy="371" rx="220" ry="19" fill="#d2d9c8" />
+  <g transform="rotate(-5 282 230)">
+    <path
+      d="M123 89h299l20 224H112Z"
+      fill="#a5ab91"
+      stroke="#536450"
+      stroke-width="2"
+    />
+    <rect
+      x="108"
+      y="83"
+      width="316"
+      height="227"
+      rx="17"
+      fill="#e0debd"
+      stroke="#536450"
+      stroke-width="2"
+    />
+    <rect x="127" y="101" width="277" height="173" rx="12" fill="#65765e" />
+    <rect x="138" y="111" width="255" height="153" rx="7" fill="#173f35" />
+    <path
+      d="M139 217h26v-18h22v-19h24v-21h23v25h19v21h26v-24h20v-23h22v21h20v19h23v-24h15v-26h13v116H139Z"
+      fill="#4c7759"
+    />
+    <path
+      d="M139 242h27v-10h32v-14h24v11h34v-10h20v-10h25v15h35v-11h23v15h34v36H139Z"
+      fill="#7f9c69"
+    />
+    <g fill="#c2d6a1">
+      <path
+        d="M171 131h4v4h-4zM351 128h4v4h-4zM324 157h4v4h-4zM208 155h3v3h-3zM371 183h3v3h-3z"
+      />
+      <path d="M300 124h13v4h5v13h-5v5h-13v-5h-5v-13h5z" />
+    </g>
+    <path d="M153 250h230" stroke="#b6c98e" stroke-width="4" />
+    <text
+      x="265"
+      y="191"
+      font-family="monospace"
+      font-size="28"
+      font-weight="bold"
+      text-anchor="middle"
+      fill="#edf1bc"
+    >
+      PRESS START
+    </text>
+    <text
+      x="265"
+      y="211"
+      font-family="monospace"
+      font-size="9"
+      letter-spacing="3"
+      text-anchor="middle"
+      fill="#d4dfb0"
+    >
+      A LITTLE NOSTALGIA, RELOADED.
+    </text>
+    <rect x="138" y="111" width="255" height="153" rx="7" fill="url(#scan)" />
+    <path d="M142 120h235" stroke="#fff" opacity=".13" stroke-width="3" />
+    <text
+      x="131"
+      y="294"
+      font-family="monospace"
+      font-size="9"
+      fill="#536450"
+      letter-spacing="2"
+    >
+      WESTCREEPER / PERSONAL COMPUTER
+    </text>
+    <circle cx="390" cy="290" r="4" fill="#7c9b5f" />
+    <path
+      d="M229 311v25h82v-25"
+      fill="#aaaf93"
+      stroke="#536450"
+      stroke-width="2"
+    />
+    <path
+      d="M205 336h130l14 12H192Z"
+      fill="#d7d6b4"
+      stroke="#536450"
+      stroke-width="2"
+    />
+  </g>
+  <g transform="rotate(-5 280 360)">
+    <path
+      d="M159 345h201l25 35H145Z"
+      fill="#e1dfc1"
+      stroke="#536450"
+      stroke-width="2"
+    />
+    <path
+      d="M169 353h184m-189 8h195m-202 8h208M182 350l-5 22m25-22-3 22m24-22-2 22m24-22v22m24-22v22m24-22 2 22m21-22 3 22m19-22 5 22"
+      stroke="#9ca58b"
+      stroke-width="3"
+    />
+  </g>
+  <path
+    d="M428 368c-18-6-16-25 0-30 9-3 20-1 25 8l5 17c0 11-20 10-30 5Z"
+    fill="#dedcbc"
+    stroke="#536450"
+    stroke-width="2"
+  />
+  <path
+    d="m437 337-2 13m1-15c-2-22 37-32 24-57"
+    fill="none"
+    stroke="#536450"
+    stroke-width="2"
+  />
+  <g transform="translate(475 220)">
+    <path
+      d="M12 80V8h18v72M12 51H-4V23h-11v40h27M30 39h12V13h12v39H30"
+      fill="#4c7b50"
+      stroke="#385d3d"
+      stroke-width="3"
+    />
+    <path d="M21 14v63M-9 28v29m56-37v26" stroke="#91a66a" stroke-width="3" />
+    <path
+      d="M-2 80h49l-8 49H6Z"
+      fill="#c79267"
+      stroke="#886b4c"
+      stroke-width="2"
+    />
+    <path
+      d="M-6 80h57v10H-6Z"
+      fill="#d5a77b"
+      stroke="#886b4c"
+      stroke-width="2"
+    />
+  </g>
+  <g fill="#738768">
+    <path
+      d="M76 111h3v13h-3zM71 116h13v3H71zM485 128h3v13h-3zM480 133h13v3h-13z"
+    />
+  </g>
+  <g transform="rotate(9 459 84)">
+    <rect
+      x="399"
+      y="66"
+      width="117"
+      height="30"
+      rx="3"
+      fill="#f7f6e9"
+      stroke="#9aa88b"
+    />
+    <text
+      x="457"
+      y="85"
+      text-anchor="middle"
+      font-family="monospace"
+      font-size="11"
+      fill="#4d6c50"
+    >
+      EST. 2021 ✳
+    </text>
+  </g>
+</svg>

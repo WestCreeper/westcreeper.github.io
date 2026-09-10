@@ -1,3 +1,5 @@
 ---
-layout: archive
+layout: studio
+title: 文章
 ---
+<div class="container collection-page" data-filter-list><header class="page-intro"><div class="eyebrow">NOTES & STORIES</div><h1>文字是记忆的存档。</h1><p>从 Flash 游戏的幕后故事，到日常生活的片刻随想。写下来，就不会忘记。</p></header>{% include studio/filters.html type='posts' %}<div class="post-list archive-posts">{% for post in site.posts %}{% include studio/post-row.html post=post filterable=true %}{% endfor %}</div><div class="empty-state" data-filter-empty hidden>没有找到相关的文章，换个关键词试试。</div></div>

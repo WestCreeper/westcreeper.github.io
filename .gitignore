@@ -25,3 +25,6 @@ Gemfile.lock
 _site/
 .jekyll-metadata
 .jekyll-cache/
+
+# Local preview runtime and screenshots (not published).
+local-preview/

@@ -1,33 +1,23 @@
 ---
-layout: article
-titles:
-  # @start locale config
-  en      : &EN       About
-  en-GB   : *EN
-  en-US   : *EN
-  en-CA   : *EN
-  en-AU   : *EN
-  zh-Hans : &ZH_HANS  关于
-  zh      : *ZH_HANS
-  zh-CN   : *ZH_HANS
-  zh-SG   : *ZH_HANS
-  zh-Hant : &ZH_HANT  關於
-  zh-TW   : *ZH_HANT
-  zh-HK   : *ZH_HANT
-  ko      : &KO       소개
-  ko-KR   : *KO
-  fr      : &FR       À propos
-  fr-BE   : *FR
-  fr-CA   : *FR
-  fr-CH   : *FR
-  fr-FR   : *FR
-  fr-LU   : *FR
-  # @end locale config
-key: page-about
-comments: false
+layout: simple
+title: 关于我
+permalink: /about.html
+description: 欢迎来到长有仙人掌的西部。
 ---
-![mstile-310x310](https://github.com/WestCreeper/westcreeper.github.io/assets/112631080/391d3aee-963b-4ae9-b6db-c4f242048c61)
-# 欢迎来到长有仙人掌的西部
-在这里我会发一些随感，请多关照
+<img class="about-avatar" src="{{ '/assets/images/avatar.png' | relative_url }}" alt="西部苦力怕的头像" width="86" height="86">
 
----
+我是 **西部苦力怕**。游戏玩家，Flash 爱好者，也会在这里写下生活中的一些随想。
+
+## 在这里，你能找到什么
+
+- **文章**：关于 Flash 游戏、它们背后的故事，以及日常随笔。
+- **游戏档案馆**：经典 Flash 游戏，借助 Ruffle 在浏览器里重新打开。
+- **汉化发布**：收录的汉化作品与 SWF 文件下载。
+
+希望这些曾带来快乐的小小作品，能在互联网的一角继续被看见、被记得。
+
+[读读我的文章]({{ '/archive.html' | relative_url }}) · [去游戏档案馆看看]({{ '/swf/' | relative_url }}) · [GitHub](https://github.com/WestCreeper)
+
+## 保持联系
+
+欢迎交流游戏、分享回忆，或者反馈汉化中的问题。你可以前往[留言板]({{ '/guestbook/' | relative_url }})找到反馈入口，也可以通过 [RSS]({{ '/feed.xml' | relative_url }}) 订阅更新。

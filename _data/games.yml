@@ -1,21 +1,35 @@
 - id: the-heist-2
-  title: The Heist 2
-  year: 2008
-  type: Action
+  title: 大劫案 2
+  original_title: The Heist 2
+  category: 驾驶追逐
+  language: 汉化版
+  translated: true
+  author: JohnnyTwoShoes
   swf: /swf/games/the-heist-2/The_Heist_2_CN.swf
   cover: /swf/games/the-heist-2/thumbnail.jpg
-  description: A classic Flash action game.
+  source: https://www.addictinggames.com/car/the-heist-2
+  description: 引擎轰鸣，街头追逐。一场惊险的大劫案等你出发。
+  play_status: 原站限制
+  play_note: 当前收录文件在本地测试中显示 AddictingGames 原站限制，暂未验证能在本站进入游戏。可查看原作页面，或下载文件留作存档。
 - id: stealth-hunter-2
-  title: Stealth Hunter 2
-  year: 2008
-  type: Action
+  title: 秘密潜入 2
+  original_title: Stealth Hunter 2
+  category: 潜行动作
+  language: 汉化版
+  translated: true
+  author: RAC7
   swf: /swf/games/stealth-hunter-2/Stealth_Hunter_2_CN.swf
   cover: /swf/games/stealth-hunter-2/thumbnail.jpg
-  description: A classic Flash action game.
+  source: https://armorgames.com/play/13136/stealth-hunter-2
+  description: 潜入敌营，避开守卫，在阴影里完成你的秘密任务。
 - id: dadnme
-  title: Stealth Hunter 2
-  year: 2008
-  type: Action
+  title: 狂扁小朋友
+  original_title: Dad 'n Me
+  category: 街机格斗
+  language: 原版
+  translated: false
+  author: Tom Fulp / Dan Paladin
   swf: /swf/games/dadnme/dadnme.swf
   cover: /swf/games/dadnme/thumbnail.jpg
-  description: A classic Flash action game.
+  source: https://www.newgrounds.com/portal/view/254456
+  description: 紫色小怪物的街头冒险，重温熟悉的连击与手绘世界。

@@ -1,0 +1,12 @@
+---
+layout: null
+permalink: /search.json
+---
+[
+{% for post in site.posts %}
+  {"title":{{ post.title | jsonify }},"url":{{ post.url | relative_url | jsonify }},"type":"文章","tags":{{ post.tags | join: ' ' | jsonify }},"description":{{ post.description | default: post.excerpt | strip_html | normalize_whitespace | truncate: 180 | jsonify }},"content":{{ post.content | strip_html | normalize_whitespace | jsonify }}}{% unless forloop.last %},{% endunless %}
+{% endfor %}{% if site.posts.size > 0 and site.data.games.size > 0 %},{% endif %}
+{% for game in site.data.games %}
+  {"title":{{ game.title | jsonify }},"url":{{ '/swf/games/' | append: game.id | append: '/' | relative_url | jsonify }},"type":"游戏","tags":{{ game.category | append: ' ' | append: game.language | append: ' ' | append: game.original_title | jsonify }},"description":{{ game.description | jsonify }}}{% unless forloop.last %},{% endunless %}
+{% endfor %}
+]
