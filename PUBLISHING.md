@@ -112,7 +112,7 @@ bundle exec jekyll build
 - 正文使用 GitHub 提供的纯文本，安全地写入 DOM；不执行留言 HTML。图片、Markdown 排版及附件请通过原帖链接查看。
 - 页面打开及手动刷新时读取最新内容，不轮询。发言后回到博客点击「刷新留言」。网络超时、访问限制和不可访问状态均提示重试；刷新或翻页失败时保留上次成功加载的内容。
 - 未登录的 API 请求受到 GitHub 的访问频率限制，共用出口网络的访客可能共享额度。不要把私有 Token 写进前端代码；受限时可直接在 GitHub 查看。关闭 JavaScript 时仍可使用 GitHub 入口。
-- 本地回归脚本：安装 Playwright 后运行 `node tools/test-guestbook.cjs`，通过 `PLAYWRIGHT_MODULE` 和 `BROWSER_EXECUTABLE` 指定现有运行时与浏览器，`BLOG_PREVIEW_URL` 可覆盖默认的 `http://127.0.0.1:4000`。测试使用模拟响应，不会创建公开留言。
+- 本地回归脚本：安装 Playwright 后运行 `node tools/test-guestbook.cjs`，通过 `PLAYWRIGHT_MODULE` 和 `BROWSER_EXECUTABLE` 指定现有运行时与浏览器，`BLOG_PREVIEW_URL` 可覆盖默认的 `http://127.0.0.1:4000`。测试使用模拟响应，不会创建公开留言。截图默认写入系统临时目录，可用 `BLOG_TEST_OUTPUT` 指定仓库外的输出目录。
 
 参考：[GitHub Issues API](https://docs.github.com/en/rest/issues/issues#list-repository-issues)、[回复 API](https://docs.github.com/en/rest/issues/comments#list-issue-comments)、[访问频率限制](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api)。
 
@@ -134,3 +134,15 @@ bundle exec jekyll build
 日期使用 `YYYY-MM-DD`；金额使用保留两位小数的字符串，避免显示精度变化。记录之间用逗号分隔，页面会自动按日期倒序、年份分组，更新记录数。不需要手工调整页面顺序。
 
 替换 `assets/images/sponsor-payment.png` 可以更新赞助方式。保持两个收款码完整清晰；当前原图为 2160 × 1080，若更换尺寸，请同步修改页面中图片的 `width`、`height`。原始 Excel 不会作为公开下载文件发布。
+
+## 将本地预览产物放在仓库外
+
+本工作区的预览运行时与临时文件位于仓库同级的 `../westcreeper-workspace/`。可运行该目录中的 `preview.ps1` 构建；它将站点输出、Jekyll 缓存、Bundler 锁文件和测试截图都放在工作目录中。
+
+使用自己安装的 Ruby 时，也可以在仓库中运行：
+
+```sh
+bundle exec jekyll build --destination ../westcreeper-workspace/site --disable-disk-cache
+```
+
+文章、游戏、赞助数据、页面代码与回归测试仍属于仓库源码；预览产物和运行时不需要提交。根目录原有 `.gitignore` 规则继续防止默认命令产生的临时文件被加入版本控制。

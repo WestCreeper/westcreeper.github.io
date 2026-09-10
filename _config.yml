@@ -28,7 +28,6 @@ defaults:
 plugins:
   - jekyll-feed
   - jekyll-sitemap
-  - jemoji
 
 # Source documentation and local tools are not published.
 exclude:

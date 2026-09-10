@@ -1,6 +1,8 @@
 // Run against a local Jekyll preview. All GitHub API responses are mocked.
 const assert = require('node:assert/strict');
-require('node:fs').mkdirSync('local-preview', {recursive: true});
+const path = require('node:path');
+const outputDir = process.env.BLOG_TEST_OUTPUT || path.join(require('node:os').tmpdir(), 'westcreeper-guestbook-tests');
+require('node:fs').mkdirSync(outputDir, {recursive: true});
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const origin = process.env.BLOG_PREVIEW_URL || 'http://127.0.0.1:4000';
 const api = 'https://api.github.com/repos/WestCreeper/westcreeper.github.io/issues';
@@ -68,13 +70,13 @@ const reply = id => ({id, user: {login: 'WestCreeper'}, body_text: '感谢支持
     assert.equal(await page.getByRole('button', {name: '加载更多回复'}).isVisible(), false);
     await page.getByRole('button', {name: '查看回复（2）'}).click();
     assert.equal(await page.locator('.guestbook-reply-panel').isVisible(), false);
-    await page.screenshot({path: 'local-preview/guestbook-desktop.png', fullPage: true});
+    await page.screenshot({path: path.join(outputDir, 'guestbook-desktop.png'), fullPage: true});
     await page.locator('[data-theme-toggle]').click();
-    await page.screenshot({path: 'local-preview/guestbook-dark.png', fullPage: true});
+    await page.screenshot({path: path.join(outputDir, 'guestbook-dark.png'), fullPage: true});
     for (const width of [320, 390, 768]) {
       await page.setViewportSize({width, height: 844});
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
-      if (width === 390) await page.screenshot({path: 'local-preview/guestbook-mobile.png', fullPage: true});
+      if (width === 390) await page.screenshot({path: path.join(outputDir, 'guestbook-mobile.png'), fullPage: true});
     }
     await page.locator('[data-guestbook-next]').click();
     await ready();

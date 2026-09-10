@@ -26,7 +26,6 @@
 - `_layouts/studio.html`：公共页面外壳、导航、搜索弹窗、主题切换。
 - `_layouts/article.html` → `reading.html` → `studio.html`：文章正文、目录与相邻文章导航。
 - `_layouts/simple.html` → `studio.html`：关于、资源、留言等文字页面。
-- `_layouts/page.html`：`simple.html` 的兼容别名。
 - `_layouts/game.html` → `studio.html`：游戏元数据、Ruffle、兼容提示与下载。
 - `_includes/studio/`：卡片、筛选栏和 SVG 图标。
 - `_data/games.yml`：首页、档案馆和搜索索引共用的游戏资料。
@@ -44,6 +43,6 @@
 
 ## 构建
 
-`Gemfile` 直接声明 Jekyll、Feed、Sitemap、Jemoji 和 Windows 时区数据，不再依赖原 TeXt 主题的 gemspec、npm、Docker 或 Travis 配置。
+`Gemfile` 直接声明 Jekyll、Feed、Sitemap 和 Windows 时区数据，不再依赖原 TeXt 主题的 gemspec、npm、Docker 或 Travis 配置。未使用的旧布局别名与 Jemoji 插件已移除，直接输入的 Unicode 表情不受影响。
 
 部署工作流在上传站点前执行 `tools/check-site.py`，检查站内链接、资源路径和搜索索引。具体操作见 [PUBLISHING.md](PUBLISHING.md)。

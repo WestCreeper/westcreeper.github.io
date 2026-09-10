@@ -49,7 +49,9 @@ GitHub Actions 会在推送到 `master` 后自动构建、检查和部署。首�
 | `.github/workflows/jekyll.yml` | GitHub Pages 自动部署 |
 | `tools/check-site.py` | 构建结果的链接和索引检查 |
 
-根目录的旧版仙人掌／苦力怕图标是本站自定义素材，保留其原路径。`_site/`、`.jekyll-cache/`、`local-preview/` 是被 Git 忽略的本地生成目录。
+当前界面使用 `assets/images/cactus.svg`。根目录保留 `favicon.ico` 和 `apple-touch-icon.png`，供浏览器自动发现；未接入页面的旧磁贴、Safari 固定标签图标、Android 图标与空清单已移除。
+
+本地工作环境、截图、备份与预览产物已移至仓库同级的 `../westcreeper-workspace/`。`_site/`、`.jekyll-cache/`、`local-preview/` 仍保留忽略规则，防止默认构建命令意外提交生成文件。
 
 ## 来源与许可
 
