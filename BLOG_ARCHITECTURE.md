@@ -10,7 +10,8 @@
 | `/archive.html` | 文章归档与筛选 |
 | `/swf/` | 游戏档案馆 |
 | `/swf/games/<id>/` | 游戏详情与播放器 |
-| `/releases/` | 汉化作品与下载 |
+| `/sponsors/` | 赞助名单、留言与赞助方式 |
+| `/releases/` | 旧地址，自动跳转至赞助名单 |
 | `/resources/` | 工具与资源 |
 | `/guestbook/` | GitHub Issues 留言入口 |
 | `/friends/` | 友情链接 |
@@ -28,7 +29,10 @@
 - `_layouts/page.html`：`simple.html` 的兼容别名。
 - `_layouts/game.html` → `studio.html`：游戏元数据、Ruffle、兼容提示与下载。
 - `_includes/studio/`：卡片、筛选栏和 SVG 图标。
-- `_data/games.yml`：首页、档案馆、汉化发布和搜索索引共用的游戏资料。
+- `_data/games.yml`：首页、档案馆和搜索索引共用的游戏资料。
+
+- `_data/sponsors.json`：赞助记录（昵称、日期、金额、留言），由 `sponsors.html` 按日期倒序、年份分组展示。
+- `assets/images/sponsor-payment.png`：支付宝与微信赞助方式原图。
 
 ## 浏览器资源
 

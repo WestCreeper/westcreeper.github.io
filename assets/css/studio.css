@@ -1381,33 +1381,197 @@ kbd {
   padding: 1px 5px;
   background: var(--soft);
 }
-.release-card {
-  display: flex;
-  gap: 23px;
+
+.sponsor-support {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
   align-items: center;
-  padding: 25px 0;
-  border-bottom: 1px solid var(--line);
+  gap: 40px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
 }
-.release-card > img {
-  width: 90px;
-  height: 90px;
-  object-fit: cover;
+.sponsor-support-copy h2 {
+  margin: 12px 0;
+  font-size: 26px;
+}
+.sponsor-support-copy p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.9;
+  margin-bottom: 22px;
+}
+.sponsor-support .button {
+  background: var(--soft);
+  color: var(--ink);
+}
+.sponsor-support .button:hover {
+  background: var(--green-light);
+  border-color: var(--green);
+}
+.sponsor-payment {
+  margin: 0;
+  min-width: 0;
+}
+.sponsor-payment a {
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.sponsor-payment img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.sponsor-payment figcaption {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 12px;
+}
+.sponsor-list {
+  margin-top: 64px;
+  scroll-margin-top: 110px;
+}
+.sponsor-list-note {
+  color: var(--muted);
+  font-size: 12px;
+}
+.sponsor-years {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 26px 0 36px;
+}
+.sponsor-years a {
+  padding: 9px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  font-size: 14px;
+  font-weight: 600;
+}
+.sponsor-years a:hover {
+  border-color: var(--green);
+  background: var(--green-light);
+}
+.sponsor-years span {
+  margin-left: 12px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.sponsor-year {
+  margin-bottom: 36px;
+  scroll-margin-top: 110px;
+}
+.sponsor-year h3 {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 26px;
+  margin: 0 0 18px;
+}
+.sponsor-year h3 span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+.sponsor-columns,
+.sponsor-record {
+  display: grid;
+  grid-template-columns: 180px 104px 92px minmax(0, 1fr);
+  gap: 22px;
+  align-items: baseline;
+  padding: 18px 20px;
+}
+.sponsor-columns {
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--soft);
+  padding-block: 11px;
   border-radius: 8px;
 }
-.release-card > div {
-  flex: 1;
+.sponsor-records {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-.release-card h2 {
-  font-size: 21px;
-}
-.release-card p {
+.sponsor-record {
+  border-bottom: 1px solid var(--line);
   font-size: 13px;
-  color: var(--muted);
-  margin: 7px 0;
 }
-.release-actions {
-  display: flex;
-  gap: 10px;
+.sponsor-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.sponsor-record time {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.sponsor-amount {
+  color: var(--green);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.sponsor-message {
+  margin: 0;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.sponsor-no-message,
+.sponsor-footnote {
+  color: var(--muted);
+  font-size: 12px;
+}
+.sponsor-footnote a {
+  color: var(--green);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (max-width: 780px) {
+  .sponsor-support {
+    grid-template-columns: 1fr;
+    padding: 24px;
+    gap: 26px;
+  }
+  .sponsor-payment {
+    width: 100%;
+    max-width: 540px;
+    margin-inline: auto;
+  }
+  .sponsor-list .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .sponsor-columns {
+    display: none;
+  }
+  .sponsor-record {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 16px;
+    padding: 20px 0;
+  }
+  .sponsor-record time {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .sponsor-amount {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .sponsor-message {
+    grid-column: 1 / -1;
+    margin-top: 4px;
+  }
+  .sponsor-year h3 {
+    margin-bottom: 0;
+  }
 }
 .error-page {
   text-align: center;
@@ -1626,9 +1790,7 @@ kbd {
   .article-header h1 {
     font-size: 30px;
   }
-  .release-actions {
-    flex-direction: column;
-  }
+
   .game-intro h1 {
     font-size: 28px;
   }
@@ -1923,25 +2085,7 @@ kbd {
   .game-facts dl {
     grid-template-columns: auto 1fr;
   }
-  .release-card {
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-  .release-card > img {
-    width: 62px;
-    height: 62px;
-  }
-  .release-card h2 {
-    font-size: 19px;
-  }
-  .release-actions {
-    flex-direction: row;
-    width: 100%;
-  }
-  .release-actions .button {
-    flex: 1;
-  }
+
   .search-dialog {
     padding: 18px;
   }
