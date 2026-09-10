@@ -1,14 +1,15 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: 'Feature request: '
+name: 建议与交流
+about: 分享游戏线索、提出网站建议或申请友链
+title: ""
 labels: ''
 assignees: ''
-
 ---
 
-<!-- Prefer English -->
+## 想聊什么
 
-## Description
+欢迎分享想法、游戏回忆、补档线索或网站建议。
 
-[Description of the feature]
+## 相关信息
+
+如涉及某款游戏，请提供名称和原作链接；申请友链请附网站名称、地址、简介和头像链接。

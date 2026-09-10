@@ -1,35 +1,24 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: 'Bug:'
+name: 网站或游戏问题
+about: 反馈页面、汉化文字或游戏运行问题
+title: "问题："
 labels: ''
 assignees: ''
-
 ---
 
-<!-- Prefer English -->
+## 页面或游戏
 
-**Description**
+请填写页面地址、游戏名称及语言版本。
 
-[Description of the bug]
+## 问题描述
 
-**Steps to Reproduce**
+请说明实际现象、期望结果，以及如何重现问题。
 
-1. [First Step]
-2. [Second Step]
-3. [and so on...]
+## 使用环境
 
-**Expected behavior**
+- 设备与操作系统：
+- 浏览器与版本：
 
-[What you expected to happen]
+## 补充信息
 
-**Screenshots (If Necessary)**
-
-[Screenshots to help explain your problem.]
-
-**Environment (If Necessary)**
-
-- OS: [e.g. Github Pages, Windows 10, macOS 10.13, Linux(CentOS 7.5), iOS 11, Android 8(Pixel 2)]
-- Ruby: [e.g. Github Pages, 2.4.0p0]
-- Jekyll: [e.g. Github Pages, 3.7.3]
-- Browser: [e.g. Chrome, Safari, Edge, Firefox]
+可附上错误提示或截图。留言公开显示，请勿填写私密信息。

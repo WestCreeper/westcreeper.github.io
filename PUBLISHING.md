@@ -2,6 +2,8 @@
 
 本站仍是 Jekyll 静态站点，保留 GitHub Pages 和现有文章地址，不需要数据库。首页与目录由 Markdown 和 YAML 自动生成，发布操作在仓库中完成。
 
+`Gemfile` 直接声明站点使用的依赖；原 TeXt 模板的示例、截图、旧组件、主题打包和开发脚本已清理。项目目录说明见 [README.md](README.md) 与 [BLOG_ARCHITECTURE.md](BLOG_ARCHITECTURE.md)。
+
 ## 发布文章
 
 在 `_posts/` 新建 `YYYY-MM-DD-标题.md`：
