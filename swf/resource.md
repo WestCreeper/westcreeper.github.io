@@ -24,4 +24,4 @@ description: 留给 Flash 爱好者的一只小工具箱。
 
 ---
 
-想了解本站收录的汉化作品？前往[汉化发布]({{ '/releases/' | relative_url }})，或直接进入[游戏档案馆]({{ '/swf/' | relative_url }})。
+想了解本站收录的汉化作品？前往[游戏档案馆]({{ '/swf/' | relative_url }})，在游戏详情页在线游玩或下载 SWF 文件。

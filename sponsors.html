@@ -1,0 +1,57 @@
+---
+layout: studio
+title: 赞助名单
+permalink: /sponsors/
+description: 感谢每一份支持，让 Flash 的回忆与汉化作品继续陪伴我们。
+---
+{% assign sponsors = site.data.sponsors | sort: 'date' | reverse %}
+{% assign years = sponsors | group_by_exp: 'sponsor', 'sponsor.date | slice: 0, 4' %}
+<div class="container collection-page sponsors-page">
+  <header class="page-intro">
+    <div class="eyebrow">THANK YOU FOR KEEPING THE MEMORIES ALIVE</div>
+    <h1>赞助名单</h1>
+    <p>谢谢你，让这些回忆继续闪光。每一份支持、每一句鼓励，都是我继续收藏游戏、制作汉化和写下故事的动力。</p>
+  </header>
+
+  <section class="sponsor-support" aria-labelledby="support-title">
+    <div class="sponsor-support-copy">
+      <div class="eyebrow">支持这个小站</div>
+      <h2 id="support-title">请苦力怕喝杯饮料</h2>
+      <p>如果这里的游戏或汉化给你带来过快乐，欢迎通过支付宝或微信随心赞助。感谢你对这份爱好的支持。</p>
+      <a class="button" href="#sponsor-list">看看大家的留言 ↓</a>
+    </div>
+    <figure class="sponsor-payment">
+      <a href="{{ '/assets/images/sponsor-payment.png' | relative_url }}" target="_blank" rel="noopener" aria-label="打开支付宝和微信赞助码原图（新标签页）">
+        <img src="{{ '/assets/images/sponsor-payment.png' | relative_url }}" width="2160" height="1080" alt="赞助方式：左侧为支付宝收款码，右侧为微信赞赏码">
+      </a>
+      <figcaption>支付宝 / 微信 · 点击图片查看原图，手机可长按保存</figcaption>
+    </figure>
+  </section>
+
+  <section id="sponsor-list" class="sponsor-list" aria-labelledby="sponsor-list-title">
+    <div class="section-heading">
+      <div><div class="eyebrow">每一份心意，都记在这里</div><h2 id="sponsor-list-title">感谢有你</h2></div>
+      <span class="sponsor-list-note">{{ sponsors.size }} 笔赞助记录 · 按日期倒序</span>
+    </div>
+    <nav class="sponsor-years" aria-label="按年份查看赞助记录">
+      {% for year in years %}<a href="#sponsors-{{ year.name }}">{{ year.name }}<span>{{ year.items.size }} 笔</span></a>{% endfor %}
+    </nav>
+    {% for year in years %}
+    <section class="sponsor-year" id="sponsors-{{ year.name }}" aria-labelledby="sponsor-year-{{ year.name }}">
+      <h3 id="sponsor-year-{{ year.name }}">{{ year.name }}<span>{{ year.items.size }} 笔心意</span></h3>
+      <div class="sponsor-columns" aria-hidden="true"><span>昵称</span><span>日期</span><span>金额（元）</span><span>留言</span></div>
+      <ul class="sponsor-records">
+        {% for sponsor in year.items %}
+        <li class="sponsor-record">
+          <span class="sponsor-name">{{ sponsor.name | escape }}</span>
+          <time datetime="{{ sponsor.date | escape }}">{{ sponsor.date | escape }}</time>
+          <span class="sponsor-amount">¥ {{ sponsor.amount | escape }}</span>
+          <p class="sponsor-message">{% if sponsor.message != '' %}{{ sponsor.message | escape }}{% else %}<span class="sponsor-no-message">未留言</span>{% endif %}</p>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endfor %}
+    <p class="sponsor-footnote">如果名单有遗漏，或希望调整展示昵称、留言，欢迎通过<a href="{{ '/guestbook/' | relative_url }}">留言板</a>联系我。</p>
+  </section>
+</div>

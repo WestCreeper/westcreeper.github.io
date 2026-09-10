@@ -23,7 +23,7 @@
         <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}aria-current="page"{% endif %}>首页</a>
         <a href="{{ '/archive.html' | relative_url }}" {% if page.url == '/archive.html' or page.layout == 'article' %}aria-current="page"{% endif %}>文章</a>
         <a href="{{ '/swf/' | relative_url }}" {% if page.url contains '/swf/' %}aria-current="page"{% endif %}>游戏档案馆<span class="nav-dot"></span></a>
-        <a href="{{ '/releases/' | relative_url }}" {% if page.url == '/releases/' %}aria-current="page"{% endif %}>汉化发布</a>
+        <a href="{{ '/sponsors/' | relative_url }}" {% if page.url == '/sponsors/' %}aria-current="page"{% endif %}>赞助名单</a>
         <a href="{{ '/about.html' | relative_url }}" {% if page.url == '/about.html' %}aria-current="page"{% endif %}>关于</a>
       </nav>
       <div class="header-actions"><button class="icon-button" data-open-search aria-label="搜索文章和游戏">{% include studio/icon.html name='search' %}</button><button class="icon-button" data-theme-toggle aria-label="切换深色模式" aria-pressed="false">{% include studio/icon.html name='moon' %}</button><button class="icon-button menu-toggle" data-menu-toggle aria-label="展开导航" aria-expanded="false" aria-controls="main-nav">{% include studio/icon.html name='menu' %}</button></div>
