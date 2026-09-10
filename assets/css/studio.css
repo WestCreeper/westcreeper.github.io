@@ -1573,6 +1573,142 @@ kbd {
     margin-bottom: 0;
   }
 }
+.guestbook-page {
+  max-width: 980px;
+}
+.guestbook-welcome,
+.guestbook-entry {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 28px;
+}
+.guestbook-welcome h2 {
+  margin: 0 0 12px;
+  font-size: 23px;
+}
+.guestbook-welcome > p {
+  color: var(--muted);
+  font-size: 14px;
+}
+.guestbook-actions,
+.guestbook-entry-actions,
+.guestbook-meta,
+.guestbook-pagination {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.guestbook-actions {
+  margin: 22px 0;
+}
+.guestbook-guide {
+  font-size: 13px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.guestbook-guide summary {
+  cursor: pointer;
+  color: var(--ink);
+}
+.guestbook-guide p {
+  margin-bottom: 0;
+}
+.guestbook-welcome .guestbook-privacy {
+  font-size: 12px;
+  margin-bottom: 0;
+}
+.guestbook-messages {
+  margin-top: 48px;
+}
+.guestbook-status,
+.guestbook-footnote {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.9;
+}
+.guestbook-status {
+  margin: 20px 0;
+}
+.guestbook-entry {
+  margin-bottom: 18px;
+  overflow-wrap: anywhere;
+}
+.guestbook-entry h3 {
+  font-size: 21px;
+  line-height: 1.5;
+  margin: 0 0 14px;
+}
+.guestbook-meta,
+.guestbook-entry-actions {
+  font-size: 12px;
+  color: var(--muted);
+}
+.guestbook-link {
+  color: var(--green);
+  text-underline-offset: 3px;
+}
+.guestbook-link:hover {
+  text-decoration: underline;
+}
+.guestbook-state {
+  padding: 1px 8px;
+  border-radius: 5px;
+  background: var(--soft);
+}
+.guestbook-body {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  line-height: 1.9;
+  margin: 22px 0;
+}
+.guestbook-replies {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.guestbook-reply {
+  padding: 18px;
+  background: var(--soft);
+  border-radius: 8px;
+  margin-top: 14px;
+}
+.guestbook-reply .guestbook-body {
+  margin: 12px 0 0;
+}
+.guestbook-pagination {
+  justify-content: center;
+  margin: 28px 0;
+  font-size: 13px;
+}
+.guestbook-page [hidden] {
+  display: none !important;
+}
+.guestbook-page button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+@media (max-width: 560px) {
+  .guestbook-welcome,
+  .guestbook-entry {
+    padding: 20px;
+  }
+  .guestbook-entry h3 {
+    font-size: 19px;
+  }
+  .guestbook-reply {
+    padding: 14px;
+  }
+  .guestbook-messages .section-heading {
+    align-items: flex-start;
+    gap: 16px;
+    flex-direction: column;
+  }
+}
 .error-page {
   text-align: center;
   padding: 90px 0;

@@ -100,9 +100,21 @@ bundle exec jekyll build
 - 首页：`index.html`；文章归档：`archive.html`；游戏数据：`_data/games.yml`。
 - 配色支持浅色、深色与首次访问时跟随系统，手动选择保存在本地浏览器。
 - 全站搜索支持 `Ctrl/Cmd + K`，使用静态 `search.json`，不调用搜索服务。
-- 留言板链接到仓库 Issues，需要在 GitHub 设置中启用 Issues。它不是站内即时评论表单。
-- 博客目前没有配置 Giscus 的仓库 ID 和分类 ID，因此不展示无法使用的评论组件。
+- 留言板通过 GitHub Issues 收集留言，并在站内读取、展示公开留言与回复。具体行为见下方说明。
 - 已有文章正文及外部图片地址保留，外部图片可用性仍取决于原托管站点。
+
+## 留言板维护
+
+- `swf/guestbook.md` 是留言板页面，`assets/js/guestbook.js` 负责读取公开 GitHub REST API。仓库由 `_config.yml` 的 `repository` 指定，必须公开并启用 Issues。
+- 「写留言」打开 GitHub 的 Issue 模板选择页；「在 GitHub 回复」打开对应 Issue。写入需要用户在 GitHub 登录，博客不保存登录凭据，也不需要配置 Token、OAuth 或评论应用。
+- 每页请求 20 条记录，按创建时间倒序，包含开放和已关闭的 Issues，过滤 Pull Request。因此包含 Pull Request 的页面可能少于 20 条留言。使用上一页 / 下一页浏览。
+- 回复展开时才请求，每批 20 条；可加载更多。关闭 Issue 不会隐藏留言；不适合公开的内容需要在 GitHub 删除或编辑。所有公开 Issues 都会展示，未按标签筛选。
+- 正文使用 GitHub 提供的纯文本，安全地写入 DOM；不执行留言 HTML。图片、Markdown 排版及附件请通过原帖链接查看。
+- 页面打开及手动刷新时读取最新内容，不轮询。发言后回到博客点击「刷新留言」。网络超时、访问限制和不可访问状态均提示重试；刷新或翻页失败时保留上次成功加载的内容。
+- 未登录的 API 请求受到 GitHub 的访问频率限制，共用出口网络的访客可能共享额度。不要把私有 Token 写进前端代码；受限时可直接在 GitHub 查看。关闭 JavaScript 时仍可使用 GitHub 入口。
+- 本地回归脚本：安装 Playwright 后运行 `node tools/test-guestbook.cjs`，通过 `PLAYWRIGHT_MODULE` 和 `BROWSER_EXECUTABLE` 指定现有运行时与浏览器，`BLOG_PREVIEW_URL` 可覆盖默认的 `http://127.0.0.1:4000`。测试使用模拟响应，不会创建公开留言。
+
+参考：[GitHub Issues API](https://docs.github.com/en/rest/issues/issues#list-repository-issues)、[回复 API](https://docs.github.com/en/rest/issues/comments#list-issue-comments)、[访问频率限制](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api)。
 
 ## 更新赞助名单
 

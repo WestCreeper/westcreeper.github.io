@@ -13,7 +13,7 @@
 | `/sponsors/` | 赞助名单、留言与赞助方式 |
 | `/releases/` | 旧地址，自动跳转至赞助名单 |
 | `/resources/` | 工具与资源 |
-| `/guestbook/` | GitHub Issues 留言入口 |
+| `/guestbook/` | GitHub Issues 留言列表、回复与写入入口 |
 | `/friends/` | 友情链接 |
 | `/about.html` | 关于我 |
 | `/search.json` | 全站静态搜索索引 |
@@ -37,6 +37,8 @@
 ## 浏览器资源
 
 样式和交互来自 `assets/css/studio.css`、`assets/js/studio.js`。游戏页额外加载 `assets/js/ruffle-loader.js`，点击开始后才请求固定版本的 Ruffle。
+
+留言页额外加载 `assets/js/guestbook.js`，从公开 GitHub Issues API 读取留言及回复，支持分页和重试。正文以纯文本显示，写入和管理均在 GitHub 完成。
 
 没有站内管理后台和数据库。文章发布通过更新 `_posts/` 完成，留言通过 GitHub Issues 收集。
 
