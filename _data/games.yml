@@ -38,7 +38,7 @@
 - id: achievement-unlocked-1-cn
   title: 成就解锁
   original_title: Achievement Unlocked
-  category: ''
+  category: 益智
   language: 汉化版
   author: jmtb02
   description: ''
@@ -126,3 +126,133 @@
   cover: /assets/uploads/02d1c6aa96a549ff8ce1d8c8efb50051.png
   source: https://www.kongregate.com/en/games/urbansquall/battalion-ghosts
   swf: https://games.westcreeper.com/games/Battalion_Ghosts_CN.swf
+- id: battalion-nemesis-cn
+  title: 星球突击队：宿敌
+  original_title: Battalion Nemesis
+  category: 策略
+  language: 汉化版
+  author: urbansquall
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/aa46202473c04325a1150656435f0f01.png
+  source: https://www.kongregate.com/en/games/urbansquall/battalion-nemesis
+  swf: https://games.westcreeper.com/games/Battalion_Nemesis_CN.swf
+- id: battalion-vengeance-cn
+  title: 星球突击队：复仇
+  original_title: Battalion Vengeance
+  category: 策略
+  language: 汉化版
+  author: urbansquall
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/84bff6c87a874590b1f2db48c22370da.png
+  source: https://www.kongregate.com/en/games/urbansquall/battalion-vengeance
+  swf: https://games.westcreeper.com/games/Battalion_Vengeance_CN.swf
+- id: battle-for-darkness-cn
+  title: 暗黑之战
+  original_title: Battle for Darkness
+  category: 策略
+  language: 汉化版
+  author: qigames
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/918547d575554e00a91b6cd58797d8aa.png
+  source: https://www.newgrounds.com/portal/view/609750
+  swf: https://games.westcreeper.com/games/Battle_for_Darkness_CN.swf
+- id: bummin-a-ride
+  title: 乞丐搭便车
+  original_title: Bummin' A Ride
+  category: 策略
+  language: 汉化版
+  author: finefin
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/b48cbb4ac0b24d8091a8a59a4618bbca.png
+  source: https://www.newgrounds.com/portal/view/492928
+  swf: https://games.westcreeper.com/games/Beggar_CN.swf
+- id: bullet-heaven-2-cn
+  title: 弹幕天堂2
+  original_title: Bullet Heaven 2
+  category: 射击
+  language: 汉化版
+  author: kupo707
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/d9d8c3a025f2415b893bce1e149f9870.png
+  source: https://www.kongregate.com/en/games/kupo707/bullet-heaven-2
+  swf: https://games.westcreeper.com/games/Bullet_Heaven_2_CN.swf
+- id: chaos-faction-2-cn
+  title: 混乱大格斗2
+  original_title: Chaos Faction 2
+  category: 动作
+  language: 汉化版
+  author: EON
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/b28eb3bbcbf746c59ab8e84fba79899f.png
+  source: https://armorgames.com/play/5645/chaos-faction-2
+  swf: https://games.westcreeper.com/games/Chaos_Faction_2_CN.swf
+- id: chaos-faction-cn
+  title: 混乱大格斗
+  original_title: Chaos Faction
+  category: ''
+  language: 汉化版
+  author: EON
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/a6b4e08061174a18b066b7e1afd33ca7.png
+  source: ''
+  swf: https://games.westcreeper.com/games/Chaos_Faction_CN.swf
+- id: cirno-cross
+  title: 琪露诺十字
+  original_title: Cirno Cross
+  category: 益智
+  language: 汉化版
+  author: 迷走ポタージュ
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/a15dfa537bc04be4a4cb1bd91d5cc1dc.png
+  source: ''
+  swf: https://games.westcreeper.com/games/Cirno_Cross.swf
+- id: ckc-2-cn
+  title: 火柴人创意逃生 2/创意杀人密室 2
+  original_title: Creative Kill Chamber 2
+  category: 益智
+  language: 汉化版
+  author: mexipino
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/24199a539fe14b87a158cf7d340fda3f.png
+  source: https://www.newgrounds.com/portal/view/594357
+  swf: https://games.westcreeper.com/games/CKC_2_CN.swf
+- id: ckc-cn
+  title: 火柴人创意逃生/创意杀人密室
+  original_title: Creative Kill Chamber
+  category: 益智
+  language: 汉化版
+  author: mexipino
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/b9913c7cf4c1469f86ec1fbd804116a5.png
+  source: https://www.newgrounds.com/portal/view/549929
+  swf: https://games.westcreeper.com/games/CKC_CN.swf
