@@ -33,3 +33,16 @@
   cover: /swf/games/dadnme/thumbnail.jpg
   source: https://www.newgrounds.com/portal/view/254456
   description: 紫色小怪物的街头冒险，重温熟悉的连击与手绘世界。
+- id: achievement-unlocked-1-cn
+  title: 成就解锁
+  original_title: Achievement Unlocked
+  category: ''
+  language: 汉化版
+  author: jmtb02
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/5a2124ecebdf4fac890c780828ad83b7.png
+  source: https://armorgames.com/play/2893/achievement-unlocked
+  swf: https://games.westcreeper.com/games/Achievement_Unlocked_1_CN.swf
