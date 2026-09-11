@@ -5,7 +5,7 @@
   language: 汉化版
   translated: true
   author: JohnnyTwoShoes
-  swf: /swf/games/the-heist-2/The_Heist_2_CN.swf
+  swf: https://games.westcreeper.com/games/The_Heist_2_CN.swf
   cover: /swf/games/the-heist-2/thumbnail.jpg
   source: https://www.addictinggames.com/car/the-heist-2
   description: 引擎轰鸣，街头追逐。一场惊险的大劫案等你出发。
@@ -18,10 +18,12 @@
   language: 汉化版
   translated: true
   author: RAC7
-  swf: /swf/games/stealth-hunter-2/Stealth_Hunter_2_CN.swf
+  swf: https://games.westcreeper.com/games/Stealth_Hunter_2_CN.swf
   cover: /swf/games/stealth-hunter-2/thumbnail.jpg
   source: https://armorgames.com/play/13136/stealth-hunter-2
   description: 潜入敌营，避开守卫，在阴影里完成你的秘密任务。
+  play_status: ''
+  play_note: ''
 - id: dadnme
   title: 狂扁小朋友
   original_title: Dad 'n Me
@@ -46,3 +48,81 @@
   cover: /assets/uploads/5a2124ecebdf4fac890c780828ad83b7.png
   source: https://armorgames.com/play/2893/achievement-unlocked
   swf: https://games.westcreeper.com/games/Achievement_Unlocked_1_CN.swf
+- id: bqwars
+  title: 笨蛋军团大战/东方八卦炉战争
+  original_title: BQwars
+  category: 休闲
+  language: 汉化版
+  author: 迷走ポタージュ
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/1d3c0dd0ee514ddcb7bb92f371702521.png
+  source: ''
+  swf: https://games.westcreeper.com/games/BQwars.swf
+- id: age-of-kingdom-cn
+  title: 帝国时代
+  original_title: Age Of Kingdom
+  category: 策略
+  language: 汉化版
+  author: belugerin
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/467614732d5e4b458c1598064facd922.png
+  source: https://www.newgrounds.com/portal/view/553747
+  swf: https://games.westcreeper.com/games/Age_Of_Kingdom_CN.swf
+- id: alien-attack-team-2-cn
+  title: 太空舱作战军团2
+  original_title: Alien Attack Team 2
+  category: ''
+  language: 汉化版
+  author: box10.com
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/5faaa285443b4520ae626dfe61c6a803.png
+  source: https://www.newgrounds.com/portal/view/649529
+  swf: https://games.westcreeper.com/games/Alien_Attack_Team_2_CN.swf
+- id: alien-attack-team-cn
+  title: 太空舱作战军团
+  original_title: Alien Attack Team
+  category: 射击
+  language: 汉化版
+  author: box10.com
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/a7078576e17b46f5b913751acbfd0a4f.png
+  source: https://www.newgrounds.com/portal/view/622614
+  swf: https://games.westcreeper.com/games/Alien_Attack_Team_CN.swf
+- id: barbarianonslaughtthesecretofsteelcn
+  title: 野蛮人的进攻：钢铁之秘
+  original_title: Barbarian On Slaught The Secret Of Steel
+  category: 冒险
+  language: 汉化版
+  author: JohanHjarpe
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/933492eaf9b84af689db7ababf3312ce.png
+  source: https://www.newgrounds.com/portal/view/498326
+  swf: https://games.westcreeper.com/games/BarbarianOnslaughtTheSecretOfSteelCN.swf
+- id: battalion-ghosts-cn
+  title: 星球突击队：幽灵
+  original_title: Battalion Ghosts
+  category: 策略
+  language: 汉化版
+  author: urbansquall
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/02d1c6aa96a549ff8ce1d8c8efb50051.png
+  source: https://www.kongregate.com/en/games/urbansquall/battalion-ghosts
+  swf: https://games.westcreeper.com/games/Battalion_Ghosts_CN.swf
