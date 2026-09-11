@@ -529,3 +529,185 @@
   cover: /assets/uploads/25067c4b69f64e8bb15855fe656c4346.png
   source: https://www.eyezmaze.com/game/grow-valley.html
   swf: https://games.westcreeper.com/games/Grow_Valley_CN.swf
+- id: hex-empire-cn
+  title: 帝国争霸
+  original_title: Hex Empire
+  category: 策略
+  language: 汉化版
+  author: Meta Sauce
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/cb57ebb7e0e946d3a64cbd1f3adde83c.png
+  source: https://www.newgrounds.com/portal/view/486811
+  swf: https://games.westcreeper.com/games/Hex_Empire_CN.swf
+- id: hold-the-fort-cn
+  title: 堡垒守卫者
+  original_title: Hold the Fort!
+  category: 塔防
+  language: 汉化版
+  author: a7s1h1
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/1adff34350ba40719fbdf29efc5fb205.png
+  source: https://www.newgrounds.com/portal/view/676313
+  swf: https://games.westcreeper.com/games/Hold_The_Fort_CN.swf
+- id: invasion-cn
+  title: 未来入侵者
+  original_title: Invasion
+  category: 塔防
+  language: 汉化版
+  author: pytachok
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/dcf57063fd4e4b46945f44b87ddb8eeb.png
+  source: https://armorgames.com/play/17654/invasion
+  swf: https://games.westcreeper.com/games/Invasion_CN.swf
+- id: iron-knight-cn
+  title: 钢铁骑士/二战守卫军
+  original_title: Iron Knight
+  category: 塔防
+  language: 汉化版
+  author: industred
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/fc8fd68390c24d8683f68829141ba2e0.png
+  source: https://armorgames.com/play/17640/iron-knight
+  swf: https://games.westcreeper.com/games/Iron_Knight_CN.swf
+- id: issac-cn
+  title: 以撒的结合：羔羊
+  original_title: Binding of Isaac DEMO
+  category: 肉鸽
+  language: 汉化版
+  author: Edmund McMillen
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/3cee750620d7485ba2266d8aeba867b3.png
+  source: https://www.newgrounds.com/portal/view/581168
+  swf: https://games.westcreeper.com/games/Issac_CN.swf
+- id: jacksmith-cn
+  title: 杰克驴铁匠
+  original_title: Jacksmith
+  category: 经营
+  language: 汉化版
+  author: Flipline Studios
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/8b19b6981c664754bed5128a8a3254ce.png
+  source: https://www.flipline.com/games/jacksmith/index.html
+  swf: https://games.westcreeper.com/games/Jacksmith_CN.swf
+- id: jellygo-cn
+  title: 果冻勇士
+  original_title: JellyGo
+  category: 策略
+  language: 汉化版
+  author: avoxgames
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/ab77cc25e5464a38b66dd879fcad2fcd.png
+  source: https://www.newgrounds.com/portal/view/619775
+  swf: https://games.westcreeper.com/games/JellyGo_CN.swf
+- id: kohctpyktop-cn
+  title: 人民工程师
+  original_title: 'KOHCTPYKTOP: Engineer of the People'
+  category: 益智
+  language: 汉化版
+  author: zachtronics
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/2bb069f0ccb4450084bd3df37965f68f.png
+  source: https://www.zachtronics.com/kohctpyktop-engineer-of-the-people/
+  swf: https://www.zachtronics.com/kohctpyktop-engineer-of-the-people/
+- id: laser-marisa
+  title: 激光魔理沙
+  original_title: Laser Marisa
+  category: 射击
+  language: 汉化版
+  author: 迷走ポタージュ
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/b1b0a4061c9947bdbad5da9a807102fc.png
+  source: ''
+  swf: https://games.westcreeper.com/games/Laser_Marisa.swf
+- id: learn-to-fly-cn
+  title: 企鹅学飞行
+  original_title: Learn To Fly
+  category: 休闲
+  language: 汉化版
+  author: Lightbringer777
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/670421ee10b6450194950e0414f3d130.png
+  source: https://www.newgrounds.com/portal/view/495715
+  swf: https://games.westcreeper.com/games/Learn_To_Fly_CN.swf
+- id: mahjong-flash-cn
+  title: 麻雀Flash
+  original_title: Mahjong Flash
+  category: 棋牌
+  language: 汉化版
+  author: GAMEDESIGN
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/663db85787be4dbd8ef3cd12157e4220.png
+  source: https://www.gamedesign.jp/flash/mahjong/mahjong.html
+  swf: https://games.westcreeper.com/games/Mahjong_Flash_CN.swf
+- id: mega-mash-cn
+  title: 兔子的魔幻世界
+  original_title: Mega Mash
+  category: 平台跳跃
+  language: 汉化版
+  author: Nitrome
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/084a03653e754c6c8caf6008e7f308e0.png
+  source: https://www.newgrounds.com/portal/view/591921
+  swf: https://games.westcreeper.com/games/Mega_Mash_CN.swf
+- id: mighty-knight-cn
+  title: 铁甲骑士
+  original_title: Mighty Knight
+  category: 动作
+  language: 汉化版
+  author: FirebeastStudio
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/f4f27cee10454216bbdba6b1b4ecbcda.png
+  source: https://armorgames.com/play/15904/mighty-knight
+  swf: https://games.westcreeper.com/games/Mighty_Knight_CN.swf
+- id: mike-shadow-cn
+  title: 火柴人破坏狂
+  original_title: Mike Shadow I paid for it
+  category: 休闲
+  language: 汉化版
+  author: Tanoku
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/b02ac63f983b497fb2f38c671ee70ae5.png
+  source: https://www.newgrounds.com/portal/view/572865
+  swf: https://games.westcreeper.com/games/Mike_Shadow_CN.swf
