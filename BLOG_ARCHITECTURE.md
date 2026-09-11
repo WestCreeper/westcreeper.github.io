@@ -31,6 +31,7 @@
 - `_data/games.yml`：首页、档案馆和搜索索引共用的游戏资料。
 
 - `_data/sponsors.json`：赞助记录（昵称、日期、金额、留言），由 `sponsors.html` 按日期倒序、年份分组展示。
+- `_data/storage.yml`：R2 公开资源域名；不存储密钥。游戏的 `swf_key` 通过 `_includes/studio/media-url.html` 解析，兼容原有站内 SWF 和完整 HTTPS 地址。
 - `assets/images/sponsor-payment.png`：支付宝与微信赞助方式原图。
 
 ## 浏览器资源

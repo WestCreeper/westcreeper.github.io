@@ -1,0 +1,9 @@
+{%- assign media_path = include.path | default: '' -%}
+{%- assign media_base = site.data.storage.public_base_url | default: '' -%}
+{%- if include.key and include.key != '' and media_base != '' -%}
+  {{- media_base -}}/{{- include.key | uri_escape -}}
+{%- elsif media_path contains '://' -%}
+  {{- media_path -}}
+{%- elsif media_path != '' -%}
+  {{- media_path | relative_url -}}
+{%- endif -%}

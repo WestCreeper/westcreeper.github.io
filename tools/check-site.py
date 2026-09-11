@@ -11,9 +11,12 @@ class Page(HTMLParser):
         super().__init__()
         self.urls = []
         self.headings = 0
+        self.player_urls = []
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
+        if 'data-player-shell' in attrs:
+            self.player_urls.append(attrs.get('data-swf', ''))
         if tag == 'h1':
             self.headings += 1
         for key in ('href', 'src', 'data-swf', 'data-search-url'):
@@ -28,6 +31,8 @@ args = parser.parse_args()
 root = args.destination.resolve()
 errors = []
 pages = list(root.rglob('*.html'))
+site_bytes = sum(path.stat().st_size for path in root.rglob('*') if path.is_file())
+assert site_bytes < 1_000_000_000, 'Published site exceeds 1 GB; move large game assets to R2 before deploying.'
 assert pages, f'No HTML files found in {root}; run Jekyll first.'
 checked = 0
 for path in pages:
@@ -37,6 +42,8 @@ for path in pages:
     if 'data-search-url=' not in html:
         continue
     checked += 1
+    if any(not url.strip() for url in document.player_urls):
+        errors.append(f'{path.relative_to(root)}: missing SWF URL; check game.swf, game.swf_key and storage.public_base_url')
     if '<title>' not in html or 'name="viewport"' not in html:
         errors.append(f'{path.relative_to(root)}: missing page metadata')
     for url in document.urls:

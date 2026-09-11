@@ -135,6 +135,30 @@ bundle exec jekyll build
 
 替换 `assets/images/sponsor-payment.png` 可以更新赞助方式。保持两个收款码完整清晰；当前原图为 2160 × 1080，若更换尺寸，请同步修改页面中图片的 `width`、`height`。原始 Excel 不会作为公开下载文件发布。
 
+## 本地可视化编辑器与 R2
+
+编辑器位于仓库外的 `../westcreeper-workspace/editor/`，双击上一级目录的「打开博客编辑器.cmd」启动。浏览器访问 `http://127.0.0.1:4173`，载入博客根目录后即可管理文章、游戏和赞助名单。编辑器仅监听本机，保存前自动备份到它的 `state/backups/`，不会自动提交或推送。
+
+- 文章：支持标题、标签、草稿、Markdown 编辑与预览、插入本地图片。已有文章保留文件名和日期，未编辑的 YAML 字段也会保留。
+- 游戏：支持档案元数据、封面、操作说明、兼容提示、外部 SWF 地址或 R2 对象路径。
+- 赞助：按条目新增、修改和删除，自动格式化两位小数，保留匿名昵称和留言。
+- R2：支持文件夹、ZIP 或单文件扫描，核对清单后上传；保留目录结构，比较文件大小及 SHA-256 元数据，相同文件跳过，不同文件默认拒绝覆盖。上传记录在编辑器 `state/transfers/`。密钥仅存于当前进程内存，退出后需要重新填写。
+
+R2 的公开域名保存在 `_data/storage.yml` 的 `public_base_url`，不要在仓库里保存密钥。游戏条目可使用：
+
+```yaml
+swf_key: games/flash-cn/My_Game_CN.swf
+swf: /swf/games/my-game/old-local-copy.swf
+```
+
+公开域名配置完成时使用 `公开域名 + swf_key`，未配置时使用 `swf` 后备地址。也可以只给 `swf` 填完整 HTTPS 地址。播放器以 SWF 所在目录解析相对资源，因此 TXT、XML、音频等配套文件必须维持原有相对位置。内含 7z 的资源应先解压为 SWF 和配套文件才能在线游玩；7z 本身仅用于下载。
+
+R2 控制台步骤、CORS 配置与编辑器使用方法见仓库外的 `../westcreeper-workspace/editor/README.md`。R2 账号尚未开通时，编辑器的内容管理仍可使用，上传不能执行。只有经过公开访问与浏览器游玩验证的游戏才能删掉仓库里的旧 SWF；当前已有三个游戏的本地文件继续保留。
+
+GitHub Pages 发布站点有 1 GB 上限，构建检查会拒绝超过上限的输出。大批游戏资源请始终保留在仓库外并上传到 R2。
+
+参考：[Pages 限制](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits)、[R2 公开访问](https://developers.cloudflare.com/r2/buckets/public-buckets/)、[R2 CORS](https://developers.cloudflare.com/r2/buckets/cors/)。
+
 ## 将本地预览产物放在仓库外
 
 本工作区的预览运行时与临时文件位于仓库同级的 `../westcreeper-workspace/`。可运行该目录中的 `preview.ps1` 构建；它将站点输出、Jekyll 缓存、Bundler 锁文件和测试截图都放在工作目录中。

@@ -71,6 +71,7 @@
       launch.hidden = true;
       const load = player.ruffle().load({
         url: shell.dataset.swf,
+        base: new URL(".", new URL(shell.dataset.swf, document.baseURI)).href,
         autoplay: "on",
         allowScriptAccess: false,
         openUrlMode: "confirm",
