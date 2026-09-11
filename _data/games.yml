@@ -711,3 +711,68 @@
   cover: /assets/uploads/b02ac63f983b497fb2f38c671ee70ae5.png
   source: https://www.newgrounds.com/portal/view/572865
   swf: https://games.westcreeper.com/games/Mike_Shadow_CN.swf
+- id: mineblocks-2-cn
+  title: 我的方块2/怪蜀黍的世界2
+  original_title: MineBlocks 2
+  category: 沙盒
+  language: 汉化版
+  author: zanzlanz
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/fce9d026c2f648ea81a2382d67765aca.png
+  source: https://mineblocks.com/2/
+  swf: https://games.westcreeper.com/games/MineBlocks_2_CN.swf
+- id: mineblocks-cn
+  title: 我的世界2D版/我的方块/怪蜀黍的世界
+  original_title: Mineblocks
+  category: 沙盒
+  language: 汉化版
+  author: zanzlanz
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/0be4f07d7cb44f4ba9e1f8cd2969f463.png
+  source: https://zanzlanz.com/MineBlocks
+  swf: https://games.westcreeper.com/games/Mineblocks_CN.swf
+- id: mirrors-edge-cn
+  title: 镜之边缘2D版
+  original_title: Mirror's Edge 2d
+  category: 平台跳跃
+  language: 汉化版
+  author: Brad Borne
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/f8f281fc23e64a39a7e358721db6c8ae.png
+  source: https://www.gameflare.com/online-game/mirrors-edge-2d/
+  swf: https://games.westcreeper.com/games/Mirrors_Edge_CN.swf
+- id: monster-saga-cn
+  title: 精灵传奇
+  original_title: Monster Saga
+  category: RPG
+  language: 汉化版
+  author: artlogicgames
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/248085adbdef41bfb6f3bfaddd60b2c4.png
+  source: https://www.newgrounds.com/portal/view/604702
+  swf: https://games.westcreeper.com/games/Monster_Saga_CN.swf
+- id: monster-truck-fever-cn
+  title: 怪物卡车大奖赛
+  original_title: Monster Truck Fever
+  category: 赛车
+  language: 汉化版
+  author: fightclub69
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/a6b9999068d04177971ef1488d380ace.png
+  source: https://www.kongregate.com/en/games/fightclub69/monster-truck-fever
+  swf: https://games.westcreeper.com/games/Monster_Truck_Fever_CN.swf
