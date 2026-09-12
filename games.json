@@ -8,6 +8,7 @@ permalink: /games.json
     "id": {{ game.id | jsonify }},
     "title": {{ game.title | jsonify }},
     "original_title": {{ game.original_title | jsonify }},
+    "author": {{ game.author | jsonify }},
     "category": {{ game.category | jsonify }},
     "language": {{ game.language | jsonify }},
     "translated": {{ game.translated | jsonify }},

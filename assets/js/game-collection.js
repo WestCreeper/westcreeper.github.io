@@ -60,6 +60,16 @@
       const prev = root.querySelector("[data-page-prev]");
       const next = root.querySelector("[data-page-next]");
       const select = root.querySelector("[data-page-select]");
+      const sort = root.querySelector("[data-games-sort]");
+      const order = root.querySelector("[data-games-order]");
+      const chinese = new Intl.Collator("zh-CN-u-co-pinyin", {
+        numeric: true,
+        sensitivity: "base",
+      });
+      const english = new Intl.Collator("en", {
+        numeric: true,
+        sensitivity: "base",
+      });
       let page = 1,
         category = "all";
       const fromUrl = () => {
@@ -70,6 +80,12 @@
         if (!chips.some((chip) => chip.dataset.filter === category))
           category = "all";
         input.value = params.get("q") || "";
+        sort.value = ["title", "original_title", "author"].includes(
+          params.get("sort"),
+        )
+          ? params.get("sort")
+          : "default";
+        order.value = params.get("order") === "desc" ? "desc" : "asc";
       };
       const update = (writeHistory = false) => {
         const query = normalize(input.value);
@@ -80,11 +96,32 @@
               [
                 game.title,
                 game.original_title,
+                game.author,
                 game.description,
                 game.language,
               ].join(" "),
             ).includes(query),
         );
+        order.disabled = sort.value === "default";
+        if (sort.value !== "default") {
+          const collator = sort.value === "original_title" ? english : chinese;
+          const direction = order.value === "desc" ? -1 : 1;
+          matched.sort((a, b) => {
+            const left = normalize(a[sort.value]),
+              right = normalize(b[sort.value]);
+            // Missing metadata stays last in either direction.
+            if (!left || !right)
+              return !left === !right
+                ? english.compare(a.id, b.id)
+                : left
+                  ? -1
+                  : 1;
+            return (
+              direction * collator.compare(left, right) ||
+              english.compare(a.id, b.id)
+            );
+          });
+        }
         const pages = Math.max(1, Math.ceil(matched.length / size));
         page = Math.min(page, pages);
         const start = (page - 1) * size;
@@ -116,6 +153,11 @@
             ["page", page > 1 ? page : ""],
             ["tag", category === "all" ? "" : category],
             ["q", input.value.trim()],
+            ["sort", sort.value === "default" ? "" : sort.value],
+            [
+              "order",
+              sort.value !== "default" && order.value === "desc" ? "desc" : "",
+            ],
           ]) {
             if (value) url.searchParams.set(key, value);
             else url.searchParams.delete(key);
@@ -142,6 +184,12 @@
         page = 1;
         update(true);
       });
+      [sort, order].forEach((control) =>
+        control.addEventListener("change", () => {
+          page = 1;
+          update(true);
+        }),
+      );
       addEventListener("popstate", () => {
         fromUrl();
         update();

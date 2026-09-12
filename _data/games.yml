@@ -45,7 +45,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/5a2124ecebdf4fac890c780828ad83b7.png
+  cover: /swf/games/achievement-unlocked-1-cn/thumbnail.png
   source: https://armorgames.com/play/2893/achievement-unlocked
   swf: https://games.westcreeper.com/games/Achievement_Unlocked_1_CN.swf
 - id: bqwars
@@ -58,7 +58,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/1d3c0dd0ee514ddcb7bb92f371702521.png
+  cover: /swf/games/bqwars/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/BQwars.swf
 - id: age-of-kingdom-cn
@@ -71,7 +71,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/467614732d5e4b458c1598064facd922.png
+  cover: /swf/games/age-of-kingdom-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/553747
   swf: https://games.westcreeper.com/games/Age_Of_Kingdom_CN.swf
 - id: alien-attack-team-2-cn
@@ -84,7 +84,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/5faaa285443b4520ae626dfe61c6a803.png
+  cover: /swf/games/alien-attack-team-2-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/649529
   swf: https://games.westcreeper.com/games/Alien_Attack_Team_2_CN.swf
 - id: alien-attack-team-cn
@@ -97,7 +97,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/a7078576e17b46f5b913751acbfd0a4f.png
+  cover: /swf/games/alien-attack-team-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/622614
   swf: https://games.westcreeper.com/games/Alien_Attack_Team_CN.swf
 - id: barbarianonslaughtthesecretofsteelcn
@@ -110,7 +110,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/933492eaf9b84af689db7ababf3312ce.png
+  cover: /swf/games/barbarianonslaughtthesecretofsteelcn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/498326
   swf: https://games.westcreeper.com/games/BarbarianOnslaughtTheSecretOfSteelCN.swf
 - id: battalion-ghosts-cn
@@ -123,7 +123,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/02d1c6aa96a549ff8ce1d8c8efb50051.png
+  cover: /swf/games/battalion-ghosts-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/urbansquall/battalion-ghosts
   swf: https://games.westcreeper.com/games/Battalion_Ghosts_CN.swf
 - id: battalion-nemesis-cn
@@ -136,7 +136,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/aa46202473c04325a1150656435f0f01.png
+  cover: /swf/games/battalion-nemesis-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/urbansquall/battalion-nemesis
   swf: https://games.westcreeper.com/games/Battalion_Nemesis_CN.swf
 - id: battalion-vengeance-cn
@@ -149,7 +149,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/84bff6c87a874590b1f2db48c22370da.png
+  cover: /swf/games/battalion-vengeance-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/urbansquall/battalion-vengeance
   swf: https://games.westcreeper.com/games/Battalion_Vengeance_CN.swf
 - id: battle-for-darkness-cn
@@ -162,7 +162,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/918547d575554e00a91b6cd58797d8aa.png
+  cover: /swf/games/battle-for-darkness-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/609750
   swf: https://games.westcreeper.com/games/Battle_for_Darkness_CN.swf
 - id: bummin-a-ride
@@ -175,7 +175,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/b48cbb4ac0b24d8091a8a59a4618bbca.png
+  cover: /swf/games/bummin-a-ride/thumbnail.png
   source: https://www.newgrounds.com/portal/view/492928
   swf: https://games.westcreeper.com/games/Beggar_CN.swf
 - id: bullet-heaven-2-cn
@@ -188,7 +188,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/d9d8c3a025f2415b893bce1e149f9870.png
+  cover: /swf/games/bullet-heaven-2-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/kupo707/bullet-heaven-2
   swf: https://games.westcreeper.com/games/Bullet_Heaven_2_CN.swf
 - id: chaos-faction-2-cn
@@ -201,7 +201,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/b28eb3bbcbf746c59ab8e84fba79899f.png
+  cover: /swf/games/chaos-faction-2-cn/thumbnail.png
   source: https://armorgames.com/play/5645/chaos-faction-2
   swf: https://games.westcreeper.com/games/Chaos_Faction_2_CN.swf
 - id: chaos-faction-cn
@@ -214,7 +214,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/a6b4e08061174a18b066b7e1afd33ca7.png
+  cover: /swf/games/chaos-faction-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/Chaos_Faction_CN.swf
 - id: cirno-cross
@@ -227,7 +227,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/a15dfa537bc04be4a4cb1bd91d5cc1dc.png
+  cover: /swf/games/cirno-cross/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/Cirno_Cross.swf
 - id: ckc-2-cn
@@ -240,7 +240,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/24199a539fe14b87a158cf7d340fda3f.png
+  cover: /swf/games/ckc-2-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/594357
   swf: https://games.westcreeper.com/games/CKC_2_CN.swf
 - id: ckc-cn
@@ -253,7 +253,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/b9913c7cf4c1469f86ec1fbd804116a5.png
+  cover: /swf/games/ckc-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/549929
   swf: https://games.westcreeper.com/games/CKC_CN.swf
 - id: days-2-die-cn
@@ -266,7 +266,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/5651ab6d8af9488187f543e695076a97.png
+  cover: /swf/games/days-2-die-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/486939
   swf: https://games.westcreeper.com/games/Days_2_Die_CN.swf
 - id: dead-drunk-cn
@@ -279,7 +279,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/ad8daa16471a41ee8485ba4e717a8b81.png
+  cover: /swf/games/dead-drunk-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/638410
   swf: https://games.westcreeper.com/games/Dead_Drunk_CN.swf
 - id: dead-paradise-2-cn
@@ -292,7 +292,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/9ab239c033b940ea9e22d8276083ea4b.png
+  cover: /swf/games/dead-paradise-2-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/620454
   swf: https://games.westcreeper.com/games/Dead_Paradise_2_CN.swf
 - id: dead-paradise-3-cn
@@ -305,7 +305,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/f8027fe970c44183b07d71fa2b4ea9d8.png
+  cover: /swf/games/dead-paradise-3-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/632366
   swf: https://games.westcreeper.com/games/Dead_Paradise_3_CN.swf
 - id: dead-paradise-4-cn
@@ -318,7 +318,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/af7a86c66c3646929ae1af1c9c1f85c2.png
+  cover: /swf/games/dead-paradise-4-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/smokoko/dead-paradise-4
   swf: https://games.westcreeper.com/games/Dead_Paradise_4_CN.swf
 - id: dig-to-china-cn
@@ -331,7 +331,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/ffe1c279d1ab4517b00db3681da3e8ad.png
+  cover: /swf/games/dig-to-china-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/636228
   swf: https://games.westcreeper.com/games/Dig_To_China_CN.swf
 - id: dj-maniax-cn
@@ -344,7 +344,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/e7b4c53be74e4b508119929863b237cc.png
+  cover: /swf/games/dj-maniax-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/556866
   swf: https://games.westcreeper.com/games/DJ_Maniax_CN.swf
 - id: double-edged-cn
@@ -357,7 +357,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/8954e5bcf0f54666b10d9018829198e0.png
+  cover: /swf/games/double-edged-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/595984
   swf: https://games.westcreeper.com/games/Double_Edged_CN.swf
 - id: dragon-fist-2-plus-cn
@@ -370,7 +370,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/91543c8cf98d46bea39f6f8441b398fe.png
+  cover: /swf/games/dragon-fist-2-plus-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/234084
   swf: https://games.westcreeper.com/games/Dragon_Fist_2_Plus_CN.swf
 - id: dragon-fist-3-age-of-the-warrior-cn
@@ -383,7 +383,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/b171cdd14c4949a8aa7e654bb2a68520.png
+  cover: /swf/games/dragon-fist-3-age-of-the-warrior-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/353654
   swf: https://games.westcreeper.com/games/Dragon_Fist_3_Age_Of_The_Warrior_cn.swf
 - id: dragon-fist-cn
@@ -396,7 +396,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/60e4cfc2ce0a40e9991e1f74cb39726c.png
+  cover: /swf/games/dragon-fist-cn/thumbnail.png
   source: https://www.kongregate.com/pt/games/HwangJangLee/legend-of-the-dragon-fist
   swf: https://games.westcreeper.com/games/Dragon_Fist_CN.swf
 - id: ducklife-3-evolution-cn
@@ -409,7 +409,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/19fa51d241464a778ab482e5de405821.png
+  cover: /swf/games/ducklife-3-evolution-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/570338
   swf: https://games.westcreeper.com/games/Ducklife_3_Evolution_CN.swf
 - id: epic-robo-quest-cn
@@ -422,7 +422,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/93267a572c1c44baad0685070e1e310f.png
+  cover: /swf/games/epic-robo-quest-cn/thumbnail.png
   source: https://armorgames.com/play/16130/epic-robo-quest
   swf: https://games.westcreeper.com/games/Epic_Robo_Quest_CN.swf
 - id: everyday-the-same-dream-cn
@@ -435,7 +435,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/493a6df929ed44c3bd2d73f9bf6b029b.png
+  cover: /swf/games/everyday-the-same-dream-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/540741
   swf: https://games.westcreeper.com/games/Everyday_The_Same_Dream_CN.swf
 - id: fleabag-vs-mutt-cn
@@ -448,7 +448,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/4a5957a4a0364087ba0c6ba5ae5af623.png
+  cover: /swf/games/fleabag-vs-mutt-cn/thumbnail.png
   source: https://www.twoplayergames.org/game/fleabag-vs--mutt
   swf: https://games.westcreeper.com/games/Fleabag_vs._Mutt_CN.swf
 - id: flightless
@@ -461,7 +461,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/1e1802785ddd4f028bd11e508bded183.png
+  cover: /swf/games/flightless/thumbnail.png
   source: https://www.newgrounds.com/portal/view/604489
   swf: https://games.westcreeper.com/games/Flightless.swf
 - id: fort-plus-cn
@@ -474,7 +474,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/38354194bc4e49548d0f0766f64da47e.png
+  cover: /swf/games/fort-plus-cn/thumbnail.png
   source: https://suznooto.com/ruffle/fort_p.html
   swf: https://games.westcreeper.com/games/Fort_Plus_CN.swf
 - id: frontier-cn
@@ -487,7 +487,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/73c79cfc80784348945c9ddd6059cd76.png
+  cover: /swf/games/frontier-cn/thumbnail.png
   source: https://armorgames.com/play/4480/frontier
   swf: https://games.westcreeper.com/games/Frontier_CN.swf
 - id: get-a-little-gold-cn
@@ -500,7 +500,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/38bb81791d384c38b0a12b5485f55d95.png
+  cover: /swf/games/get-a-little-gold-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/jarofed/get-a-little-gold
   swf: https://games.westcreeper.com/games/Get_A_Little_Gold_CN.swf
 - id: grow-island-cn
@@ -513,7 +513,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/3ae8c620fc7c4c388a289c068c653d4b.png
+  cover: /swf/games/grow-island-cn/thumbnail.png
   source: https://www.eyezmaze.com/game/grow_Island.html
   swf: https://games.westcreeper.com/games/Grow_Island_CN.swf
 - id: grow-valley-cn
@@ -526,7 +526,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/25067c4b69f64e8bb15855fe656c4346.png
+  cover: /swf/games/grow-valley-cn/thumbnail.png
   source: https://www.eyezmaze.com/game/grow-valley.html
   swf: https://games.westcreeper.com/games/Grow_Valley_CN.swf
 - id: hex-empire-cn
@@ -539,7 +539,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/cb57ebb7e0e946d3a64cbd1f3adde83c.png
+  cover: /swf/games/hex-empire-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/486811
   swf: https://games.westcreeper.com/games/Hex_Empire_CN.swf
 - id: hold-the-fort-cn
@@ -552,7 +552,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/1adff34350ba40719fbdf29efc5fb205.png
+  cover: /swf/games/hold-the-fort-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/676313
   swf: https://games.westcreeper.com/games/Hold_The_Fort_CN.swf
 - id: invasion-cn
@@ -565,7 +565,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/dcf57063fd4e4b46945f44b87ddb8eeb.png
+  cover: /swf/games/invasion-cn/thumbnail.png
   source: https://armorgames.com/play/17654/invasion
   swf: https://games.westcreeper.com/games/Invasion_CN.swf
 - id: iron-knight-cn
@@ -578,7 +578,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/fc8fd68390c24d8683f68829141ba2e0.png
+  cover: /swf/games/iron-knight-cn/thumbnail.png
   source: https://armorgames.com/play/17640/iron-knight
   swf: https://games.westcreeper.com/games/Iron_Knight_CN.swf
 - id: issac-cn
@@ -591,7 +591,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/3cee750620d7485ba2266d8aeba867b3.png
+  cover: /swf/games/issac-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/581168
   swf: https://games.westcreeper.com/games/Issac_CN.swf
 - id: jacksmith-cn
@@ -604,7 +604,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/8b19b6981c664754bed5128a8a3254ce.png
+  cover: /swf/games/jacksmith-cn/thumbnail.png
   source: https://www.flipline.com/games/jacksmith/index.html
   swf: https://games.westcreeper.com/games/Jacksmith_CN.swf
 - id: jellygo-cn
@@ -617,7 +617,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/ab77cc25e5464a38b66dd879fcad2fcd.png
+  cover: /swf/games/jellygo-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/619775
   swf: https://games.westcreeper.com/games/JellyGo_CN.swf
 - id: kohctpyktop-cn
@@ -630,7 +630,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/2bb069f0ccb4450084bd3df37965f68f.png
+  cover: /swf/games/kohctpyktop-cn/thumbnail.png
   source: https://www.zachtronics.com/kohctpyktop-engineer-of-the-people/
   swf: https://www.zachtronics.com/kohctpyktop-engineer-of-the-people/
 - id: laser-marisa
@@ -643,7 +643,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/b1b0a4061c9947bdbad5da9a807102fc.png
+  cover: /swf/games/laser-marisa/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/Laser_Marisa.swf
 - id: learn-to-fly-cn
@@ -656,7 +656,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/670421ee10b6450194950e0414f3d130.png
+  cover: /swf/games/learn-to-fly-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/495715
   swf: https://games.westcreeper.com/games/Learn_To_Fly_CN.swf
 - id: mahjong-flash-cn
@@ -669,7 +669,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/663db85787be4dbd8ef3cd12157e4220.png
+  cover: /swf/games/mahjong-flash-cn/thumbnail.png
   source: https://www.gamedesign.jp/flash/mahjong/mahjong.html
   swf: https://games.westcreeper.com/games/Mahjong_Flash_CN.swf
 - id: mega-mash-cn
@@ -682,7 +682,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/084a03653e754c6c8caf6008e7f308e0.png
+  cover: /swf/games/mega-mash-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/591921
   swf: https://games.westcreeper.com/games/Mega_Mash_CN.swf
 - id: mighty-knight-cn
@@ -695,7 +695,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/f4f27cee10454216bbdba6b1b4ecbcda.png
+  cover: /swf/games/mighty-knight-cn/thumbnail.png
   source: https://armorgames.com/play/15904/mighty-knight
   swf: https://games.westcreeper.com/games/Mighty_Knight_CN.swf
 - id: mike-shadow-cn
@@ -708,7 +708,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/b02ac63f983b497fb2f38c671ee70ae5.png
+  cover: /swf/games/mike-shadow-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/572865
   swf: https://games.westcreeper.com/games/Mike_Shadow_CN.swf
 - id: mineblocks-2-cn
@@ -721,7 +721,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/fce9d026c2f648ea81a2382d67765aca.png
+  cover: /swf/games/mineblocks-2-cn/thumbnail.png
   source: https://mineblocks.com/2/
   swf: https://games.westcreeper.com/games/MineBlocks_2_CN.swf
 - id: mineblocks-cn
@@ -734,7 +734,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/0be4f07d7cb44f4ba9e1f8cd2969f463.png
+  cover: /swf/games/mineblocks-cn/thumbnail.png
   source: https://zanzlanz.com/MineBlocks
   swf: https://games.westcreeper.com/games/Mineblocks_CN.swf
 - id: mirrors-edge-cn
@@ -747,7 +747,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/f8f281fc23e64a39a7e358721db6c8ae.png
+  cover: /swf/games/mirrors-edge-cn/thumbnail.png
   source: https://www.gameflare.com/online-game/mirrors-edge-2d/
   swf: https://games.westcreeper.com/games/Mirrors_Edge_CN.swf
 - id: monster-saga-cn
@@ -760,7 +760,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/248085adbdef41bfb6f3bfaddd60b2c4.png
+  cover: /swf/games/monster-saga-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/604702
   swf: https://games.westcreeper.com/games/Monster_Saga_CN.swf
 - id: monster-truck-fever-cn
@@ -773,7 +773,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/a6b9999068d04177971ef1488d380ace.png
+  cover: /swf/games/monster-truck-fever-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/fightclub69/monster-truck-fever
   swf: https://games.westcreeper.com/games/Monster_Truck_Fever_CN.swf
 - id: nekoscro-2-cn
@@ -786,7 +786,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/2cc5585d0ec847e69ed1a1a8a169c060.png
+  cover: /swf/games/nekoscro-2-cn/thumbnail.png
   source: https://pokotan.jp/game/nekoscroll2/
   swf: https://games.westcreeper.com/games/Nekoscro_2_CN.swf
 - id: nyan-cat-lost-in-space-cn
@@ -799,7 +799,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/d79da4c935594b6381b598e55d93d5d5.png
+  cover: /swf/games/nyan-cat-lost-in-space-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/570085
   swf: https://games.westcreeper.com/games/Nyan_Cat_Lost_In_Space_CN.swf
 - id: nekoscro-3-cn
@@ -812,7 +812,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/779ce251ce564028ab789587cb86b2df.png
+  cover: /swf/games/nekoscro-3-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/Nekoscro_3_CN.swf
 - id: plazma-burst-2-cn
@@ -825,7 +825,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/4df64a01d4e24edda9b957cdbd3dc3ac.png
+  cover: /swf/games/plazma-burst-2-cn/thumbnail.png
   source: https://www.plazmaburst2.com/?s=2&a=
   swf: https://games.westcreeper.com/games/Plazma_Burst_2_CN.swf
 - id: plazma-burst-cn
@@ -838,7 +838,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/cad53f8d153e4906a195d0ae7a21d7f3.png
+  cover: /swf/games/plazma-burst-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/500590
   swf: https://games.westcreeper.com/games/Plazma_Burst_CN.swf
 - id: zombotron-2-cn
@@ -851,7 +851,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/dc1fb64dcd0d4232813b2166084fdd0a.png
+  cover: /swf/games/zombotron-2-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/598023
   swf: https://games.westcreeper.com/games/Zombotron_2_CN.swf
 - id: wolfgang-fights-the-future-cn
@@ -864,7 +864,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/128db0a04b0e49d1803d0f53f11a3c4d.png
+  cover: /swf/games/wolfgang-fights-the-future-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/640258
   swf: https://games.westcreeper.com/games/Wolfgang_Fights_The_Future_CN.swf
 - id: zombality-cn
@@ -877,7 +877,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/104d947b8f9c4aa184f5740f00135926.png
+  cover: /swf/games/zombality-cn/thumbnail.png
   source: https://www.miniplay.com/game/zombality
   swf: https://games.westcreeper.com/games/Zombality_CN.swf
 - id: warfare-1917-cn
@@ -890,7 +890,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/fde5345bb0694e44b11ee3e7f9420b08.png
+  cover: /swf/games/warfare-1917-cn/thumbnail.png
   source: https://armorgames.com/play/2267/warfare-1917
   swf: https://games.westcreeper.com/games/Warfare_1917_CN.swf
 - id: war-zombie-avatar-cn
@@ -903,7 +903,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/fcadf056c66e4e04bb2f14bcb81d99b7.png
+  cover: /swf/games/war-zombie-avatar-cn/thumbnail.png
   source: https://armorgames.com/play/15008/war-zomb-avatarMusic
   swf: https://games.westcreeper.com/games/War_Zombie_Avatar_CN.swf
 - id: touhou-tennis
@@ -916,7 +916,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/68f9eab7eb8b4e09af4e9b56e6422074.png
+  cover: /swf/games/touhou-tennis/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/Touhou_Tennis.swf
 - id: touhou-kotodamamatsuri
@@ -929,7 +929,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/9750b0c09a234bfaacaba9b476763200.png
+  cover: /swf/games/touhou-kotodamamatsuri/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/Touhou_Kotodamamatsuri.swf
 - id: themcoconuts-cn
@@ -942,7 +942,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/15af4fc16b9649a8957839f322801a25.png
+  cover: /swf/games/themcoconuts-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/ThemCoconuts_CN.swf
 - id: the-heist-cn
@@ -955,7 +955,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/1ce43edf8e5f497b931ea1dfb7af44ba.png
+  cover: /swf/games/the-heist-cn/thumbnail.png
   source: https://www.addictinggames.com/car/the-heist
   swf: https://games.westcreeper.com/games/The_Heist_CN.swf
 - id: the-fight-for-glorton-cn
@@ -968,7 +968,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/30cad6575a4649d3835b77a82f1d8d01.png
+  cover: /swf/games/the-fight-for-glorton-cn/thumbnail.png
   source: https://armorgames.com/play/1108/the-fight-for-glorton
   swf: https://games.westcreeper.com/games/The_Fight_For_Glorton_CN.swf
 - id: the-castle-dungeon-clicker-cn
@@ -981,7 +981,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/f282b02088dc4cdb8bc436f8811a54f5.png
+  cover: /swf/games/the-castle-dungeon-clicker-cn/thumbnail.png
   source: https://kiz10.com/the-castle-dungeon/
   swf: https://games.westcreeper.com/games/The_Castle_Dungeon_Clicker_CN.swf
 - id: raze-2-cn
@@ -994,7 +994,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/a9c7feb48092498997b71dceac9d745a.png
+  cover: /swf/games/raze-2-cn/thumbnail.png
   source: https://armorgames.com/play/12275/raze-2
   swf: https://games.westcreeper.com/games/Raze_2_CN.swf
 - id: raze-3-cn
@@ -1007,7 +1007,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/acc289d2b59a477a9c865b3656a9c955.png
+  cover: /swf/games/raze-3-cn/thumbnail.png
   source: https://armorgames.com/play/15979/raze-3
   swf: https://games.westcreeper.com/games/Raze_3_CN.swf
 - id: raze-cn
@@ -1020,7 +1020,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/15ee6c6280e64b43860912b4be5c8d2f.png
+  cover: /swf/games/raze-cn/thumbnail.png
   source: https://armorgames.com/play/5395/raze
   swf: https://games.westcreeper.com/games/Raze_CN.swf
 - id: rebuild-cn
@@ -1033,7 +1033,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/7dd4b04dcd804278967e3572eb2ae46b.png
+  cover: /swf/games/rebuild-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/562116
   swf: https://games.westcreeper.com/games/Rebuild_CN.swf
 - id: relic-of-war-cn
@@ -1046,7 +1046,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/ebc74c4e3eeb40e1a89bf412c6c02298.png
+  cover: /swf/games/relic-of-war-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/600861
   swf: https://games.westcreeper.com/games/Relic_Of_War_CN.swf
 - id: renegades-cn
@@ -1059,7 +1059,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/2892c5a44d6f4ead9528bdfe2f910980.png
+  cover: /swf/games/renegades-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/642311
   swf: https://games.westcreeper.com/games/Renegades_CN.swf
 - id: riddle-school-1-cn
@@ -1072,7 +1072,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/2515cbd797b741e5a7526ca8e80c3089.png
+  cover: /swf/games/riddle-school-1-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/314680
   swf: https://games.westcreeper.com/games/Riddle_School_1_CN.swf
 - id: riddle-school-2-cn
@@ -1085,7 +1085,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/8c8396d8479b4e8c8f61384c223dee38.png
+  cover: /swf/games/riddle-school-2-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/349194
   swf: https://games.westcreeper.com/games/Riddle_School_2_CN.swf
 - id: royal-offense-cn
@@ -1098,7 +1098,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/9cb13b5db2044617a15bf6a69afe9263.png
+  cover: /swf/games/royal-offense-cn/thumbnail.png
   source: https://armorgames.com/play/15721/royal-offense
   swf: https://games.westcreeper.com/games/Royal_Offense_CN.swf
 - id: seventhsky-refine-cn
@@ -1111,7 +1111,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/b4967406ed424750936de261089883bb.png
+  cover: /swf/games/seventhsky-refine-cn/thumbnail.png
   source: https://nextframe.jp/flash/seventhsky_refine/seventhsky_refine.html
   swf: https://games.westcreeper.com/games/Seventhsky_Refine_CN.swf
 - id: seventhsky-test-cn
@@ -1124,7 +1124,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/59630d9034d64b498307624fd34bb7d2.png
+  cover: /swf/games/seventhsky-test-cn/thumbnail.png
   source: https://nextframe.jp/flash/seventhsky_plus/seventhSkyPlus.html
   swf: https://games.westcreeper.com/games/Seventhsky_Test_CN.swf
 - id: sfh2-cn
@@ -1137,7 +1137,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/743f6805f452443ab614f62b309b9169.png
+  cover: /swf/games/sfh2-cn/thumbnail.png
   source: https://armorgames.com/play/14775/strike-force-heroes-2
   swf: https://games.westcreeper.com/games/SFH2_CN.swf
 - id: sfh3cn-fixed
@@ -1150,7 +1150,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/f9abd6bca9ab4670b9b80e2c6699bc57.png
+  cover: /swf/games/sfh3cn-fixed/thumbnail.png
   source: https://armorgames.com/play/17706/strike-force-heroes-3
   swf: https://games.westcreeper.com/games/SFH3CN_fixed.swf
 - id: sfh-cn-final
@@ -1163,7 +1163,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/54392c11a7cd424089c2b85c4b5332a5.png
+  cover: /swf/games/sfh-cn-final/thumbnail.png
   source: https://www.newgrounds.com/portal/view/598428
   swf: https://games.westcreeper.com/games/SFH_CN_Final.swf
 - id: shop-empire-2-cn
@@ -1176,7 +1176,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/a5a7fe47e2b44a1cb1324bc52389d623.png
+  cover: /swf/games/shop-empire-2-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/littlegiantworld/shop-empire-2
   swf: https://games.westcreeper.com/games/Shop_Empire_2_CN.swf
 - id: shore-siege-cn
@@ -1189,7 +1189,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/02d506add9454d9d8b6bfcd766ab38cc.png
+  cover: /swf/games/shore-siege-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/452432
   swf: https://games.westcreeper.com/games/Shore_Siege_CN.swf
 - id: sift-renegade-2-cn
@@ -1202,7 +1202,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/a4332b498914497fbfbc47402fdc299b.png
+  cover: /swf/games/sift-renegade-2-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/513862
   swf: https://games.westcreeper.com/games/Sift_Renegade_2_CN.swf
 - id: sift-renegade-3-cn
@@ -1215,7 +1215,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/5eeb3bfb0ffa407bbc040f7e387c7855.png
+  cover: /swf/games/sift-renegade-3-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/608062
   swf: https://games.westcreeper.com/games/Sift_Renegade_3_CN.swf
 - id: sift-renegade-3-expansion-cn
@@ -1228,7 +1228,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/1f3bd8df1b2e4d9191a5422ee40c864a.png
+  cover: /swf/games/sift-renegade-3-expansion-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/610265
   swf: https://games.westcreeper.com/games/Sift_Renegade_3_Expansion_CN.swf
 - id: sift-renegade-cn
@@ -1241,7 +1241,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/b20c569e4ed34f0181ae225ce32d2b60.png
+  cover: /swf/games/sift-renegade-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/475034
   swf: https://games.westcreeper.com/games/Sift_Renegade_CN.swf
 - id: sniper-hostile-territory-cn
@@ -1254,7 +1254,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/90817b9b3e314a038a9e00eaf7615e7a.png
+  cover: /swf/games/sniper-hostile-territory-cn/thumbnail.png
   source: https://www.kongregate.com/it/games/erenkilich/sniper-hostile-territory
   swf: https://games.westcreeper.com/games/Sniper_Hostile_Territory_CN.swf
 - id: south-pole-aggressor-cn
@@ -1267,7 +1267,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/25352d00df12447ab4f0e3b9819f0e0c.png
+  cover: /swf/games/south-pole-aggressor-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/startonlinegames/south-pole-aggressor
   swf: https://games.westcreeper.com/games/south_pole_aggressor_cn.swf
 - id: st-romance-academy-beach-dockkin-paradise-cn
@@ -1280,7 +1280,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/1c3072a485324269893057772c2aab80.png
+  cover: /swf/games/st-romance-academy-beach-dockkin-paradise-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/St._Romance_Academy_Collection_CN/St._Romance_Academy_Beach_Dockkin_Paradise_CN.swf
 - id: st-romance-academy-hot-summer-love-festival-cn
@@ -1293,7 +1293,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/36098848d7344625a7200d476b3b8c64.png
+  cover: /swf/games/st-romance-academy-hot-summer-love-festival-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/St._Romance_Academy_Collection_CN/St._Romance_Academy_Hot_Summer_Love_Festival_CN.swf
 - id: st-romance-academy-hot-summer-peach-festival-cn
@@ -1306,7 +1306,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/0161d110e8f4418db9e646a314ea622d.png
+  cover: /swf/games/st-romance-academy-hot-summer-peach-festival-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/St._Romance_Academy_Collection_CN/St._Romance_Academy_Hot_Summer_Peach_Festival_CN.swf
 - id: st-romance-academy-tokimeki-of-love-masterpiece-war-cn
@@ -1319,7 +1319,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/2be4d977406d4aa29dc3b4eacbd8c1c7.png
+  cover: /swf/games/st-romance-academy-tokimeki-of-love-masterpiece-war-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/St._Romance_Academy_Collection_CN/St._Romance_Academy_Tokimeki_of_Love_Masterpiece_War_CN.swf
 - id: stealth-hunter-cn
@@ -1332,7 +1332,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/15a944b0687f440aae26a3d60f17094c.png
+  cover: /swf/games/stealth-hunter-cn/thumbnail.png
   source: https://armorgames.com/play/84/stealth-hunter
   swf: https://games.westcreeper.com/games/Stealth_Hunter_CN.swf
 - id: steam-king-cn
@@ -1345,7 +1345,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/30e42d5169584df39171a7dfdcfb4d35.png
+  cover: /swf/games/steam-king-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/iriysoft/steam-king
   swf: https://games.westcreeper.com/games/Steam_King_CN.swf
 - id: stick-invader-the-game-cn
@@ -1358,7 +1358,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/d54a60cdfc5c409ca17f29a365e41541.png
+  cover: /swf/games/stick-invader-the-game-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/598653
   swf: https://games.westcreeper.com/games/Stick_Invader_The_Game_CN.swf
 - id: superfighters-cn
@@ -1371,7 +1371,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/985997fc99504313bb27543ef35354fc.png
+  cover: /swf/games/superfighters-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/575163
   swf: https://games.westcreeper.com/games/Superfighters_CN.swf
 - id: sushi-cat-the-honeymoon-cn
@@ -1384,7 +1384,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/d22ec43b18f64305a73742fb9dd505c1.png
+  cover: /swf/games/sushi-cat-the-honeymoon-cn/thumbnail.png
   source: https://armorgames.com/play/6301/sushi-cat-the-honeymoon
   swf: https://games.westcreeper.com/games/Sushi_Cat_The_Honeymoon_CN.swf
 - id: swordfall-kingdoms-cn
@@ -1397,7 +1397,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/2a5e103f069644d18ef1ab8d534bff9a.png
+  cover: /swf/games/swordfall-kingdoms-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/samraski/swordfall-kingdoms
   swf: https://games.westcreeper.com/games/Swordfall_Kingdoms_CN.swf
 - id: talesworth-adventure-cn
@@ -1410,7 +1410,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/19f1a4ee7c6946ea83b2350a658ef7fe.png
+  cover: /swf/games/talesworth-adventure-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/533264
   swf: https://games.westcreeper.com/games/Talesworth_Adventure_CN.swf
 - id: tank-trouble-cn
@@ -1423,7 +1423,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/c37dbfefd3eb4411a798a7be8fb2942e.png
+  cover: /swf/games/tank-trouble-cn/thumbnail.png
   source: https://tanktrouble.com/
   swf: https://games.westcreeper.com/games/Tank_Trouble_CN.swf
 - id: tavern-of-heroes-cn
@@ -1436,7 +1436,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/6b87ab3bfed04c64bf4a96da539f9884.png
+  cover: /swf/games/tavern-of-heroes-cn/thumbnail.png
   source: https://kbhgames.com/game/tavern-of-heroes
   swf: https://games.westcreeper.com/games/Tavern_of_Heroes_CN.swf
 - id: tequila-zombies-2-cn
@@ -1449,7 +1449,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/f569f110d2cd45a7973e070d2d96b7f8.png
+  cover: /swf/games/tequila-zombies-2-cn/thumbnail.png
   source: https://armorgames.com/play/13821/tequila-zombies-2
   swf: https://games.westcreeper.com/games/Tequila_Zombies_2_CN.swf
 - id: tequila-zombies-3-cn
@@ -1462,7 +1462,7 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/c6712052520d48de80a77e8e902bf0c3.png
+  cover: /swf/games/tequila-zombies-3-cn/thumbnail.png
   source: https://armorgames.com/play/16128/tequila-zombies-3
   swf: https://games.westcreeper.com/games/Tequila_Zombies_3_CN.swf
 - id: territory-war-cn
@@ -1475,6 +1475,6 @@
   play_status: ''
   play_note: ''
   translated: true
-  cover: /assets/uploads/7644f1b984f64bffaf6e272b8231b614.png
+  cover: /swf/games/territory-war-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/302830
   swf: https://games.westcreeper.com/games/Territory_WAR_CN.swf

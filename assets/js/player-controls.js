@@ -17,6 +17,8 @@
     volume = 100,
     previousVolume = 100;
   let savedScroll = 0;
+  let immersiveBefore = null;
+  let resetJoystick = () => {};
   const held = new Map();
   const pointers = new Map();
   const report = (text) => {
@@ -140,6 +142,7 @@
     fullButton.querySelector("span").textContent = on
       ? "退出屏幕全屏"
       : "屏幕全屏";
+    if (!on && immersiveBefore) setWebFullscreen(true);
     webButton.disabled = on;
     updateSize();
   });
@@ -152,7 +155,8 @@
       !document.fullscreenElement
     ) {
       event.preventDefault();
-      setWebFullscreen(false);
+      if (immersiveBefore) setImmersive(false);
+      else setWebFullscreen(false);
     }
     if (
       event.key === "Tab" &&
@@ -186,6 +190,40 @@
     keyboard.hidden = !on;
     keyboardButton.setAttribute("aria-expanded", String(on));
   }
+  function setImmersive(on) {
+    releaseAll();
+    if (on === !!immersiveBefore) return;
+    if (on) {
+      immersiveBefore = {
+        web: shell.classList.contains("is-web-fullscreen"),
+        keyboard: !keyboard.hidden,
+        help: !help.hidden,
+      };
+      if (!document.fullscreenElement) setWebFullscreen(true);
+      setHelp(false);
+      setKeyboard(true);
+      shell.classList.add("is-immersive");
+      $("[data-player-immersive-unlock]").hidden = false;
+      $("[data-player-immersive]").setAttribute("aria-pressed", "true");
+      $("[data-player-immersive-unlock]").focus({ preventScroll: true });
+    } else {
+      const before = immersiveBefore;
+      immersiveBefore = null;
+      shell.classList.remove("is-immersive");
+      $("[data-player-immersive-unlock]").hidden = true;
+      $("[data-player-immersive]").setAttribute("aria-pressed", "false");
+      setKeyboard(before.keyboard);
+      setHelp(before.help);
+      setWebFullscreen(before.web);
+      $("[data-player-immersive]").focus({ preventScroll: true });
+    }
+  }
+  $("[data-player-immersive]").addEventListener("click", () =>
+    setImmersive(true),
+  );
+  $("[data-player-immersive-unlock]").addEventListener("click", () =>
+    setImmersive(false),
+  );
   mobileButton.addEventListener("click", () => setHelp(help.hidden));
   $("[data-player-help-close]").addEventListener("click", () => setHelp(false));
   keyboardButton.addEventListener("click", () => setKeyboard(keyboard.hidden));
@@ -300,6 +338,7 @@
     for (const [code, entry] of held)
       for (const owner of [...entry.owners.keys()]) release(code, owner);
     pointers.clear();
+    resetJoystick();
   }
   const slots = {
     up: "上",
@@ -341,6 +380,7 @@
   const storageKey = "wc-player-keys:" + shell.dataset.gameId;
   let bindings = preset("arrows");
   const layoutSelect = $("[data-keyboard-layout]");
+  const directionSelect = $("[data-direction-mode]");
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey));
     if (
@@ -354,6 +394,8 @@
         )
           bindings[slot] = saved.bindings[slot];
       layoutSelect.value = saved.layout;
+      if (["dpad", "joystick"].includes(saved.directionMode))
+        directionSelect.value = saved.directionMode;
     }
   } catch (_) {
     /* Ignore unavailable or invalid saved preferences. */
@@ -362,7 +404,12 @@
     try {
       localStorage.setItem(
         storageKey,
-        JSON.stringify({ version: 1, layout: layoutSelect.value, bindings }),
+        JSON.stringify({
+          version: 1,
+          layout: layoutSelect.value,
+          bindings,
+          directionMode: directionSelect.value,
+        }),
       );
       return true;
     } catch (_) {
@@ -426,10 +473,115 @@
         : "按键配置已应用；浏览器未允许保存，关闭页面后需重新设置。",
     );
   });
+  function createJoystick() {
+    const stick = document.createElement("button");
+    stick.type = "button";
+    stick.className = "virtual-joystick";
+    stick.disabled = !player;
+    stick.setAttribute("aria-label", "八向摇杆，拖动选择方向，松手回中");
+    stick.setAttribute("aria-pressed", "false");
+    const thumb = document.createElement("span");
+    thumb.className = "joystick-thumb";
+    thumb.setAttribute("aria-hidden", "true");
+    for (const [index, arrow] of [
+      "→",
+      "↘",
+      "↓",
+      "↙",
+      "←",
+      "↖",
+      "↑",
+      "↗",
+    ].entries()) {
+      const marker = document.createElement("span");
+      marker.className = "joystick-marker";
+      marker.textContent = arrow;
+      marker.style.setProperty("--angle", index * 45 + "deg");
+      marker.setAttribute("aria-hidden", "true");
+      stick.append(marker);
+    }
+    stick.append(thumb);
+    const owner = Symbol("joystick");
+    let activeId = null,
+      current = new Set();
+    const directions = [
+      ["right"],
+      ["right", "down"],
+      ["down"],
+      ["down", "left"],
+      ["left"],
+      ["left", "up"],
+      ["up"],
+      ["up", "right"],
+    ];
+    const reset = () => {
+      activeId = null;
+      current.clear();
+      thumb.style.transform = "translate(0px, 0px)";
+      stick.dataset.direction = "center";
+      stick.classList.remove("is-held");
+      stick.setAttribute("aria-pressed", "false");
+    };
+    resetJoystick = reset;
+    const move = (event) => {
+      const box = stick.getBoundingClientRect(),
+        radius = box.width * 0.34;
+      let x = event.clientX - box.x - box.width / 2,
+        y = event.clientY - box.y - box.height / 2;
+      const length = Math.hypot(x, y),
+        angle = (Math.round(Math.atan2(y, x) / (Math.PI / 4)) + 8) % 8;
+      const slots = length < radius * 0.24 ? [] : directions[angle];
+      const next = new Set(slots.map((slot) => bindings[slot]).filter(Boolean));
+      for (const code of current) if (!next.has(code)) release(code, owner);
+      for (const code of next)
+        if (!current.has(code)) press(code, owner, stick);
+      current = next;
+      if (length > radius) {
+        x *= radius / length;
+        y *= radius / length;
+      }
+      thumb.style.transform = `translate(${x}px, ${y}px)`;
+      stick.dataset.direction = slots.join("-") || "center";
+      stick.classList.toggle("is-held", next.size > 0);
+      stick.setAttribute("aria-pressed", String(next.size > 0));
+    };
+    stick.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0 || activeId !== null || !player) return;
+      event.preventDefault();
+      activeId = event.pointerId;
+      stick.setPointerCapture(activeId);
+      focusPlayer();
+      move(event);
+    });
+    stick.addEventListener("pointermove", (event) => {
+      if (event.pointerId === activeId) {
+        event.preventDefault();
+        move(event);
+      }
+    });
+    const end = (event) => {
+      if (event.pointerId !== activeId) return;
+      for (const code of current) release(code, owner);
+      reset();
+    };
+    for (const event of ["pointerup", "pointercancel", "lostpointercapture"])
+      stick.addEventListener(event, end);
+    stick.addEventListener("contextmenu", (event) => event.preventDefault());
+    reset();
+    return stick;
+  }
+  directionSelect.addEventListener("change", () => {
+    drawKeys();
+    persistKeys();
+  });
   function drawKeys() {
     releaseAll();
     const layout = layoutSelect.value;
     keys.dataset.layout = layout;
+    directionSelect.disabled = layout === "all";
+    directionSelect.title =
+      layout === "all" ? "请先选择方向键、WASD 或自定义布局" : "";
+    resetJoystick = () => {};
     const rows =
       layout === "all"
         ? [
@@ -457,6 +609,12 @@
           ];
     keys.replaceChildren(
       ...rows.map((codes, index) => {
+        if (
+          layout !== "all" &&
+          index === 0 &&
+          directionSelect.value === "joystick"
+        )
+          return createJoystick();
         const row = document.createElement("div");
         row.className =
           layout !== "all" && index === 0 ? "virtual-dpad" : "virtual-key-row";

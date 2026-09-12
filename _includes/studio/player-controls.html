@@ -18,8 +18,10 @@
 </section>
 <section id="player-keyboard" class="player-keyboard" aria-label="虚拟游戏键盘" hidden>
   <div class="keyboard-heading"><label>按键布局 <select data-keyboard-layout><option value="arrows">方向键 + Z / X / C</option><option value="wasd">WASD + J / K / L</option><option value="custom">自定义按键</option><option value="all">完整键盘</option></select></label><span data-keyboard-hint>开始游戏后可用 · 支持多指同时按</span><button data-keyboard-config>配置按键</button><button data-keyboard-close aria-label="收起虚拟键盘">收起</button></div>
+  <div class="keyboard-mode-tools"><label>方向操作 <select data-direction-mode><option value="dpad">十字键</option><option value="joystick">八向摇杆</option></select></label><button data-player-immersive aria-pressed="false">沉浸模式</button></div>
   <div class="virtual-key-grid" data-keyboard-keys></div>
 </section>
+<button class="player-immersive-unlock" data-player-immersive-unlock hidden>解锁沉浸模式</button>
 <dialog class="key-config-dialog" data-key-config aria-labelledby="key-config-title">
   <form data-key-config-form>
     <header><div><span>MAKE IT YOURS</span><h2 id="key-config-title">让每个按键，都顺手。</h2></div><button type="button" data-key-config-close aria-label="关闭按键配置">关闭</button></header>

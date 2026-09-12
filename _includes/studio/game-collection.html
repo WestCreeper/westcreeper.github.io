@@ -1,5 +1,10 @@
 <div data-game-collection data-mode="{{ include.mode }}" data-limit="{{ include.limit }}" data-exclude="{{ include.exclude | escape }}" data-games-url="{{ '/games.json' | relative_url }}">
-  {% if include.mode == 'archive' %}{% include studio/filters.html type='games' %}{% endif %}
+  {% if include.mode == 'archive' %}{% include studio/filters.html type='games' %}
+  <div class="game-sort-controls">
+    <label>排序方式 <select data-games-sort><option value="default">默认顺序</option><option value="title">中文名称</option><option value="original_title">英文名称</option><option value="author">作者名称</option></select></label>
+    <label>排列方向 <select data-games-order><option value="asc">正序（A → Z）</option><option value="desc">倒序（Z → A）</option></select></label>
+  </div>
+  {% endif %}
   <p data-games-status role="status">正在加载游戏…</p>
   <div class="game-grid" data-games-grid></div>
   <nav class="game-pagination" data-games-pagination aria-label="游戏分页" hidden>
