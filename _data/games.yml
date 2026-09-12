@@ -77,7 +77,7 @@
 - id: alien-attack-team-2-cn
   title: 太空舱作战军团2
   original_title: Alien Attack Team 2
-  category: ''
+  category: 射击
   language: 汉化版
   author: box10.com
   description: ''
@@ -207,7 +207,7 @@
 - id: chaos-faction-cn
   title: 混乱大格斗
   original_title: Chaos Faction
-  category: ''
+  category: 动作
   language: 汉化版
   author: EON
   description: ''
@@ -493,7 +493,7 @@
 - id: get-a-little-gold-cn
   title: 黄金放置
   original_title: Get A Little Gold
-  category: 休闲
+  category: 增量
   language: 汉化版
   author: jarofed
   description: ''
@@ -776,3 +776,705 @@
   cover: /assets/uploads/a6b9999068d04177971ef1488d380ace.png
   source: https://www.kongregate.com/en/games/fightclub69/monster-truck-fever
   swf: https://games.westcreeper.com/games/Monster_Truck_Fever_CN.swf
+- id: nekoscro-2-cn
+  title: 喵勇者滚动条
+  original_title: Neko Scroll 2
+  category: RPG
+  language: 汉化版
+  author: pokotan.jp
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/2cc5585d0ec847e69ed1a1a8a169c060.png
+  source: https://pokotan.jp/game/nekoscroll2/
+  swf: https://games.westcreeper.com/games/Nekoscro_2_CN.swf
+- id: nyan-cat-lost-in-space-cn
+  title: 彩虹猫：迷失太空
+  original_title: 'Nyan Cat: Lost in Space'
+  category: 休闲
+  language: 汉化版
+  author: MyLostGames
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/d79da4c935594b6381b598e55d93d5d5.png
+  source: https://www.newgrounds.com/portal/view/570085
+  swf: https://games.westcreeper.com/games/Nyan_Cat_Lost_In_Space_CN.swf
+- id: nekoscro-3-cn
+  title: 喵勇者滚动条
+  original_title: Neko Scroll
+  category: RPG
+  language: 汉化版
+  author: pokotan.jp
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/779ce251ce564028ab789587cb86b2df.png
+  source: ''
+  swf: https://games.westcreeper.com/games/Nekoscro_3_CN.swf
+- id: plazma-burst-2-cn
+  title: 超时空战士2
+  original_title: Plazma Burst 2
+  category: 射击
+  language: 汉化版
+  author: Eric Gurt
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/4df64a01d4e24edda9b957cdbd3dc3ac.png
+  source: https://www.plazmaburst2.com/?s=2&a=
+  swf: https://games.westcreeper.com/games/Plazma_Burst_2_CN.swf
+- id: plazma-burst-cn
+  title: 超时空战士
+  original_title: 'Plazma Burst: FTP'
+  category: 射击
+  language: 汉化版
+  author: Eric Gurt
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/cad53f8d153e4906a195d0ae7a21d7f3.png
+  source: https://www.newgrounds.com/portal/view/500590
+  swf: https://games.westcreeper.com/games/Plazma_Burst_CN.swf
+- id: zombotron-2-cn
+  title: 勇闯僵尸洞穴2
+  original_title: Zombotron 2
+  category: 射击
+  language: 汉化版
+  author: AntKarlov
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/dc1fb64dcd0d4232813b2166084fdd0a.png
+  source: https://www.newgrounds.com/portal/view/598023
+  swf: https://games.westcreeper.com/games/Zombotron_2_CN.swf
+- id: wolfgang-fights-the-future-cn
+  title: 沃尔夫冈：为未来而战
+  original_title: Wolfgang VS The Future
+  category: 动作
+  language: 汉化版
+  author: flashchaz
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/128db0a04b0e49d1803d0f53f11a3c4d.png
+  source: https://www.newgrounds.com/portal/view/640258
+  swf: https://games.westcreeper.com/games/Wolfgang_Fights_The_Future_CN.swf
+- id: zombality-cn
+  title: 僵尸城突围
+  original_title: Zombality
+  category: 冒险
+  language: 汉化版
+  author: ridlake
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/104d947b8f9c4aa184f5740f00135926.png
+  source: https://www.miniplay.com/game/zombality
+  swf: https://games.westcreeper.com/games/Zombality_CN.swf
+- id: warfare-1917-cn
+  title: 一战1917
+  original_title: Warfare 1917
+  category: 策略
+  language: 汉化版
+  author: ConArtists
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/fde5345bb0694e44b11ee3e7f9420b08.png
+  source: https://armorgames.com/play/2267/warfare-1917
+  swf: https://games.westcreeper.com/games/Warfare_1917_CN.swf
+- id: war-zombie-avatar-cn
+  title: 僵尸部落之战
+  original_title: War Zombie Avatar
+  category: 射击
+  language: 汉化版
+  author: zamzim
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/fcadf056c66e4e04bb2f14bcb81d99b7.png
+  source: https://armorgames.com/play/15008/war-zomb-avatarMusic
+  swf: https://games.westcreeper.com/games/War_Zombie_Avatar_CN.swf
+- id: touhou-tennis
+  title: 东方姬庭球
+  original_title: 東方姫庭球
+  category: 体育
+  language: 汉化版
+  author: 迷走ポタージュ
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/68f9eab7eb8b4e09af4e9b56e6422074.png
+  source: ''
+  swf: https://games.westcreeper.com/games/Touhou_Tennis.swf
+- id: touhou-kotodamamatsuri
+  title: 东方言灵祭
+  original_title: 東方言霊祭
+  category: 益智
+  language: 汉化版
+  author: 迷走ポタージュ
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/9750b0c09a234bfaacaba9b476763200.png
+  source: ''
+  swf: https://games.westcreeper.com/games/Touhou_Kotodamamatsuri.swf
+- id: themcoconuts-cn
+  title: 椰子塔防
+  original_title: Them Coconuts
+  category: 塔防
+  language: 汉化版
+  author: ArmorGames
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/15af4fc16b9649a8957839f322801a25.png
+  source: ''
+  swf: https://games.westcreeper.com/games/ThemCoconuts_CN.swf
+- id: the-heist-cn
+  title: 大劫案
+  original_title: The Heist
+  category: 体育
+  language: 汉化版
+  author: JohnnyTwoShoes
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/1ce43edf8e5f497b931ea1dfb7af44ba.png
+  source: https://www.addictinggames.com/car/the-heist
+  swf: https://games.westcreeper.com/games/The_Heist_CN.swf
+- id: the-fight-for-glorton-cn
+  title: 疯狂小人战斗
+  original_title: The Fight for Glorton
+  category: 动作
+  language: 汉化版
+  author: Sir-Davey
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/30cad6575a4649d3835b77a82f1d8d01.png
+  source: https://armorgames.com/play/1108/the-fight-for-glorton
+  swf: https://games.westcreeper.com/games/The_Fight_For_Glorton_CN.swf
+- id: the-castle-dungeon-clicker-cn
+  title: 地堡地牢
+  original_title: The Castle Dungeon Clicker
+  category: 增量
+  language: 汉化版
+  author: kiz10.com
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/f282b02088dc4cdb8bc436f8811a54f5.png
+  source: https://kiz10.com/the-castle-dungeon/
+  swf: https://games.westcreeper.com/games/The_Castle_Dungeon_Clicker_CN.swf
+- id: raze-2-cn
+  title: 虚拟对战2
+  original_title: Raze 2
+  category: 射击
+  language: 汉化版
+  author: sky9games
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/a9c7feb48092498997b71dceac9d745a.png
+  source: https://armorgames.com/play/12275/raze-2
+  swf: https://games.westcreeper.com/games/Raze_2_CN.swf
+- id: raze-3-cn
+  title: 虚拟对战3
+  original_title: Raze 3
+  category: 射击
+  language: 汉化版
+  author: sky9games
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/acc289d2b59a477a9c865b3656a9c955.png
+  source: https://armorgames.com/play/15979/raze-3
+  swf: https://games.westcreeper.com/games/Raze_3_CN.swf
+- id: raze-cn
+  title: 虚拟对战
+  original_title: Raze
+  category: 射击
+  language: 汉化版
+  author: sky9games
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/15ee6c6280e64b43860912b4be5c8d2f.png
+  source: https://armorgames.com/play/5395/raze
+  swf: https://games.westcreeper.com/games/Raze_CN.swf
+- id: rebuild-cn
+  title: 重建城镇
+  original_title: Rebuild
+  category: 策略
+  language: 汉化版
+  author: sarahnorthway
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/7dd4b04dcd804278967e3572eb2ae46b.png
+  source: https://www.newgrounds.com/portal/view/562116
+  swf: https://games.westcreeper.com/games/Rebuild_CN.swf
+- id: relic-of-war-cn
+  title: 二战之欧洲战场
+  original_title: Relic Of War
+  category: 策略
+  language: 汉化版
+  author: toge-games
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/ebc74c4e3eeb40e1a89bf412c6c02298.png
+  source: https://www.newgrounds.com/portal/view/600861
+  swf: https://games.westcreeper.com/games/Relic_Of_War_CN.swf
+- id: renegades-cn
+  title: 叛军行动
+  original_title: Renegades
+  category: 策略
+  language: 汉化版
+  author: kitecrimson
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/2892c5a44d6f4ead9528bdfe2f910980.png
+  source: https://www.newgrounds.com/portal/view/642311
+  swf: https://games.westcreeper.com/games/Renegades_CN.swf
+- id: riddle-school-1-cn
+  title: 谜题学校/逃学威龙
+  original_title: Riddle School
+  category: 益智
+  language: 汉化版
+  author: jonochrome
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/2515cbd797b741e5a7526ca8e80c3089.png
+  source: https://www.newgrounds.com/portal/view/314680
+  swf: https://games.westcreeper.com/games/Riddle_School_1_CN.swf
+- id: riddle-school-2-cn
+  title: 谜题学校 2/逃学威龙 2
+  original_title: Riddle School 2
+  category: 益智
+  language: 汉化版
+  author: jonochrome
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/8c8396d8479b4e8c8f61384c223dee38.png
+  source: https://www.newgrounds.com/portal/view/349194
+  swf: https://games.westcreeper.com/games/Riddle_School_2_CN.swf
+- id: royal-offense-cn
+  title: 皇家攻势
+  original_title: Royal Offense
+  category: 策略
+  language: 汉化版
+  author: mrDN
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/9cb13b5db2044617a15bf6a69afe9263.png
+  source: https://armorgames.com/play/15721/royal-offense
+  swf: https://games.westcreeper.com/games/Royal_Offense_CN.swf
+- id: seventhsky-refine-cn
+  title: 第七天空改进版
+  original_title: SeventhSky Refine
+  category: 动作
+  language: 汉化版
+  author: Tanaka U
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/b4967406ed424750936de261089883bb.png
+  source: https://nextframe.jp/flash/seventhsky_refine/seventhsky_refine.html
+  swf: https://games.westcreeper.com/games/Seventhsky_Refine_CN.swf
+- id: seventhsky-test-cn
+  title: 第七天空测试版
+  original_title: SeventhSky Test
+  category: 动作
+  language: 汉化版
+  author: Tanaka U
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/59630d9034d64b498307624fd34bb7d2.png
+  source: https://nextframe.jp/flash/seventhsky_plus/seventhSkyPlus.html
+  swf: https://games.westcreeper.com/games/Seventhsky_Test_CN.swf
+- id: sfh2-cn
+  title: 战火英雄2
+  original_title: Strike Force Heroes 2
+  category: 射击
+  language: 汉化版
+  author: sky9games
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/743f6805f452443ab614f62b309b9169.png
+  source: https://armorgames.com/play/14775/strike-force-heroes-2
+  swf: https://games.westcreeper.com/games/SFH2_CN.swf
+- id: sfh3cn-fixed
+  title: 战火英雄 3
+  original_title: Strike Force Heroes 3
+  category: 射击
+  language: 汉化版
+  author: sky9games
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/f9abd6bca9ab4670b9b80e2c6699bc57.png
+  source: https://armorgames.com/play/17706/strike-force-heroes-3
+  swf: https://games.westcreeper.com/games/SFH3CN_fixed.swf
+- id: sfh-cn-final
+  title: 战火英雄
+  original_title: Strike Force Heroes
+  category: 射击
+  language: 汉化版
+  author: sky9games
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/54392c11a7cd424089c2b85c4b5332a5.png
+  source: https://www.newgrounds.com/portal/view/598428
+  swf: https://games.westcreeper.com/games/SFH_CN_Final.swf
+- id: shop-empire-2-cn
+  title: 商业帝国2
+  original_title: Shop Empire 2
+  category: 经营
+  language: 汉化版
+  author: littlegiantworld
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/a5a7fe47e2b44a1cb1324bc52389d623.png
+  source: https://www.kongregate.com/en/games/littlegiantworld/shop-empire-2
+  swf: https://games.westcreeper.com/games/Shop_Empire_2_CN.swf
+- id: shore-siege-cn
+  title: 海滨围攻！
+  original_title: Shore Siege!
+  category: 塔防
+  language: 汉化版
+  author: The-EXP
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/02d506add9454d9d8b6bfcd766ab38cc.png
+  source: https://www.newgrounds.com/portal/view/452432
+  swf: https://games.westcreeper.com/games/Shore_Siege_CN.swf
+- id: sift-renegade-2-cn
+  title: 复仇忍者2
+  original_title: Sift Renegade 2
+  category: 动作
+  language: 汉化版
+  author: Pyrozen
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/a4332b498914497fbfbc47402fdc299b.png
+  source: https://www.newgrounds.com/portal/view/513862
+  swf: https://games.westcreeper.com/games/Sift_Renegade_2_CN.swf
+- id: sift-renegade-3-cn
+  title: 复仇忍者3
+  original_title: Sift Renegade 3
+  category: 动作
+  language: 汉化版
+  author: Pyrozen
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/5eeb3bfb0ffa407bbc040f7e387c7855.png
+  source: https://www.newgrounds.com/portal/view/608062
+  swf: https://games.westcreeper.com/games/Sift_Renegade_3_CN.swf
+- id: sift-renegade-3-expansion-cn
+  title: 复仇忍者3：违抗
+  original_title: Sift Renegade 3 Defiance
+  category: 动作
+  language: 汉化版
+  author: Pyrozen
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/1f3bd8df1b2e4d9191a5422ee40c864a.png
+  source: https://www.newgrounds.com/portal/view/610265
+  swf: https://games.westcreeper.com/games/Sift_Renegade_3_Expansion_CN.swf
+- id: sift-renegade-cn
+  title: 复仇忍者
+  original_title: Sift Renegade
+  category: 动作
+  language: 汉化版
+  author: Pyrozen
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/b20c569e4ed34f0181ae225ce32d2b60.png
+  source: https://www.newgrounds.com/portal/view/475034
+  swf: https://games.westcreeper.com/games/Sift_Renegade_CN.swf
+- id: sniper-hostile-territory-cn
+  title: 敌对狙击
+  original_title: 'Sniper: Hostile Territory'
+  category: 射击
+  language: 汉化版
+  author: ErenKilich
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/90817b9b3e314a038a9e00eaf7615e7a.png
+  source: https://www.kongregate.com/it/games/erenkilich/sniper-hostile-territory
+  swf: https://games.westcreeper.com/games/Sniper_Hostile_Territory_CN.swf
+- id: south-pole-aggressor-cn
+  title: 南极侵略者
+  original_title: South Pole Aggressor
+  category: 塔防
+  language: 汉化版
+  author: StartOnlineGames
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/25352d00df12447ab4f0e3b9819f0e0c.png
+  source: https://www.kongregate.com/en/games/startonlinegames/south-pole-aggressor
+  swf: https://games.westcreeper.com/games/south_pole_aggressor_cn.swf
+- id: st-romance-academy-beach-dockkin-paradise-cn
+  title: 圣罗曼司学园 沙滩心动♪天堂
+  original_title: 聖ロマンス学園 ビーチdaどっきん♪パラダイス
+  category: 休闲
+  language: 汉化版
+  author: Shockwave
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/1c3072a485324269893057772c2aab80.png
+  source: ''
+  swf: https://games.westcreeper.com/games/St._Romance_Academy_Collection_CN/St._Romance_Academy_Beach_Dockkin_Paradise_CN.swf
+- id: st-romance-academy-hot-summer-love-festival-cn
+  title: 圣罗曼司学园 盛夏爱意祭典/电眼美女2
+  original_title: 聖ロマンス学園ほっとサマーdeらぶ祭り♪
+  category: 休闲
+  language: 汉化版
+  author: Shockwave
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/36098848d7344625a7200d476b3b8c64.png
+  source: ''
+  swf: https://games.westcreeper.com/games/St._Romance_Academy_Collection_CN/St._Romance_Academy_Hot_Summer_Love_Festival_CN.swf
+- id: st-romance-academy-hot-summer-peach-festival-cn
+  title: 圣罗曼司学园 盛夏桃色祭典♪/电眼美女3
+  original_title: 聖ロマンス学園 ほっとサマー de もこ祭り♪
+  category: 休闲
+  language: 汉化版
+  author: Shockwave
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/0161d110e8f4418db9e646a314ea622d.png
+  source: ''
+  swf: https://games.westcreeper.com/games/St._Romance_Academy_Collection_CN/St._Romance_Academy_Hot_Summer_Peach_Festival_CN.swf
+- id: st-romance-academy-tokimeki-of-love-masterpiece-war-cn
+  title: 圣罗曼司学园 心动恋爱♪大作战/电眼美女
+  original_title: 聖ロマンス学園 恋のトキメキ♪大作戦
+  category: 休闲
+  language: 汉化版
+  author: Shockwave
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/2be4d977406d4aa29dc3b4eacbd8c1c7.png
+  source: ''
+  swf: https://games.westcreeper.com/games/St._Romance_Academy_Collection_CN/St._Romance_Academy_Tokimeki_of_Love_Masterpiece_War_CN.swf
+- id: stealth-hunter-cn
+  title: 秘密潜入
+  original_title: Stealth Hunter
+  category: 策略
+  language: 汉化版
+  author: RAC7
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/15a944b0687f440aae26a3d60f17094c.png
+  source: https://armorgames.com/play/84/stealth-hunter
+  swf: https://games.westcreeper.com/games/Stealth_Hunter_CN.swf
+- id: steam-king-cn
+  title: 勇闯蒸汽王国
+  original_title: Steam King
+  category: 动作
+  language: 汉化版
+  author: IriySoft
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/30e42d5169584df39171a7dfdcfb4d35.png
+  source: https://www.kongregate.com/en/games/iriysoft/steam-king
+  swf: https://games.westcreeper.com/games/Steam_King_CN.swf
+- id: stick-invader-the-game-cn
+  title: 火柴人入侵者2
+  original_title: Slush Invaders Game
+  category: 策略
+  language: 汉化版
+  author: gildedguy
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/d54a60cdfc5c409ca17f29a365e41541.png
+  source: https://www.newgrounds.com/portal/view/598653
+  swf: https://games.westcreeper.com/games/Stick_Invader_The_Game_CN.swf
+- id: superfighters-cn
+  title: 超级对战
+  original_title: Superfighters
+  category: 动作
+  language: 汉化版
+  author: JohanHjarpe
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/985997fc99504313bb27543ef35354fc.png
+  source: https://www.newgrounds.com/portal/view/575163
+  swf: https://games.westcreeper.com/games/Superfighters_CN.swf
+- id: sushi-cat-the-honeymoon-cn
+  title: 寿司猫：蜜月
+  original_title: Sushi Cat The Honeymoon
+  category: 休闲
+  language: 汉化版
+  author: joeybetz
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/d22ec43b18f64305a73742fb9dd505c1.png
+  source: https://armorgames.com/play/6301/sushi-cat-the-honeymoon
+  swf: https://games.westcreeper.com/games/Sushi_Cat_The_Honeymoon_CN.swf
+- id: swordfall-kingdoms-cn
+  title: 日不落帝国
+  original_title: 'Swordfall: Kingdoms'
+  category: 策略
+  language: 汉化版
+  author: SamRaski
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/2a5e103f069644d18ef1ab8d534bff9a.png
+  source: https://www.kongregate.com/en/games/samraski/swordfall-kingdoms
+  swf: https://games.westcreeper.com/games/Swordfall_Kingdoms_CN.swf
+- id: talesworth-adventure-cn
+  title: 塔斯莱沃斯冒险：追寻龙之财宝
+  original_title: 'Talesworth Adventure: Quest for The Dragon’s Hoard'
+  category: 益智
+  language: 汉化版
+  author: jinxology
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/19f1a4ee7c6946ea83b2350a658ef7fe.png
+  source: https://www.newgrounds.com/portal/view/533264
+  swf: https://games.westcreeper.com/games/Talesworth_Adventure_CN.swf
+- id: tank-trouble-cn
+  title: 坦克动荡
+  original_title: Tank Trouble
+  category: 休闲
+  language: 汉化版
+  author: Purup
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/c37dbfefd3eb4411a798a7be8fb2942e.png
+  source: https://tanktrouble.com/
+  swf: https://games.westcreeper.com/games/Tank_Trouble_CN.swf
+- id: tavern-of-heroes-cn
+  title: 酒馆英雄之战
+  original_title: Tavern of Heroes
+  category: 策略
+  language: 汉化版
+  author: id.net
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/6b87ab3bfed04c64bf4a96da539f9884.png
+  source: https://kbhgames.com/game/tavern-of-heroes
+  swf: https://games.westcreeper.com/games/Tavern_of_Heroes_CN.swf
+- id: tequila-zombies-2-cn
+  title: 喝酒杀僵尸2
+  original_title: Tequila Zombies 2
+  category: 射击
+  language: 汉化版
+  author: IriySoft
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/f569f110d2cd45a7973e070d2d96b7f8.png
+  source: https://armorgames.com/play/13821/tequila-zombies-2
+  swf: https://games.westcreeper.com/games/Tequila_Zombies_2_CN.swf
+- id: tequila-zombies-3-cn
+  title: 喝酒杀僵尸3
+  original_title: Tequila Zombies 3
+  category: 射击
+  language: 汉化版
+  author: IriySoft
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/c6712052520d48de80a77e8e902bf0c3.png
+  source: https://armorgames.com/play/16128/tequila-zombies-3
+  swf: https://games.westcreeper.com/games/Tequila_Zombies_3_CN.swf
+- id: territory-war-cn
+  title: 火柴人领土战争
+  original_title: Territory WAR
+  category: 策略
+  language: 汉化版
+  author: Afro-Ninja
+  description: ''
+  play_status: ''
+  play_note: ''
+  translated: true
+  cover: /assets/uploads/7644f1b984f64bffaf6e272b8231b614.png
+  source: https://www.newgrounds.com/portal/view/302830
+  swf: https://games.westcreeper.com/games/Territory_WAR_CN.swf
