@@ -6,7 +6,6 @@
   const launch = shell.querySelector("[data-player-launch]");
   const start = shell.querySelector("[data-player-start]");
   const restart = shell.querySelector("[data-player-restart]");
-  const fullscreen = shell.querySelector("[data-player-fullscreen]");
   const message = document.querySelector("[data-player-message]");
   let player;
   let busy = false;
@@ -56,6 +55,7 @@
   const boot = async () => {
     if (busy) return;
     busy = true;
+    shell.dispatchEvent(new CustomEvent("player-loading"));
     start.disabled = true;
     restart.disabled = true;
     start.textContent = "正在加载…";
@@ -90,8 +90,10 @@
         shell.dataset.playNote ||
         "游戏文件已加载。请点击画面后使用键盘操作；重新开始会清除当前这一局的进度。";
       restart.disabled = false;
+      shell.dispatchEvent(new CustomEvent("player-ready", { detail: player }));
       player.focus();
     } catch (error) {
+      shell.dispatchEvent(new CustomEvent("player-failed"));
       if (player) {
         player.remove();
         player = null;
@@ -113,21 +115,4 @@
   restart.addEventListener("click", () => {
     if (confirm("重新开始会结束当前这一局，确定重新开始吗？")) boot();
   });
-  if (!document.fullscreenEnabled || !shell.requestFullscreen) {
-    fullscreen.hidden = true;
-  } else {
-    fullscreen.addEventListener("click", async () => {
-      try {
-        if (document.fullscreenElement === shell)
-          await document.exitFullscreen();
-        else await shell.requestFullscreen();
-      } catch (_) {
-        message.textContent = "当前浏览器无法进入全屏，请在页面内游玩。";
-      }
-    });
-    document.addEventListener("fullscreenchange", () => {
-      fullscreen.lastChild.textContent =
-        document.fullscreenElement === shell ? "退出全屏" : "全屏";
-    });
-  }
 })();

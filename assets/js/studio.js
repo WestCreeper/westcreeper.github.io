@@ -197,7 +197,11 @@
   });
   searchInput.addEventListener("input", renderSearch);
   document.addEventListener("keydown", (event) => {
-    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      event.key.toLowerCase() === "k" &&
+      !event.composedPath().some((node) => node.tagName === "RUFFLE-PLAYER")
+    ) {
       event.preventDefault();
       openSearch();
     }

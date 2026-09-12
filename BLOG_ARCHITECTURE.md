@@ -39,6 +39,8 @@
 
 样式和交互来自 `assets/css/studio.css`、`assets/js/studio.js`。游戏页额外加载 `assets/js/ruffle-loader.js`，点击开始后才请求固定版本的 Ruffle。
 
+播放器工具栏由 `_includes/studio/player-controls.html` 和 `assets/js/player-controls.js` 提供，包括手机指南、可重新映射的虚拟键盘、网页内全屏、屏幕全屏、画面尺寸与音量。加载器通过 `player-loading`、`player-ready`、`player-failed` 事件同步按键可用状态；键位按游戏保存在访客浏览器，音量为浏览器内共用偏好。切换视图不会重建播放器，重新开始仍需确认。
+
 首页、游戏详情页和档案馆通过 `_includes/studio/game-collection.html` 与 `assets/js/game-collection.js` 读取 `games.json`。首页与详情页随机取 3 部（详情页排除当前游戏），档案馆每页 12 部；只为当前结果创建卡片与封面。分类、关键词及页码使用 `tag`、`q`、`page` 查询参数，支持历史导航。关闭 JavaScript 时提供有限数量的静态卡片。
 
 留言页额外加载 `assets/js/guestbook.js`，从公开 GitHub Issues API 读取留言及回复，支持分页和重试。正文以纯文本显示，写入和管理均在 GitHub 完成。

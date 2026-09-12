@@ -1,0 +1,32 @@
+<div class="player-toolbar">
+  <div class="player-tools" role="group" aria-label="游玩工具">
+    <button data-player-mobile aria-expanded="false" aria-controls="player-mobile-help">{% include studio/icon.html name='game' %}手机上玩？</button>
+    <button data-player-keyboard aria-expanded="false" aria-controls="player-keyboard">虚拟键盘</button>
+    <button data-player-web-fullscreen aria-pressed="false">网页内全屏</button>
+    <button data-player-fullscreen aria-pressed="false">{% include studio/icon.html name='expand' %}<span>屏幕全屏</span></button>
+    <button data-player-restart disabled>{% include studio/icon.html name='refresh' %}重新开始</button>
+    <a href="{{ game_swf_url | strip | escape }}" download target="_blank" rel="noopener">{% include studio/icon.html name='download' %}下载 SWF</a>
+  </div>
+  <div class="player-adjustments">
+    <div class="player-size" role="group" aria-label="游戏画面尺寸"><button data-player-smaller aria-label="缩小游戏画面">尺寸 −</button><output data-player-size aria-live="polite">100%</output><button data-player-larger aria-label="放大游戏画面">尺寸 ＋</button><button data-player-size-reset aria-label="恢复默认画面尺寸">重置</button></div>
+    <div class="player-volume"><button data-player-mute aria-label="静音" aria-pressed="false">音量</button><input data-player-volume type="range" min="0" max="100" value="100" aria-label="游戏音量"><output data-player-volume-value>100%</output></div>
+  </div>
+</div>
+<section id="player-mobile-help" class="player-help" aria-label="手机游玩指南" hidden>
+  <div><strong>把旧时光，装进口袋。</strong><p>横屏握持手机，点击「开始游戏」。需要键盘的游戏可开启虚拟按键，方向和动作键支持同时长按；鼠标操作则直接点按或拖动画面。</p><p>「网页内全屏」会铺满当前网页；「屏幕全屏」还会隐藏浏览器栏，是否可用取决于浏览器。部分 Flash 游戏仍需鼠标、实体键盘或存在模拟器兼容问题。</p></div>
+  <div class="player-help-actions"><button data-player-touch-mode>开启触控操作</button><button data-player-copy-link>复制游戏链接</button><button data-player-help-close>收起指南</button></div>
+</section>
+<section id="player-keyboard" class="player-keyboard" aria-label="虚拟游戏键盘" hidden>
+  <div class="keyboard-heading"><label>按键布局 <select data-keyboard-layout><option value="arrows">方向键 + Z / X / C</option><option value="wasd">WASD + J / K / L</option><option value="custom">自定义按键</option><option value="all">完整键盘</option></select></label><span data-keyboard-hint>开始游戏后可用 · 支持多指同时按</span><button data-keyboard-config>配置按键</button><button data-keyboard-close aria-label="收起虚拟键盘">收起</button></div>
+  <div class="virtual-key-grid" data-keyboard-keys></div>
+</section>
+<dialog class="key-config-dialog" data-key-config aria-labelledby="key-config-title">
+  <form data-key-config-form>
+    <header><div><span>MAKE IT YOURS</span><h2 id="key-config-title">让每个按键，都顺手。</h2></div><button type="button" data-key-config-close aria-label="关闭按键配置">关闭</button></header>
+    <p>为触控按钮选择实际发送的键盘按键。不需要的按钮可隐藏；这份配置仅保存在当前浏览器，并只用于此游戏。</p>
+    <div class="key-config-presets"><span>快速预设</span><button type="button" data-key-preset="arrows">方向键方案</button><button type="button" data-key-preset="wasd">WASD 方案</button></div>
+    <div class="key-config-fields" data-key-config-fields></div>
+    <footer><button type="button" data-key-config-cancel>取消</button><button type="submit">保存并应用</button></footer>
+  </form>
+</dialog>
+<p class="player-control-status" data-player-control-status role="status" hidden></p>

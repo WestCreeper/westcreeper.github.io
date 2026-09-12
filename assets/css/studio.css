@@ -1159,13 +1159,13 @@ svg {
 .player-stage {
   position: relative;
   aspect-ratio: 4/3;
-  max-height: 72vh;
+  width: min(100%, calc(min(800px, 100vw - 48px) * var(--player-scale, 1)));
   margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   isolation: isolate;
-  min-height: 260px;
+  min-height: 0;
 }
 .player-backdrop {
   position: absolute;
@@ -1215,9 +1215,9 @@ svg {
 }
 .player-toolbar {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
+  align-items: stretch;
+  flex-direction: column;
+  gap: 12px;
   background: #202b23;
   color: #d8e2d3;
   min-height: 54px;
@@ -1228,7 +1228,8 @@ svg {
 }
 .player-tools {
   display: flex;
-  gap: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 .player-tools button,
 .player-tools a {
@@ -1238,23 +1239,304 @@ svg {
   background: transparent;
   border: 0;
   color: inherit;
-  padding: 4px;
-  font-size: 11px;
+  padding: 8px 10px;
+  min-height: 40px;
+  border-radius: 6px;
+  font-size: 12px;
 }
 .player-tools .icon {
   width: 16px;
 }
-.player-shell:fullscreen {
+.player-shell:fullscreen,
+.player-shell.is-web-fullscreen {
   border-radius: 0;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
-.player-shell:fullscreen .player-stage {
+.player-shell:fullscreen .player-stage,
+.player-shell.is-web-fullscreen .player-stage {
   flex: 1;
   width: 100%;
   max-height: none;
   min-height: 0;
   aspect-ratio: auto;
+}
+.player-shell.is-web-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  border: 0;
+}
+.has-player-overlay {
+  overflow: hidden;
+}
+.player-shell {
+  --player-scale: 1;
+}
+.player-tools button:hover,
+.player-tools a:hover,
+.player-tools button[aria-pressed="true"],
+.player-tools button[aria-expanded="true"] {
+  background: #354939;
+  color: #eaf5df;
+}
+.player-shell button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.player-adjustments {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  border-top: 1px solid #ffffff16;
+}
+.player-size,
+.player-volume {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+}
+.player-adjustments button,
+.player-help button,
+.keyboard-heading button {
+  border: 1px solid #53634e;
+  background: #2c3d2e;
+  color: #e3eddc;
+  border-radius: 6px;
+  padding: 7px 10px;
+  min-height: 36px;
+  font: inherit;
+}
+.player-size output,
+.player-volume output {
+  min-width: 42px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.player-volume input {
+  width: 120px;
+  min-height: 36px;
+  accent-color: #b1cf97;
+  cursor: pointer;
+}
+.player-help,
+.player-keyboard {
+  padding: 16px 20px;
+  background: #19251c;
+  color: #e3eddc;
+  border-top: 1px solid #ffffff16;
+  font-size: 12px;
+}
+.player-help strong {
+  font-size: 16px;
+}
+.player-help p {
+  color: #becdb8;
+  margin-top: 8px;
+}
+.player-help-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.keyboard-heading {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.keyboard-heading > span {
+  flex: 1;
+  color: #a7bda0;
+}
+.keyboard-heading select {
+  background: #2c3d2e;
+  color: #e3eddc;
+  padding: 7px;
+  font: inherit;
+  border: 1px solid #53634e;
+  border-radius: 6px;
+}
+.virtual-key-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  max-width: 800px;
+  margin: auto;
+}
+.virtual-key-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.virtual-key {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px 12px;
+  border: 1px solid #69815e;
+  border-bottom-width: 3px;
+  border-radius: 8px;
+  background: #31462e;
+  color: #eff6e7;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.1;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.virtual-key.is-held {
+  background: #bbd99c;
+  color: #21311d;
+  border-color: #bbd99c;
+  transform: translateY(2px);
+}
+.virtual-key small {
+  display: block;
+  font-size: 9px;
+  font-weight: 400;
+  opacity: 0.8;
+  margin-top: 3px;
+}
+.player-shell:not(:fullscreen):not(.is-web-fullscreen)
+  .player-stage:has(.player-launch:not([hidden])) {
+  min-height: 300px;
+}
+.virtual-key-wide {
+  min-width: 90px;
+}
+.virtual-dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  gap: 5px;
+  flex-shrink: 0;
+}
+.virtual-dpad > :first-child {
+  grid-column: 2;
+}
+.virtual-dpad > :nth-child(2) {
+  grid-column: 1;
+  grid-row: 2;
+}
+.virtual-dpad > :nth-child(3) {
+  grid-column: 2;
+  grid-row: 2;
+}
+.virtual-dpad > :nth-child(4) {
+  grid-column: 3;
+  grid-row: 2;
+}
+.virtual-key-grid[data-layout="all"] {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.virtual-key-grid[data-layout="all"] .virtual-key-row {
+  flex-wrap: nowrap;
+  width: 100%;
+}
+.virtual-key-grid[data-layout="all"] .virtual-key {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 2px;
+}
+.player-control-status {
+  margin: 0;
+  padding: 10px 18px;
+  background: #293624;
+  color: #d3e4c5;
+  font-size: 12px;
+}
+.player-shell:is(:fullscreen, .is-web-fullscreen) .player-keyboard {
+  flex-shrink: 0;
+  max-height: 45dvh;
+  overflow-y: auto;
+}
+.player-shell:is(:fullscreen, .is-web-fullscreen) .player-help {
+  max-height: 35dvh;
+  overflow-y: auto;
+}
+.player-shell:is(:fullscreen, .is-web-fullscreen) .player-toolbar {
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .player-help,
+  .player-keyboard {
+    padding: 12px 10px;
+  }
+  .virtual-key-grid {
+    gap: 10px;
+  }
+  .virtual-key-row {
+    gap: 5px;
+  }
+  .virtual-key {
+    padding: 6px 8px;
+  }
+  .virtual-key-grid[data-layout="all"] .virtual-key {
+    font-size: 10px;
+    min-height: 38px;
+  }
+  .keyboard-heading > span {
+    flex-basis: 100%;
+    order: 3;
+  }
+  .player-tools button,
+  .player-tools a {
+    padding: 6px 8px;
+  }
+}
+@media (orientation: landscape) and (max-height: 600px) {
+  .player-shell:is(:fullscreen, .is-web-fullscreen) .player-launch {
+    padding: 8px;
+    gap: 4px;
+  }
+  .player-shell:is(:fullscreen, .is-web-fullscreen) .player-launch > .icon,
+  .player-shell:is(:fullscreen, .is-web-fullscreen) .player-launch small {
+    display: none;
+  }
+  .player-shell:is(:fullscreen, .is-web-fullscreen) .player-launch h2 {
+    font-size: 18px;
+  }
+  .player-shell:is(:fullscreen, .is-web-fullscreen) .player-launch .button {
+    margin: 0;
+  }
+  .player-shell:is(:fullscreen, .is-web-fullscreen) .player-toolbar {
+    gap: 4px;
+    padding: 4px 10px;
+  }
+  .player-shell:is(:fullscreen, .is-web-fullscreen) .player-adjustments {
+    border: 0;
+    padding: 0;
+  }
+  .player-shell:is(:fullscreen, .is-web-fullscreen) .player-keyboard {
+    padding: 5px 12px;
+    max-height: 42dvh;
+  }
+  .player-shell:is(:fullscreen, .is-web-fullscreen) .keyboard-heading {
+    margin-bottom: 4px;
+  }
+  .player-shell:is(:fullscreen, .is-web-fullscreen) .keyboard-heading > span {
+    display: none;
+  }
+  .player-shell:is(:fullscreen, .is-web-fullscreen) .virtual-key {
+    min-height: 36px;
+  }
 }
 .player-message {
   color: var(--muted);
@@ -2223,7 +2505,7 @@ kbd {
     margin-top: -8px;
   }
   .player-stage {
-    min-height: 270px;
+    min-height: 0;
   }
   .player-launch {
     padding: 20px;
@@ -2319,4 +2601,102 @@ kbd {
 .game-compatibility a {
   color: var(--green);
   text-decoration: underline;
+}
+
+.key-config-dialog {
+  width: min(680px, calc(100vw - 28px));
+  max-height: 88vh;
+  max-height: 88dvh;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 24px;
+}
+.key-config-dialog::backdrop {
+  background: #102116b8;
+  backdrop-filter: blur(4px);
+}
+.key-config-dialog header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.key-config-dialog header span {
+  color: var(--green);
+  font: 10px/2 monospace;
+  letter-spacing: 2px;
+}
+.key-config-dialog h2 {
+  font-size: 22px;
+  margin: 5px 0 0;
+}
+.key-config-dialog p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+  margin: 16px 0;
+}
+.key-config-dialog button {
+  background: var(--green-light);
+  color: var(--green);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  min-height: 40px;
+  padding: 7px 12px;
+  font: inherit;
+}
+.key-config-presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.key-config-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+  margin: 20px 0;
+}
+.key-config-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+.key-config-fields select {
+  width: 100%;
+  min-height: 40px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px;
+}
+.key-config-dialog footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  position: sticky;
+  bottom: -24px;
+  background: var(--surface);
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.key-config-dialog button[type="submit"] {
+  background: var(--green);
+  color: var(--surface);
+}
+@media (max-width: 480px) {
+  .key-config-dialog {
+    padding: 18px;
+  }
+  .key-config-dialog h2 {
+    font-size: 18px;
+  }
 }

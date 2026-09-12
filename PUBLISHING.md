@@ -137,6 +137,18 @@ bundle exec jekyll build
 
 替换 `assets/images/sponsor-payment.png` 可以更新赞助方式。保持两个收款码完整清晰；当前原图为 2160 × 1080，若更换尺寸，请同步修改页面中图片的 `width`、`height`。原始 Excel 不会作为公开下载文件发布。
 
+## 游戏播放器操作
+
+- 「手机上玩？」提供横屏、触控与链接分享指南；「开启触控操作」同时展开虚拟键盘与网页内全屏。
+- 虚拟键盘提供方向键、WASD、自定义与完整键盘布局。「配置按键」可逐个映射方向、A/B/X/Y、开始/选择和肩键，也可以隐藏不用的按钮。按钮下的小字表示实际发送的键盘按键。
+- 配置按游戏 ID 保存在访客当前浏览器的 `wc-player-keys:<id>`；不修改博客档案、不上传服务器。配置弹窗的预设在「保存并应用」后生效，取消会保留原映射。不同游戏互不影响。
+- 虚拟键支持长按、重复触发和多指操作；松手、触控取消、页面失焦、收起键盘、改变布局及重新开始时释放。使用 Ruffle 0.6.0 的播放器焦点与键盘事件机制，保持 `allowScriptAccess: false`。
+- 「网页内全屏」铺满网页，保留浏览器界面；Esc 或退出按钮恢复原位置。「屏幕全屏」使用浏览器 Fullscreen API，将播放器与工具栏一起全屏；不支持时切换网页内全屏。全屏时画面自适应，暂时禁用尺寸调节。
+- 普通模式支持 50%–150% 的尺寸调节和重置，宽度不超过页面。音量条使用 Ruffle 的 `volume` 接口，0% 为静音；点击音量按钮静音或恢复，音量偏好保存在 `wc-player-volume`。
+- 手机端仍取决于具体 SWF 与 Ruffle 的兼容性；依赖鼠标悬停、右键或复杂组合操作的游戏，建议用电脑游玩。
+
+实现入口：`_includes/studio/player-controls.html`、`assets/js/player-controls.js` 与 `assets/js/ruffle-loader.js`。参考交互来自 [OldSWF 游戏页](https://oldswf.com/game/236) 与提供的键位配置截图；接口依据 [Ruffle PlayerV1](https://ruffle.rs/js-docs/master/interfaces/Player.PlayerV1.html) 和 [0.6.0 键盘事件处理源码](https://github.com/ruffle-rs/ruffle/blob/v0.6.0/web/src/lib.rs)。
+
 ## 本地可视化编辑器与 R2
 
 编辑器位于仓库外的 `../westcreeper-workspace/editor/`，双击上一级目录的「打开博客编辑器.cmd」启动。浏览器访问 `http://127.0.0.1:4173`，载入博客根目录后即可管理文章、游戏和赞助名单。编辑器仅监听本机，保存前自动备份到它的 `state/backups/`，不会自动提交或推送。
