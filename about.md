@@ -4,7 +4,7 @@ title: 关于我
 permalink: /about.html
 description: 欢迎来到长有仙人掌的西部。
 ---
-<img class="about-avatar" src="{{ '/assets/images/avatar.png' | relative_url }}" alt="西部苦力怕的头像" width="86" height="86">
+<img class="about-avatar" src="{{ '/assets/images/avatar.gif' | relative_url }}" alt="西部苦力怕的头像" width="86" height="86">
 
 我是 **西部苦力怕**。游戏玩家，Flash 爱好者，也会在这里写下生活中的一些随想。
 
