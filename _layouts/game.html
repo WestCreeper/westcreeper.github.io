@@ -13,6 +13,6 @@ layout: studio
   </section>
   <p class="player-message" data-player-message role="status" aria-live="polite">首次启动需要加载模拟器，请稍等片刻。模拟器的兼容情况可能因游戏和浏览器而异。</p>
   <div class="game-details-grid"><div class="prose">{{ content }}</div><aside class="game-facts"><h2>档案信息</h2><dl><dt>原作名称</dt><dd>{{ game.original_title }}</dd><dt>开发者</dt><dd>{{ game.author }}</dd><dt>游戏类型</dt><dd>{{ game.category }}</dd><dt>语言版本</dt><dd>{{ game.language }}</dd><dt>运行方式</dt><dd>Ruffle 模拟器</dd></dl><a href="{{ game.source }}" target="_blank" rel="noopener noreferrer">访问原作页面 ↗</a><a href="{{ '/guestbook/' | relative_url }}">遇到问题？反馈给我 ↗</a></aside></div>
-  <section class="section"><div class="section-heading"><div><div class="eyebrow">ONE MORE GAME?</div><h2>再玩一局</h2></div><a class="section-link" href="{{ '/swf/' | relative_url }}">全部游戏 ↗</a></div><div class="game-grid">{% for other in site.data.games %}{% unless other.id == current_game.id %}{% include studio/game-card.html game=other %}{% endunless %}{% endfor %}</div></section>
+  <section class="section"><div class="section-heading"><div><div class="eyebrow">ONE MORE GAME?</div><h2>再玩一局</h2></div><a class="section-link" href="{{ '/swf/' | relative_url }}">全部游戏 ↗</a></div>{% include studio/game-collection.html mode='random' limit=3 exclude=current_game.id %}</section>
 </div>
 <script src="{{ '/assets/js/ruffle-loader.js' | relative_url }}" defer></script>

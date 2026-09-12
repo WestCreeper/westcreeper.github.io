@@ -17,6 +17,7 @@
 | `/friends/` | 友情链接 |
 | `/about.html` | 关于我 |
 | `/search.json` | 全站静态搜索索引 |
+| `/games.json` | 游戏卡片数据，不含 SWF 本体 |
 | `/feed.xml` | Atom 订阅 |
 
 文章沿用 Jekyll 的日期 URL，页面入口由 front matter 中的 `permalink` 决定。
@@ -37,6 +38,8 @@
 ## 浏览器资源
 
 样式和交互来自 `assets/css/studio.css`、`assets/js/studio.js`。游戏页额外加载 `assets/js/ruffle-loader.js`，点击开始后才请求固定版本的 Ruffle。
+
+首页、游戏详情页和档案馆通过 `_includes/studio/game-collection.html` 与 `assets/js/game-collection.js` 读取 `games.json`。首页与详情页随机取 3 部（详情页排除当前游戏），档案馆每页 12 部；只为当前结果创建卡片与封面。分类、关键词及页码使用 `tag`、`q`、`page` 查询参数，支持历史导航。关闭 JavaScript 时提供有限数量的静态卡片。
 
 留言页额外加载 `assets/js/guestbook.js`，从公开 GitHub Issues API 读取留言及回复，支持分页和重试。正文以纯文本显示，写入和管理均在 GitHub 完成。
 

@@ -19,7 +19,7 @@ class Page(HTMLParser):
             self.player_urls.append(attrs.get('data-swf', ''))
         if tag == 'h1':
             self.headings += 1
-        for key in ('href', 'src', 'data-swf', 'data-search-url'):
+        for key in ('href', 'src', 'data-swf', 'data-search-url', 'data-games-url'):
             if attrs.get(key):
                 self.urls.append(attrs[key])
 
@@ -63,6 +63,18 @@ for path in pages:
             errors.append(f'{path.relative_to(root)}: broken local link {url}')
 
 index = json.loads((root / 'search.json').read_text(encoding='utf-8'))
+games = json.loads((root / 'games.json').read_text(encoding='utf-8'))
+assert len({game['id'] for game in games}) == len(games), 'Duplicate game IDs.'
+for game in games:
+    for key in ('url', 'cover'):
+        parts = urlsplit(game[key])
+        if parts.scheme or parts.netloc:
+            continue
+        route = unquote(parts.path)
+        if args.baseurl:
+            assert route.startswith(args.baseurl + '/'), game[key]
+            route = route[len(args.baseurl):]
+        assert (root / route.lstrip('/')).exists(), game[key]
 assert index, 'Search index is empty.'
 assert len({entry['url'] for entry in index}) == len(index), 'Duplicate search URLs.'
 for entry in index:

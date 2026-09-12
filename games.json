@@ -1,0 +1,21 @@
+---
+layout: null
+permalink: /games.json
+---
+[
+{% for game in site.data.games %}
+  {
+    "id": {{ game.id | jsonify }},
+    "title": {{ game.title | jsonify }},
+    "original_title": {{ game.original_title | jsonify }},
+    "category": {{ game.category | jsonify }},
+    "language": {{ game.language | jsonify }},
+    "translated": {{ game.translated | jsonify }},
+    "description": {{ game.description | jsonify }},
+    "play_status": {{ game.play_status | default: '在线游玩' | jsonify }},
+    "play_note": {{ game.play_note | jsonify }},
+    "cover": {{ game.cover | relative_url | jsonify }},
+    "url": {{ '/swf/games/' | append: game.id | append: '/' | relative_url | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+{% endfor %}
+]

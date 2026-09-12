@@ -1,4 +1,27 @@
 /* WestCreeper — a small digital garden. No font or CSS CDN required. */
+.game-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 32px;
+}
+.game-pagination select {
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px;
+}
+.game-pagination button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+[data-game-collection] {
+  scroll-margin-top: 100px;
+}
 :root {
   color-scheme: light;
   --bg: #f8f9f5;
