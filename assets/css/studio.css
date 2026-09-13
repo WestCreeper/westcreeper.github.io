@@ -2844,3 +2844,5 @@ kbd {
       rotate(calc(-1 * var(--angle)));
   }
 }
+
+.game-tag-links{display:flex;flex-wrap:wrap;gap:6px}.game-facts .game-tag-links a{display:inline-block;margin:0;padding:3px 9px;border:1px solid var(--line);border-radius:5px;background:var(--green-light);font-size:12px}

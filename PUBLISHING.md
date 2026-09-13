@@ -34,7 +34,7 @@ description: 一两句话介绍这篇文章，用于首页摘要与搜索结果�
 - id: example
   title: 游戏中文名
   original_title: Original Game Title
-  category: 益智解谜
+  tags: [益智, 冒险]
   language: 汉化版
   translated: true
   author: 原作者
@@ -43,6 +43,8 @@ description: 一两句话介绍这篇文章，用于首页摘要与搜索结果�
   source: https://example.com/original-game
   description: 一句简洁的游戏介绍。
 ```
+
+游戏可同时使用多个标签；至少选择一个。当前标签为动作、益智、体育、射击、冒险、养成、策略、敏捷、休闲、经营，统一维护在 `_data/game_tags.yml`。游戏档案馆支持按标签筛选，并可叠加搜索、中文名／英文名／作者排序；筛选后重新从第一页展示。本地编辑器也支持标签勾选与筛选。
 
 游戏的 `index.md`：
 

@@ -12,7 +12,7 @@
     <label>跳转到 <select data-page-select aria-label="选择游戏页码"></select></label>
     <button class="filter-chip" data-page-next>下一页</button>
   </nav>
-  <template data-game-template><a class="game-card"><div class="game-cover"><img loading="lazy" width="400" height="230"><span class="game-badge"></span><span class="game-launch">{% include studio/icon.html name='play' %}</span><span class="game-cover-caption"></span></div><div class="game-card-body"><div class="game-card-title"><h3></h3><span aria-hidden="true">↗</span></div><p></p><div class="game-card-meta"><span data-game-category></span><span class="play-label"><i></i><span data-game-status></span></span></div></div></a></template>
+  <template data-game-template><a class="game-card"><div class="game-cover"><img loading="lazy" width="400" height="230"><span class="game-badge"></span><span class="game-launch">{% include studio/icon.html name='play' %}</span><span class="game-cover-caption"></span></div><div class="game-card-body"><div class="game-card-title"><h3></h3><span aria-hidden="true">↗</span></div><p></p><div class="game-card-meta"><span data-game-tags></span><span class="play-label"><i></i><span data-game-status></span></span></div></div></a></template>
   <noscript><p>启用 JavaScript 可使用随机推荐、搜索和分页。</p><div class="game-grid">{% assign fallback_count = 0 %}{% for fallback_game in site.data.games %}{% unless fallback_game.id == include.exclude %}{% if fallback_count < include.limit %}{% include studio/game-card.html game=fallback_game %}{% assign fallback_count = fallback_count | plus: 1 %}{% endif %}{% endunless %}{% endfor %}</div></noscript>
 </div>
 <script src="{{ '/assets/js/game-collection.js' | relative_url }}" defer></script>

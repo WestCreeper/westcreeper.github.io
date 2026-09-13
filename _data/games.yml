@@ -1,7 +1,6 @@
 - id: the-heist-2
   title: 大劫案 2
   original_title: The Heist 2
-  category: 驾驶追逐
   language: 汉化版
   translated: true
   author: JohnnyTwoShoes
@@ -11,10 +10,12 @@
   description: 引擎轰鸣，街头追逐。一场惊险的大劫案等你出发。
   play_status: 原站限制
   play_note: 当前收录文件在本地测试中显示 AddictingGames 原站限制，暂未验证能在本站进入游戏。可查看原作页面，或下载文件留作存档。
+  tags:
+  - 动作
+  - 敏捷
 - id: stealth-hunter-2
   title: 秘密潜入 2
   original_title: Stealth Hunter 2
-  category: 潜行动作
   language: 汉化版
   translated: true
   author: RAC7
@@ -24,10 +25,12 @@
   description: 潜入敌营，避开守卫，在阴影里完成你的秘密任务。
   play_status: ''
   play_note: ''
+  tags:
+  - 动作
+  - 益智
 - id: dadnme
   title: 狂扁小朋友
   original_title: Dad 'n Me
-  category: 街机格斗
   language: 原版
   translated: false
   author: Tom Fulp / Dan Paladin
@@ -35,1446 +38,1657 @@
   cover: /swf/games/dadnme/thumbnail.jpg
   source: https://www.newgrounds.com/portal/view/254456
   description: 紫色小怪物的街头冒险，重温熟悉的连击与手绘世界。
+  tags:
+  - 动作
 - id: achievement-unlocked-1-cn
   title: 成就解锁
   original_title: Achievement Unlocked
-  category: 益智
   language: 汉化版
   author: jmtb02
-  description: ''
+  description: 蓝色小象被放进一间机关房，目标不是寻找出口，而是把看似普通的动作变成成就。移动、跳跃、碰触机关甚至失败，都可能解锁新的记录。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/achievement-unlocked-1-cn/thumbnail.png
   source: https://armorgames.com/play/2893/achievement-unlocked
   swf: https://games.westcreeper.com/games/Achievement_Unlocked_1_CN.swf
+  tags:
+  - 益智
+  - 休闲
 - id: bqwars
   title: 笨蛋军团大战/东方八卦炉战争
   original_title: BQwars
-  category: 休闲
   language: 汉化版
   author: 迷走ポタージュ
-  description: ''
+  description: 东方角色在场地里踢击各种球，把球送向对手并躲开飞来的球与子弹。生命耗尽后会暂时离场再复活，在限时内减少被击败次数并保留更多生命，争取赢得比赛。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/bqwars/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/BQwars.swf
+  tags:
+  - 动作
+  - 体育
+  - 敏捷
 - id: age-of-kingdom-cn
   title: 帝国时代
   original_title: Age Of Kingdom
-  category: 策略
   language: 汉化版
   author: belugerin
-  description: ''
+  description: 从早期聚落开始建设王国，通过生产、贸易与科技积累推动时代发展。扩建城镇的同时招募军队，处理经济与征服之间的取舍。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/age-of-kingdom-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/553747
   swf: https://games.westcreeper.com/games/Age_Of_Kingdom_CN.swf
+  tags:
+  - 策略
+  - 经营
 - id: alien-attack-team-2-cn
   title: 太空舱作战军团2
   original_title: Alien Attack Team 2
-  category: 射击
   language: 汉化版
   author: box10.com
-  description: ''
+  description: 与小队一同抵抗外星入侵，在太空设施中穿越交火区域。续作加入大型机甲等战斗场景，武器配置和队友配合仍是突破敌阵的关键。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/alien-attack-team-2-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/649529
   swf: https://games.westcreeper.com/games/Alien_Attack_Team_2_CN.swf
+  tags:
+  - 射击
+  - 动作
 - id: alien-attack-team-cn
   title: 太空舱作战军团
   original_title: Alien Attack Team
-  category: 射击
   language: 汉化版
   author: box10.com
-  description: ''
+  description: 加入抵抗外星人的战斗小队，在横向展开的设施中寻找武器、躲避火力并完成任务。角色与装备可作调整，不同武器适合不同交战距离。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/alien-attack-team-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/622614
   swf: https://games.westcreeper.com/games/Alien_Attack_Team_CN.swf
+  tags:
+  - 射击
+  - 动作
 - id: barbarianonslaughtthesecretofsteelcn
   title: 野蛮人的进攻：钢铁之秘
   original_title: Barbarian On Slaught The Secret Of Steel
-  category: 冒险
   language: 汉化版
   author: JohanHjarpe
-  description: ''
+  description: 年轻的野蛮人踏上寻找钢铁秘密的旅程。挥剑应对成群敌人，利用地形与可互动的物体突破阻碍，逐步挑战更强大的对手。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/barbarianonslaughtthesecretofsteelcn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/498326
   swf: https://games.westcreeper.com/games/BarbarianOnslaughtTheSecretOfSteelCN.swf
+  tags:
+  - 动作
+  - 冒险
 - id: battalion-ghosts-cn
   title: 星球突击队：幽灵
   original_title: Battalion Ghosts
-  category: 策略
   language: 汉化版
   author: urbansquall
-  description: ''
+  description: 率领阿卡迪亚部队参与新的战役，在回合制战场上调配步兵与装甲单位。利用各兵种的射程和地形优势，逐步削弱敌军并夺取据点。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/battalion-ghosts-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/urbansquall/battalion-ghosts
   swf: https://games.westcreeper.com/games/Battalion_Ghosts_CN.swf
+  tags:
+  - 策略
 - id: battalion-nemesis-cn
   title: 星球突击队：宿敌
   original_title: Battalion Nemesis
-  category: 策略
   language: 汉化版
   author: urbansquall
-  description: ''
+  description: 指挥快速反应部队抵抗穆伦军队，在方格地图上展开回合制交战。步兵、坦克与其他单位各有用途，保护脆弱兵种并控制关键地点才能推进战线。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/battalion-nemesis-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/urbansquall/battalion-nemesis
   swf: https://games.westcreeper.com/games/Battalion_Nemesis_CN.swf
+  tags:
+  - 策略
 - id: battalion-vengeance-cn
   title: 星球突击队：复仇
   original_title: Battalion Vengeance
-  category: 策略
   language: 汉化版
   author: urbansquall
-  description: ''
+  description: 《Battalion》系列的后续战役延续回合制军事对抗。面对不同地形和敌军配置，安排单位协同推进，并在进攻前考虑敌方下一回合的反击范围。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/battalion-vengeance-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/urbansquall/battalion-vengeance
   swf: https://games.westcreeper.com/games/Battalion_Vengeance_CN.swf
+  tags:
+  - 策略
 - id: battle-for-darkness-cn
   title: 暗黑之战
   original_title: Battle for Darkness
-  category: 策略
   language: 汉化版
   author: qigames
-  description: ''
+  description: 这次由你指挥黑暗军团向人类王国进攻。招募不同种族的部队、调整前后排配置，并用每次远征的收益升级军队，向更深处的强敌发起挑战。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/battle-for-darkness-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/609750
   swf: https://games.westcreeper.com/games/Battle_for_Darkness_CN.swf
+  tags:
+  - 策略
+  - 养成
 - id: bummin-a-ride
   title: 乞丐搭便车
   original_title: Bummin' A Ride
-  category: 策略
   language: 汉化版
   author: finefin
-  description: ''
+  description: 一笔遗产等在洛杉矶，但主角必须在限定天数内赶到。通过旅途中的工作与小游戏筹集路费，在时间、现金和生存需求之间作出选择。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/bummin-a-ride/thumbnail.png
   source: https://www.newgrounds.com/portal/view/492928
   swf: https://games.westcreeper.com/games/Beggar_CN.swf
+  tags:
+  - 冒险
+  - 经营
 - id: bullet-heaven-2-cn
   title: 弹幕天堂2
   original_title: Bullet Heaven 2
-  category: 射击
   language: 汉化版
   author: kupo707
-  description: ''
+  description: 《Epic Battle Fantasy》角色化身弹幕射击小队，在密集弹雨中寻找空隙。不同角色、攻击方式和难度提供多种挑战，集中火力的同时也要留意周围弹道。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/bullet-heaven-2-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/kupo707/bullet-heaven-2
   swf: https://games.westcreeper.com/games/Bullet_Heaven_2_CN.swf
+  tags:
+  - 射击
+  - 敏捷
 - id: chaos-faction-2-cn
   title: 混乱大格斗2
   original_title: Chaos Faction 2
-  category: 动作
   language: 汉化版
   author: EON
-  description: ''
+  description: 在不断变化的平台竞技场中展开混战，抢夺武器、利用机关，把对手赶出战场。续作带来更多角色与关卡，也提供自定义对战和关卡编辑内容。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/chaos-faction-2-cn/thumbnail.png
   source: https://armorgames.com/play/5645/chaos-faction-2
   swf: https://games.westcreeper.com/games/Chaos_Faction_2_CN.swf
+  tags:
+  - 动作
 - id: chaos-faction-cn
   title: 混乱大格斗
   original_title: Chaos Faction
-  category: 动作
   language: 汉化版
   author: EON
-  description: ''
+  description: 小型竞技场里的乱斗游戏。选择角色，借助平台和场景武器与对手交战，在快速变化的局面中争取生存与得分。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/chaos-faction-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/Chaos_Faction_CN.swf
+  tags:
+  - 动作
 - id: cirno-cross
   title: 琪露诺十字
   original_title: Cirno Cross
-  category: 益智
   language: 汉化版
   author: 迷走ポタージュ
-  description: ''
+  description: 在彩色方块中寻找横向或纵向对齐的同色两端，拖动鼠标冻结夹在中间的方块。一次冻结得越多，得分越高；错误操作会让冰块融化，需要兼顾观察与速度。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/cirno-cross/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/Cirno_Cross.swf
+  tags:
+  - 益智
+  - 敏捷
 - id: ckc-2-cn
   title: 火柴人创意逃生 2/创意杀人密室 2
   original_title: Creative Kill Chamber 2
-  category: 益智
   language: 汉化版
   author: mexipino
-  description: ''
+  description: 蒙蒂再次进入危险的机关房，这次需要救出被困的同伴。观察敌人与场景中的细节，按正确顺序行动，让每一次看似绝境的遭遇变成逃生机会。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/ckc-2-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/594357
   swf: https://games.westcreeper.com/games/CKC_2_CN.swf
+  tags:
+  - 益智
+  - 冒险
 - id: ckc-cn
   title: 火柴人创意逃生/创意杀人密室
   original_title: Creative Kill Chamber
-  category: 益智
   language: 汉化版
   author: mexipino
-  description: ''
+  description: 火柴人被困在布满武装守卫与致命机关的设施中。通过观察场景、寻找可用物品和选择行动，逐步解开每个房间的逃生方法。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/ckc-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/549929
   swf: https://games.westcreeper.com/games/CKC_CN.swf
+  tags:
+  - 益智
+  - 冒险
 - id: days-2-die-cn
   title: 僵尸死期
   original_title: Days 2 Die
-  category: 射击
   language: 汉化版
   author: toge-games
-  description: ''
+  description: 僵尸涌入城市，你需要守住临时阵地并寻找逃往港口的机会。战前布置路障和补给，开战后兼顾射击、走位与阵地维修。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/days-2-die-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/486939
   swf: https://games.westcreeper.com/games/Days_2_Die_CN.swf
+  tags:
+  - 射击
+  - 策略
 - id: dead-drunk-cn
   title: 醉酒出门
   original_title: Dead Drunk
-  category: 休闲
   language: 汉化版
   author: Eric Gurt
-  description: ''
+  description: 醉醺醺的主角试图穿过危险的城市回家。摇晃的身体与物理碰撞让普通台阶也变成难题，需要小心控制节奏，避开会造成伤害的障碍。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/dead-drunk-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/638410
   swf: https://games.westcreeper.com/games/Dead_Drunk_CN.swf
+  tags:
+  - 动作
+  - 敏捷
 - id: dead-paradise-2-cn
   title: 末日余晖2
   original_title: Dead Paradise 2
-  category: 驾驶
   language: 汉化版
   author: smokoko
-  description: ''
+  description: 驾驶武装车辆穿越被战火摧毁的道路，前往 51 区寻找生路。沿途与追击者交火，用任务收益强化车辆，平衡车体防护和攻击能力。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/dead-paradise-2-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/620454
   swf: https://games.westcreeper.com/games/Dead_Paradise_2_CN.swf
+  tags:
+  - 动作
+  - 射击
 - id: dead-paradise-3-cn
   title: 末日余晖3
   original_title: Dead Paradise 3
-  category: 驾驶
   language: 汉化版
   author: Smokoko
-  description: ''
+  description: 末日车队继续突围，这次还必须保护同行的幸存者。驾驶武装车辆清除道路上的敌人，兼顾自己的生存和护送目标的安全。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/dead-paradise-3-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/632366
   swf: https://games.westcreeper.com/games/Dead_Paradise_3_CN.swf
+  tags:
+  - 动作
+  - 射击
 - id: dead-paradise-4-cn
   title: 末日余晖4
   original_title: Dead Paradise 4
-  category: 驾驶
   language: 汉化版
   author: smokoko
-  description: ''
+  description: 深入地下实验设施，驾驶武装车辆迎击变异生物与敌方机械。狭窄通道中的火力覆盖尤其重要，升级车辆后再挑战更危险的区域。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/dead-paradise-4-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/smokoko/dead-paradise-4
   swf: https://games.westcreeper.com/games/Dead_Paradise_4_CN.swf
+  tags:
+  - 动作
+  - 射击
 - id: dig-to-china-cn
   title: 挖到中国去
   original_title: Dig To China
-  category: 休闲
   language: 汉化版
   author: Octopodo
-  description: ''
+  description: 带着有限的挖掘时间不断向地下深入，收集资源换取更好的工具与能力。每一轮获得的收益都会帮助下一次挖得更深，逐步接近穿越地层的目标。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/dig-to-china-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/636228
   swf: https://games.westcreeper.com/games/Dig_To_China_CN.swf
+  tags:
+  - 休闲
+  - 经营
 - id: dj-maniax-cn
   title: DJ狂热者
   original_title: DJManiax
-  category: 节奏
   language: 汉化版
   author: TaroNuke
-  description: ''
+  description: 跟随音乐节拍处理沿轨道出现的音符。游戏提供不同难度及鼠标、键盘操作方式，需要观察判定线并保持节奏，连续准确命中可提高成绩。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/dj-maniax-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/556866
   swf: https://games.westcreeper.com/games/DJ_Maniax_CN.swf
+  tags:
+  - 敏捷
 - id: double-edged-cn
   title: 双刃战士
   original_title: Double Edged
-  category: 动作
   language: 汉化版
   author: Nitrome
-  description: ''
+  description: 两名战士闯入充满神话怪物的古希腊世界。挥剑清理敌群，在场景中寻找前进路线，可独自挑战，也可与同伴合作作战。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/double-edged-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/595984
   swf: https://games.westcreeper.com/games/Double_Edged_CN.swf
+  tags:
+  - 动作
+  - 冒险
 - id: dragon-fist-2-plus-cn
   title: 龙拳2+为剑再战
   original_title: Dragon Fist 2 Plus
-  category: 动作
   language: 汉化版
   author: Ben Olding
-  description: ''
+  description: 以武侠电影为灵感的对战格斗游戏。选择不同风格的角色，结合拳脚、兵器与特殊招式击败对手，掌握防御和出招距离比盲目连按更有效。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/dragon-fist-2-plus-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/234084
   swf: https://games.westcreeper.com/games/Dragon_Fist_2_Plus_CN.swf
+  tags:
+  - 动作
 - id: dragon-fist-3-age-of-the-warrior-cn
   title: 龙拳3武林时代
   original_title: Dragon Fist 3 Age Of The Warrior
-  category: 动作
   language: 汉化版
   author: Ben Olding
-  description: ''
+  description: 武侠格斗系列第三作提供更多角色、兵器与对战方式，还可制作自己的角色。利用各人物的招式差异，尝试空手与兵器之间的战术变化。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/dragon-fist-3-age-of-the-warrior-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/353654
   swf: https://games.westcreeper.com/games/Dragon_Fist_3_Age_Of_The_Warrior_cn.swf
+  tags:
+  - 动作
 - id: dragon-fist-cn
   title: 龙拳传说
   original_title: Legend Of The Dragon Fist
-  category: 动作
   language: 汉化版
   author: Ben Olding
-  description: ''
+  description: 《Dragon Fist》系列早期作品，以中国功夫电影式的角色与招式展开对决。通过走位、防守和拳脚组合战胜一名名对手，也可选择双人交战。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/dragon-fist-cn/thumbnail.png
   source: https://www.kongregate.com/pt/games/HwangJangLee/legend-of-the-dragon-fist
   swf: https://games.westcreeper.com/games/Dragon_Fist_CN.swf
+  tags:
+  - 动作
 - id: ducklife-3-evolution-cn
   title: 小鸭子的生活3：进化
   original_title: 'DuckLife3: Evolution'
-  category: 休闲
   language: 汉化版
   author: WixGames
-  description: ''
+  description: 训练小鸭参加竞赛，通过不同项目提升跑步、游泳、飞行等能力。进化带来的成长差异会影响比赛表现，需要有针对性地弥补弱项。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/ducklife-3-evolution-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/570338
   swf: https://games.westcreeper.com/games/Ducklife_3_Evolution_CN.swf
+  tags:
+  - 养成
+  - 敏捷
 - id: epic-robo-quest-cn
   title: 天启机器人
   original_title: Epic Robo Quest
-  category: 冒险
   language: 汉化版
   author: AlcapaGames
-  description: ''
+  description: 机器人在荒废的世界中寻找遗失的关键部件。穿过敌人盘踞的区域，逐步获得推进旅程所需的能力，并挑战阻挡道路的首领。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/epic-robo-quest-cn/thumbnail.png
   source: https://armorgames.com/play/16130/epic-robo-quest
   swf: https://games.westcreeper.com/games/Epic_Robo_Quest_CN.swf
+  tags:
+  - 动作
+  - 冒险
 - id: everyday-the-same-dream-cn
   title: 人生如梦/每一天都做相同的梦
   original_title: Everyday The Same Dream
-  category: 益智
   language: 汉化版
   author: molleindustria
-  description: ''
+  description: 起床、通勤、工作，看似相同的一天不断循环。偏离习以为常的路线，留意周围的人与事，寻找日常秩序之外的细微变化。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/everyday-the-same-dream-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/540741
   swf: https://games.westcreeper.com/games/Everyday_The_Same_Dream_CN.swf
+  tags:
+  - 冒险
 - id: fleabag-vs-mutt-cn
   title: 猫狗大战
   original_title: Fleabag vs. Mutt
-  category: 策略
   language: 汉化版
   author: gametuner.com
-  description: ''
+  description: 猫狗隔着障碍展开投掷大战，轮流将物品抛向对方。根据风向和距离调整力度，抓住时机使用道具，争取在自己倒下前耗尽对手体力。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/fleabag-vs-mutt-cn/thumbnail.png
   source: https://www.twoplayergames.org/game/fleabag-vs--mutt
   swf: https://games.westcreeper.com/games/Fleabag_vs._Mutt_CN.swf
+  tags:
+  - 休闲
+  - 策略
 - id: flightless
   title: 黑暗山洞探宝者
   original_title: Flightless
-  category: 益智
   language: 汉化版
   author: Nitrome
-  description: ''
+  description: 不会飞的鸭子深入遗迹寻找宝石，只能借助魔法梯子跨越高差。梯子既能帮助移动，也能影响敌人和机关，需要观察地形安排每一步。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/flightless/thumbnail.png
   source: https://www.newgrounds.com/portal/view/604489
   swf: https://games.westcreeper.com/games/Flightless.swf
+  tags:
+  - 益智
+  - 冒险
 - id: fort-plus-cn
   title: 激突要塞！+
   original_title: 激突要塞！＋
-  category: 策略
   language: 汉化版
   author: すずぬーと
-  description: ''
+  description: 在有限的预算和空间里布置自己的要塞，让各类单位在对撞中击破敌方核心。调整阵形、火力与防护结构，反复测试不同设计的效果。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/fort-plus-cn/thumbnail.png
   source: https://suznooto.com/ruffle/fort_p.html
   swf: https://games.westcreeper.com/games/Fort_Plus_CN.swf
+  tags:
+  - 策略
 - id: frontier-cn
   title: 国家边境
   original_title: Frontier
-  category: 策略
   language: 汉化版
   author: jmtb02
-  description: ''
+  description: 带领商队往返各地，通过商品差价积累资金，再购置更强的运输工具并招募伙伴。旅途中可能遇到战斗与公会任务，也可以走向城镇征服之路。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/frontier-cn/thumbnail.png
   source: https://armorgames.com/play/4480/frontier
   swf: https://games.westcreeper.com/games/Frontier_CN.swf
+  tags:
+  - 经营
+  - 策略
+  - 冒险
 - id: get-a-little-gold-cn
   title: 黄金放置
   original_title: Get A Little Gold
-  category: 增量
   language: 汉化版
   author: jarofed
-  description: ''
+  description: 从亲手点击获得第一点黄金开始，逐步购入能够持续生产的设施。把收益投入升级与新目标，在主动点击和自动增长之间建立自己的黄金生意。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/get-a-little-gold-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/jarofed/get-a-little-gold
   swf: https://games.westcreeper.com/games/Get_A_Little_Gold_CN.swf
+  tags:
+  - 经营
+  - 休闲
 - id: grow-island-cn
   title: 生命之岛
   original_title: Grow Island
-  category: 休闲
   language: 汉化版
   author: EYEZMAZE
-  description: ''
+  description: 小岛会随着你选择的发展项目不断变化。每个项目既有自己的成长过程，也会影响其他设施，尝试安排正确的出现顺序，让岛屿发展到更高等级。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/grow-island-cn/thumbnail.png
   source: https://www.eyezmaze.com/game/grow_Island.html
   swf: https://games.westcreeper.com/games/Grow_Island_CN.swf
+  tags:
+  - 益智
+  - 休闲
 - id: grow-valley-cn
   title: 生长球之建设山谷
   original_title: Grow Valley
-  category: 休闲
   language: 汉化版
   author: EYEZMAZE
-  description: ''
+  description: 七个发展项目共同塑造山谷的未来。道路、建筑与技术之间存在连锁关系，不同的选择顺序会带来截然不同的发展过程和结局。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/grow-valley-cn/thumbnail.png
   source: https://www.eyezmaze.com/game/grow-valley.html
   swf: https://games.westcreeper.com/games/Grow_Valley_CN.swf
+  tags:
+  - 益智
+  - 休闲
 - id: hex-empire-cn
   title: 帝国争霸
   original_title: Hex Empire
-  category: 策略
   language: 汉化版
   author: Meta Sauce
-  description: ''
+  description: 在六边形地图上指挥军队扩张领土，争夺城市并压制对手。观察兵力分布和边界，选择集中突破还是防守积蓄，每个回合都要考虑后续战线。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/hex-empire-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/486811
   swf: https://games.westcreeper.com/games/Hex_Empire_CN.swf
+  tags:
+  - 策略
 - id: hold-the-fort-cn
   title: 堡垒守卫者
   original_title: Hold the Fort!
-  category: 塔防
   language: 汉化版
   author: a7s1h1
-  description: ''
+  description: 白天修筑并整备堡垒，夜间抵挡来袭的敌人。有限的人手需要在休息、训练、建设和战斗之间分配，持续作战会考验整个防守体系。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/hold-the-fort-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/676313
   swf: https://games.westcreeper.com/games/Hold_The_Fort_CN.swf
+  tags:
+  - 策略
+  - 射击
 - id: invasion-cn
   title: 未来入侵者
   original_title: Invasion
-  category: 塔防
   language: 汉化版
   author: pytachok
-  description: ''
+  description: 在未来战场上部署防御部队，阻止敌军逐波突破。不同作战单位承担不同职责，合理安排位置并投入升级，才能应付越来越强的进攻。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/invasion-cn/thumbnail.png
   source: https://armorgames.com/play/17654/invasion
   swf: https://games.westcreeper.com/games/Invasion_CN.swf
+  tags:
+  - 策略
 - id: iron-knight-cn
   title: 钢铁骑士/二战守卫军
   original_title: Iron Knight
-  category: 塔防
   language: 汉化版
   author: industred
-  description: ''
+  description: 孤身守在危险区域的战士必须搜集装备，修复设施并抵御敌军。探索和防守同时进行，离开安全位置前要留意弹药与敌人的动向。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/iron-knight-cn/thumbnail.png
   source: https://armorgames.com/play/17640/iron-knight
   swf: https://games.westcreeper.com/games/Iron_Knight_CN.swf
+  tags:
+  - 射击
+  - 冒险
 - id: issac-cn
   title: 以撒的结合：羔羊
   original_title: Binding of Isaac DEMO
-  category: 肉鸽
   language: 汉化版
   author: Edmund McMillen
-  description: ''
+  description: 以撒躲进地下室，在随机排列的房间中对抗怪物。收集会改变攻击方式的道具，在有限的生命和补给下寻找下一层入口。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/issac-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/581168
   swf: https://games.westcreeper.com/games/Issac_CN.swf
+  tags:
+  - 射击
+  - 冒险
 - id: jacksmith-cn
   title: 杰克驴铁匠
   original_title: Jacksmith
-  category: 经营
   language: 汉化版
   author: Flipline Studios
-  description: ''
+  description: 扮演铁匠为出征的战士打造兵器，从选材、熔炼到浇铸和组装都亲自完成。武器质量影响战斗表现，战场带回的材料又能用于下一次制作。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/jacksmith-cn/thumbnail.png
   source: https://www.flipline.com/games/jacksmith/index.html
   swf: https://games.westcreeper.com/games/Jacksmith_CN.swf
+  tags:
+  - 经营
+  - 策略
 - id: jellygo-cn
   title: 果冻勇士
   original_title: JellyGo
-  category: 策略
   language: 汉化版
   author: avoxgames
-  description: ''
+  description: 果冻阵营争夺不断生产兵力的建筑。把握出兵时机，在扩张、升级和防守之间分配数量，用优势兵力夺取对方设施。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/jellygo-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/619775
   swf: https://games.westcreeper.com/games/JellyGo_CN.swf
+  tags:
+  - 策略
 - id: kohctpyktop-cn
   title: 人民工程师
   original_title: 'KOHCTPYKTOP: Engineer of the People'
-  category: 益智
   language: 汉化版
   author: zachtronics
-  description: ''
+  description: 在苏联风格的半导体工厂设计逻辑电路，根据输入与输出要求铺设材料。把设计交给模拟器检验，观察信号是否符合目标，再修正线路结构。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/kohctpyktop-cn/thumbnail.png
   source: https://www.zachtronics.com/kohctpyktop-engineer-of-the-people/
   swf: https://www.zachtronics.com/kohctpyktop-engineer-of-the-people/
+  tags:
+  - 益智
 - id: laser-marisa
   title: 激光魔理沙
   original_title: Laser Marisa
-  category: 射击
   language: 汉化版
   author: 迷走ポタージュ
-  description: ''
+  description: 魔理沙用可以转向的激光应对四面来袭的敌人。攻击、符卡与吸灵都会消耗灵力，需要在集中火力、控制幽灵和脱离战斗恢复之间掌握节奏。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/laser-marisa/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/Laser_Marisa.swf
+  tags:
+  - 射击
+  - 敏捷
 - id: learn-to-fly-cn
   title: 企鹅学飞行
   original_title: Learn To Fly
-  category: 休闲
   language: 汉化版
   author: Lightbringer777
-  description: ''
+  description: 一只企鹅决定证明自己也能飞。反复滑下坡道，利用每次尝试的收益购买滑翔装备和推进装置，逐渐提升距离、高度与滞空时间。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/learn-to-fly-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/495715
   swf: https://games.westcreeper.com/games/Learn_To_Fly_CN.swf
+  tags:
+  - 休闲
+  - 养成
 - id: mahjong-flash-cn
   title: 麻雀Flash
   original_title: Mahjong Flash
-  category: 棋牌
   language: 汉化版
   author: GAMEDESIGN
-  description: ''
+  description: 与电脑对手进行日式麻将对局，通过摸牌、舍牌和鸣牌组织有效牌型。需要同时考虑进张、役种和对手的舍牌，掌握进攻与防守的节奏。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/mahjong-flash-cn/thumbnail.png
   source: https://www.gamedesign.jp/flash/mahjong/mahjong.html
   swf: https://games.westcreeper.com/games/Mahjong_Flash_CN.swf
+  tags:
+  - 益智
+  - 策略
 - id: mega-mash-cn
   title: 兔子的魔幻世界
   original_title: Mega Mash
-  category: 平台跳跃
   language: 汉化版
   author: Nitrome
-  description: ''
+  description: 一盘发生故障的游戏把多种玩法混在同一段旅程中。随着场景变化切换英雄与能力，用平台动作、射击和其他规则解决眼前的障碍。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/mega-mash-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/591921
   swf: https://games.westcreeper.com/games/Mega_Mash_CN.swf
+  tags:
+  - 动作
+  - 冒险
+  - 益智
 - id: mighty-knight-cn
   title: 铁甲骑士
   original_title: Mighty Knight
-  category: 动作
   language: 汉化版
   author: FirebeastStudio
-  description: ''
+  description: 骑士迎击不断涌来的怪物，逐步解锁技能和战斗伙伴。把战斗所得用于提升能力，利用队友分担压力，挑战更强的敌群。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/mighty-knight-cn/thumbnail.png
   source: https://armorgames.com/play/15904/mighty-knight
   swf: https://games.westcreeper.com/games/Mighty_Knight_CN.swf
+  tags:
+  - 动作
+  - 养成
 - id: mike-shadow-cn
   title: 火柴人破坏狂
   original_title: Mike Shadow I paid for it
-  category: 休闲
   language: 汉化版
   author: Tanoku
-  description: ''
+  description: 自动售货机吞掉了硬币，愤怒的迈克决定用拳脚讨回来。攻击赚取收益，再解锁越来越夸张的招式、装备与能力，组合出更高的连击成绩。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/mike-shadow-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/572865
   swf: https://games.westcreeper.com/games/Mike_Shadow_CN.swf
+  tags:
+  - 休闲
+  - 养成
 - id: mineblocks-2-cn
   title: 我的方块2/怪蜀黍的世界2
   original_title: MineBlocks 2
-  category: 沙盒
   language: 汉化版
   author: zanzlanz
-  description: ''
+  description: 《Mine Blocks》的早期续作尝试，在二维方块世界中探索、采集并搭建自己的空间。保留自由建造的方向，同时展示了开发中的新世界系统。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/mineblocks-2-cn/thumbnail.png
   source: https://mineblocks.com/2/
   swf: https://games.westcreeper.com/games/MineBlocks_2_CN.swf
+  tags:
+  - 冒险
+  - 经营
 - id: mineblocks-cn
   title: 我的世界2D版/我的方块/怪蜀黍的世界
   original_title: Mineblocks
-  category: 沙盒
   language: 汉化版
   author: zanzlanz
-  description: ''
+  description: 在二维方块世界中收集木材与矿物，合成工具，建造庇护所并继续探索。可以按自己的节奏发展，从简单的工作台逐步建立更复杂的生活空间。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/mineblocks-cn/thumbnail.png
   source: https://zanzlanz.com/MineBlocks
   swf: https://games.westcreeper.com/games/Mineblocks_CN.swf
+  tags:
+  - 冒险
+  - 经营
 - id: mirrors-edge-cn
   title: 镜之边缘2D版
   original_title: Mirror's Edge 2d
-  category: 平台跳跃
   language: 汉化版
   author: Brad Borne
-  description: ''
+  description: 将城市跑酷化为横向平台关卡，在楼顶与建筑之间保持流畅移动。把握起跳距离和落点，利用墙面与高低差越过障碍。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/mirrors-edge-cn/thumbnail.png
   source: https://www.gameflare.com/online-game/mirrors-edge-2d/
   swf: https://games.westcreeper.com/games/Mirrors_Edge_CN.swf
+  tags:
+  - 动作
+  - 敏捷
 - id: monster-saga-cn
   title: 精灵传奇
   original_title: Monster Saga
-  category: RPG
   language: 汉化版
   author: artlogicgames
-  description: ''
+  description: 来到怪物生活的世界，收集并训练伙伴，组建队伍参与主线和支线挑战。不同怪物的成长与队伍组合会影响战斗表现。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/monster-saga-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/604702
   swf: https://games.westcreeper.com/games/Monster_Saga_CN.swf
+  tags:
+  - 养成
+  - 策略
 - id: monster-truck-fever-cn
   title: 怪物卡车大奖赛
   original_title: Monster Truck Fever
-  category: 赛车
   language: 汉化版
   author: fightclub69
-  description: ''
+  description: 驾驶大脚车参加各地赛事，在弯道与车群之间争夺名次。通过比赛赚取奖金，升级最大速度、抓地能力、涡轮增压与加速性能，再挑战新的赛道和车辆。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/monster-truck-fever-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/fightclub69/monster-truck-fever
   swf: https://games.westcreeper.com/games/Monster_Truck_Fever_CN.swf
+  tags:
+  - 体育
+  - 动作
 - id: nekoscro-2-cn
   title: 喵勇者滚动条
   original_title: Neko Scroll 2
-  category: RPG
   language: 汉化版
   author: pokotan.jp
-  description: ''
+  description: 用菜单推进的猫咪勇者冒险，目标是夺回被魔王夺走的传说卷轴。探索途中管理装备、物品与技能，在战斗和撤退之间作出判断。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/nekoscro-2-cn/thumbnail.png
   source: https://pokotan.jp/game/nekoscroll2/
   swf: https://games.westcreeper.com/games/Nekoscro_2_CN.swf
+  tags:
+  - 冒险
+  - 养成
 - id: nyan-cat-lost-in-space-cn
   title: 彩虹猫：迷失太空
   original_title: 'Nyan Cat: Lost in Space'
-  category: 休闲
   language: 汉化版
   author: MyLostGames
-  description: ''
+  description: 彩虹猫在太空平台间不断前进，一边收集食物与奖励，一边避开危险。跳跃节奏决定能否维持连续收集并获得更高分数。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/nyan-cat-lost-in-space-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/570085
   swf: https://games.westcreeper.com/games/Nyan_Cat_Lost_In_Space_CN.swf
+  tags:
+  - 敏捷
+  - 休闲
 - id: nekoscro-3-cn
   title: 喵勇者滚动条
   original_title: Neko Scroll
-  category: RPG
   language: 汉化版
   author: pokotan.jp
-  description: ''
+  description: 围绕点击前进与角色成长展开的猫咪勇者冒险。沿途战斗并管理物品，逐步改善攻击能力和生存能力，寻找继续深入的时机。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/nekoscro-3-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/Nekoscro_3_CN.swf
+  tags:
+  - 冒险
+  - 养成
 - id: plazma-burst-2-cn
   title: 超时空战士2
   original_title: Plazma Burst 2
-  category: 射击
   language: 汉化版
   author: Eric Gurt
-  description: ''
+  description: 在充满机械与敌方士兵的平台场景中展开科幻枪战。利用地形和物理效果寻找射击位置，在前进时留意高低差与敌方交叉火力。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/plazma-burst-2-cn/thumbnail.png
   source: https://www.plazmaburst2.com/?s=2&a=
   swf: https://games.westcreeper.com/games/Plazma_Burst_2_CN.swf
+  tags:
+  - 射击
+  - 动作
 - id: plazma-burst-cn
   title: 超时空战士
   original_title: 'Plazma Burst: FTP'
-  category: 射击
   language: 汉化版
   author: Eric Gurt
-  description: ''
+  description: 一次穿越时间的行动把战士带到危机四伏的未来。穿过敌人控制的设施，使用不同武器清除道路，在平台与物理机关之间寻找生路。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/plazma-burst-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/500590
   swf: https://games.westcreeper.com/games/Plazma_Burst_CN.swf
+  tags:
+  - 射击
+  - 动作
 - id: zombotron-2-cn
   title: 勇闯僵尸洞穴2
   original_title: Zombotron 2
-  category: 射击
   language: 汉化版
   author: AntKarlov
-  description: ''
+  description: 深入怪物遍布的 Zombotron 世界，利用枪械与场景物件清除障碍。探索道路、搜集物资，借助爆炸物和物理机关应付敌群。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/zombotron-2-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/598023
   swf: https://games.westcreeper.com/games/Zombotron_2_CN.swf
+  tags:
+  - 射击
+  - 冒险
 - id: wolfgang-fights-the-future-cn
   title: 沃尔夫冈：为未来而战
   original_title: Wolfgang VS The Future
-  category: 动作
   language: 汉化版
   author: flashchaz
-  description: ''
+  description: 古典音乐家沃尔夫冈被卷入未来战斗，必须用小提琴与特殊能力面对敌群。通过战斗积累资源、购买强化，并挑战故事或生存模式。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/wolfgang-fights-the-future-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/640258
   swf: https://games.westcreeper.com/games/Wolfgang_Fights_The_Future_CN.swf
+  tags:
+  - 动作
+  - 冒险
 - id: zombality-cn
   title: 僵尸城突围
   original_title: Zombality
-  category: 冒险
   language: 汉化版
   author: ridlake
-  description: ''
+  description: 在僵尸出没的建筑中寻找逃生路线。弹药并不充裕，需要搜集物品、处理障碍，并在近战与射击之间作出选择。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/zombality-cn/thumbnail.png
   source: https://www.miniplay.com/game/zombality
   swf: https://games.westcreeper.com/games/Zombality_CN.swf
+  tags:
+  - 动作
+  - 冒险
+  - 益智
 - id: warfare-1917-cn
   title: 一战1917
   original_title: Warfare 1917
-  category: 策略
   language: 汉化版
   author: ConArtists
-  description: ''
+  description: 第一次世界大战的战壕成为双方推进的关键。招募不同兵种、占据掩体并呼叫支援，在士气与伤亡的压力下突破敌方防线。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/warfare-1917-cn/thumbnail.png
   source: https://armorgames.com/play/2267/warfare-1917
   swf: https://games.westcreeper.com/games/Warfare_1917_CN.swf
+  tags:
+  - 策略
 - id: war-zombie-avatar-cn
   title: 僵尸部落之战
   original_title: War Zombie Avatar
-  category: 射击
   language: 汉化版
   author: zamzim
-  description: ''
+  description: 带领幸存者在僵尸占领的废土上寻找装备与补给。外出完成任务的同时，不能让基地长期无人防守，还要照顾伙伴的状态和武器。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/war-zombie-avatar-cn/thumbnail.png
   source: https://armorgames.com/play/15008/war-zomb-avatarMusic
   swf: https://games.westcreeper.com/games/War_Zombie_Avatar_CN.swf
+  tags:
+  - 射击
+  - 冒险
 - id: touhou-tennis
   title: 东方姬庭球
   original_title: 東方姫庭球
-  category: 体育
   language: 汉化版
   author: 迷走ポタージュ
-  description: ''
+  description: 把东方弹幕与网球对打结合起来的同人作品。既要追上来球，也要应对对手的特殊攻势，在球场上寻找回击与使用符卡的时机。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/touhou-tennis/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/Touhou_Tennis.swf
+  tags:
+  - 体育
+  - 敏捷
 - id: touhou-kotodamamatsuri
   title: 东方言灵祭
   original_title: 東方言霊祭
-  category: 益智
   language: 汉化版
   author: 迷走ポタージュ
-  description: ''
+  description: 东方题材的文字输入小游戏，通过快速、准确地输入画面上的读音应对挑战。节奏逐渐加快时，需要同时兼顾识读和键盘输入。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/touhou-kotodamamatsuri/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/Touhou_Kotodamamatsuri.swf
+  tags:
+  - 敏捷
+  - 益智
 - id: themcoconuts-cn
   title: 椰子塔防
   original_title: Them Coconuts
-  category: 塔防
   language: 汉化版
   author: ArmorGames
-  description: ''
+  description: 敌人不断涌向城堡，你需要用多种武器与支援守住阵地。将战斗所得投入升级，逐步获得更强的火力，应对越来越密集的攻势。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/themcoconuts-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/ThemCoconuts_CN.swf
+  tags:
+  - 射击
+  - 策略
 - id: the-heist-cn
   title: 大劫案
   original_title: The Heist
-  category: 体育
   language: 汉化版
   author: JohnnyTwoShoes
-  description: ''
+  description: 担任劫案团伙的逃亡司机，在繁忙道路上甩开追捕。完成任务后升级车辆，把速度、耐久与装备结合起来，为下一次逃亡作准备。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/the-heist-cn/thumbnail.png
   source: https://www.addictinggames.com/car/the-heist
   swf: https://games.westcreeper.com/games/The_Heist_CN.swf
+  tags:
+  - 动作
+  - 敏捷
 - id: the-fight-for-glorton-cn
   title: 疯狂小人战斗
   original_title: The Fight for Glorton
-  category: 动作
   language: 汉化版
   author: Sir-Davey
-  description: ''
+  description: 在平台竞技场上把对手打出场外，受击越多，被击飞的风险越高。利用普通攻击、特殊招式与防守，在混战中争取位置优势。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/the-fight-for-glorton-cn/thumbnail.png
   source: https://armorgames.com/play/1108/the-fight-for-glorton
   swf: https://games.westcreeper.com/games/The_Fight_For_Glorton_CN.swf
+  tags:
+  - 动作
 - id: the-castle-dungeon-clicker-cn
   title: 地堡地牢
   original_title: The Castle Dungeon Clicker
-  category: 增量
   language: 汉化版
   author: kiz10.com
-  description: ''
+  description: 点击攻击地牢中的怪物，赚取金币后提升伤害并招募伙伴。随着深入，使用技能应对更强的敌人，让手动点击与队伍成长相互配合。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/the-castle-dungeon-clicker-cn/thumbnail.png
   source: https://kiz10.com/the-castle-dungeon/
   swf: https://games.westcreeper.com/games/The_Castle_Dungeon_Clicker_CN.swf
+  tags:
+  - 休闲
+  - 养成
 - id: raze-2-cn
   title: 虚拟对战2
   original_title: Raze 2
-  category: 射击
   language: 汉化版
   author: sky9games
-  description: ''
+  description: 人类与外星阵营在横向平台战场上交火。挑选装备、利用地图中的武器补给，完成战役与不同规则的竞技挑战。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/raze-2-cn/thumbnail.png
   source: https://armorgames.com/play/12275/raze-2
   swf: https://games.westcreeper.com/games/Raze_2_CN.swf
+  tags:
+  - 射击
+  - 动作
 - id: raze-3-cn
   title: 虚拟对战3
   original_title: Raze 3
-  category: 射击
   language: 汉化版
   author: sky9games
-  description: ''
+  description: 在外星战争后的世界继续战斗，穿梭于平台与高低交错的设施之间。通过任务获取新的战斗选择，按敌人和地图的特点调整装备。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/raze-3-cn/thumbnail.png
   source: https://armorgames.com/play/15979/raze-3
   swf: https://games.westcreeper.com/games/Raze_3_CN.swf
+  tags:
+  - 射击
+  - 动作
 - id: raze-cn
   title: 虚拟对战
   original_title: Raze
-  category: 射击
   language: 汉化版
   author: sky9games
-  description: ''
+  description: 在科幻平台竞技场中与士兵、机器人和外星敌人交战。灵活利用跳跃路线、武器刷新点和掩体，在不同任务规则下赢得战斗。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/raze-cn/thumbnail.png
   source: https://armorgames.com/play/5395/raze
   swf: https://games.westcreeper.com/games/Raze_CN.swf
+  tags:
+  - 射击
+  - 动作
 - id: rebuild-cn
   title: 重建城镇
   original_title: Rebuild
-  category: 策略
   language: 汉化版
   author: sarahnorthway
-  description: ''
+  description: 僵尸占领的城市中，一群幸存者试图重建社区。搜集食物、夺回街区、分配工作并保持士气，每一天都要权衡扩张和安全。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/rebuild-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/562116
   swf: https://games.westcreeper.com/games/Rebuild_CN.swf
+  tags:
+  - 策略
+  - 经营
 - id: relic-of-war-cn
   title: 二战之欧洲战场
   original_title: Relic Of War
-  category: 策略
   language: 汉化版
   author: toge-games
-  description: ''
+  description: 架空历史中的战争因古代遗物而改变。训练部队、研究强化并调用支援，推动战线穿过敌方控制区域，逐步解锁新的战斗单位。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/relic-of-war-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/600861
   swf: https://games.westcreeper.com/games/Relic_Of_War_CN.swf
+  tags:
+  - 策略
 - id: renegades-cn
   title: 叛军行动
   original_title: Renegades
-  category: 策略
   language: 汉化版
   author: kitecrimson
-  description: ''
+  description: 小队在敌对势力与危险环境之间展开回合制交战。为队员配备武器与升级，利用掩体、距离和行动消耗安排每次进攻。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/renegades-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/642311
   swf: https://games.westcreeper.com/games/Renegades_CN.swf
+  tags:
+  - 策略
 - id: riddle-school-1-cn
   title: 谜题学校/逃学威龙
   original_title: Riddle School
-  category: 益智
   language: 汉化版
   author: jonochrome
-  description: ''
+  description: 菲尔想从无聊的学校中溜走，但通往出口的路上有不少阻碍。与人物交谈，寻找道具，利用校园里的细节解开逃学谜题。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/riddle-school-1-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/314680
   swf: https://games.westcreeper.com/games/Riddle_School_1_CN.swf
+  tags:
+  - 益智
+  - 冒险
 - id: riddle-school-2-cn
   title: 谜题学校 2/逃学威龙 2
   original_title: Riddle School 2
-  category: 益智
   language: 汉化版
   author: jonochrome
-  description: ''
+  description: 菲尔再次打起逃离学校的主意。这次校园里有新的物品、人物与谜题，需要把看似无关的线索组合起来，找到离开的办法。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/riddle-school-2-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/349194
   swf: https://games.westcreeper.com/games/Riddle_School_2_CN.swf
+  tags:
+  - 益智
+  - 冒险
 - id: royal-offense-cn
   title: 皇家攻势
   original_title: Royal Offense
-  category: 策略
   language: 汉化版
   author: mrDN
-  description: ''
+  description: 召集王国的战斗单位抵御怪物，逐步强化自己的军队。利用不同兵种的能力和战斗收益持续推进，处理前线压力与长期成长的关系。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/royal-offense-cn/thumbnail.png
   source: https://armorgames.com/play/15721/royal-offense
   swf: https://games.westcreeper.com/games/Royal_Offense_CN.swf
+  tags:
+  - 策略
+  - 养成
 - id: seventhsky-refine-cn
   title: 第七天空改进版
   original_title: SeventhSky Refine
-  category: 动作
   language: 汉化版
   author: Tanaka U
-  description: ''
+  description: 操纵具有多种战斗模式的空中机体，与敌人展开高速交锋。近战、射击、防御和特殊能力需要结合位置与距离使用。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/seventhsky-refine-cn/thumbnail.png
   source: https://nextframe.jp/flash/seventhsky_refine/seventhsky_refine.html
   swf: https://games.westcreeper.com/games/Seventhsky_Refine_CN.swf
+  tags:
+  - 动作
+  - 射击
 - id: seventhsky-test-cn
   title: 第七天空测试版
   original_title: SeventhSky Test
-  category: 动作
   language: 汉化版
   author: Tanaka U
-  description: ''
+  description: 《Seventh Sky》相关开发测试作品，集中展示空中机体移动、射击与近战机制。适合试验战斗系统，并非具有完整关卡进度的正式战役。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/seventhsky-test-cn/thumbnail.png
   source: https://nextframe.jp/flash/seventhsky_plus/seventhSkyPlus.html
   swf: https://games.westcreeper.com/games/Seventhsky_Test_CN.swf
+  tags:
+  - 动作
+  - 射击
 - id: sfh2-cn
   title: 战火英雄2
   original_title: Strike Force Heroes 2
-  category: 射击
   language: 汉化版
   author: sky9games
-  description: ''
+  description: 组建不同职业的战士参与平台枪战，在任务中获取经验与装备。根据职业特长选择武器和技能，在交错的平台之间寻找有利的交战位置。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/sfh2-cn/thumbnail.png
   source: https://armorgames.com/play/14775/strike-force-heroes-2
   swf: https://games.westcreeper.com/games/SFH2_CN.swf
+  tags:
+  - 射击
+  - 动作
+  - 养成
 - id: sfh3cn-fixed
   title: 战火英雄 3
   original_title: Strike Force Heroes 3
-  category: 射击
   language: 汉化版
   author: sky9games
-  description: ''
+  description: 带领自己的英雄小队完成战斗任务，收集装备和蓝图，并通过整备提升队员实力。不同队员的职业与成长让队伍配置更为重要。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/sfh3cn-fixed/thumbnail.png
   source: https://armorgames.com/play/17706/strike-force-heroes-3
   swf: https://games.westcreeper.com/games/SFH3CN_fixed.swf
+  tags:
+  - 射击
+  - 动作
+  - 养成
 - id: sfh-cn-final
   title: 战火英雄
   original_title: Strike Force Heroes
-  category: 射击
   language: 汉化版
   author: sky9games
-  description: ''
+  description: 在平台战场中操纵不同职业的英雄，完成战役、挑战或自定义对战。战斗积累经验，逐步开放新武器与连杀能力，形成自己的作战方式。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/sfh-cn-final/thumbnail.png
   source: https://www.newgrounds.com/portal/view/598428
   swf: https://games.westcreeper.com/games/SFH_CN_Final.swf
+  tags:
+  - 射击
+  - 动作
+  - 养成
 - id: shop-empire-2-cn
   title: 商业帝国2
   original_title: Shop Empire 2
-  category: 经营
   language: 汉化版
   author: littlegiantworld
-  description: ''
+  description: 规划自己的购物中心，安排商铺、设施和员工，让顾客愿意停留与消费。扩张时也要处理维护、安全与客流问题，避免只顾建店而忽略运营。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/shop-empire-2-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/littlegiantworld/shop-empire-2
   swf: https://games.westcreeper.com/games/Shop_Empire_2_CN.swf
+  tags:
+  - 经营
+  - 策略
 - id: shore-siege-cn
   title: 海滨围攻！
   original_title: Shore Siege!
-  category: 塔防
   language: 汉化版
   author: The-EXP
-  description: ''
+  description: 海盗的船只搁浅在危险海岸，必须一边抵挡怪物一边修船。不同敌人有各自的弱点，需要选择合适的工具处理，才能争取离开的时间。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/shore-siege-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/452432
   swf: https://games.westcreeper.com/games/Shore_Siege_CN.swf
+  tags:
+  - 策略
+  - 休闲
 - id: sift-renegade-2-cn
   title: 复仇忍者2
   original_title: Sift Renegade 2
-  category: 动作
   language: 汉化版
   author: Pyrozen
-  description: ''
+  description: 基罗的故事继续推进，在帮派冲突中使用武士刀与新的战斗技巧迎击敌人。不同场景穿插近战与特殊行动，节奏和防守同样重要。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/sift-renegade-2-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/513862
   swf: https://games.westcreeper.com/games/Sift_Renegade_2_CN.swf
+  tags:
+  - 动作
+  - 冒险
 - id: sift-renegade-3-cn
   title: 复仇忍者3
   original_title: Sift Renegade 3
-  category: 动作
   language: 汉化版
   author: Pyrozen
-  description: ''
+  description: 回到基罗早年的经历，与兄弟一同卷入危险的帮派斗争。通过横向场景展开刀剑战斗，逐步开放更强的攻击方式。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/sift-renegade-3-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/608062
   swf: https://games.westcreeper.com/games/Sift_Renegade_3_CN.swf
+  tags:
+  - 动作
+  - 冒险
 - id: sift-renegade-3-expansion-cn
   title: 复仇忍者3：违抗
   original_title: Sift Renegade 3 Defiance
-  category: 动作
   language: 汉化版
   author: Pyrozen
-  description: ''
+  description: 《Sift Renegade 3》的扩展篇改由兄弟健二担任主角，继续追查帮派中的背叛。新的地图和招式提供另一段近战冒险。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/sift-renegade-3-expansion-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/610265
   swf: https://games.westcreeper.com/games/Sift_Renegade_3_Expansion_CN.swf
+  tags:
+  - 动作
+  - 冒险
 - id: sift-renegade-cn
   title: 复仇忍者
   original_title: Sift Renegade
-  category: 动作
   language: 汉化版
   author: Pyrozen
-  description: ''
+  description: 持刀的基罗卷入黑道冲突，在街道与设施中追击敌人。关卡除了刀剑战斗，也包含需要单独应对的追逐和行动场景。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/sift-renegade-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/475034
   swf: https://games.westcreeper.com/games/Sift_Renegade_CN.swf
+  tags:
+  - 动作
+  - 冒险
 - id: sniper-hostile-territory-cn
   title: 敌对狙击
   original_title: 'Sniper: Hostile Territory'
-  category: 射击
   language: 汉化版
   author: ErenKilich
-  description: ''
+  description: 在敌对区域执行狙击任务，先读懂简报，再从场景中辨认目标。开枪的对象与时机都会影响任务结果，需要观察人物行动而非见人就射击。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/sniper-hostile-territory-cn/thumbnail.png
   source: https://www.kongregate.com/it/games/erenkilich/sniper-hostile-territory
   swf: https://games.westcreeper.com/games/Sniper_Hostile_Territory_CN.swf
+  tags:
+  - 射击
+  - 益智
 - id: south-pole-aggressor-cn
   title: 南极侵略者
   original_title: South Pole Aggressor
-  category: 塔防
   language: 汉化版
   author: StartOnlineGames
-  description: ''
+  description: 人类试图在南极建立军事基地，企鹅们组织起防线保卫家园。沿进军路线配置防守单位，利用地形与升级阻挡来袭的军队。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/south-pole-aggressor-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/startonlinegames/south-pole-aggressor
   swf: https://games.westcreeper.com/games/south_pole_aggressor_cn.swf
+  tags:
+  - 策略
 - id: st-romance-academy-beach-dockkin-paradise-cn
   title: 圣罗曼司学园 沙滩心动♪天堂
   original_title: 聖ロマンス学園 ビーチdaどっきん♪パラダイス
-  category: 休闲
   language: 汉化版
   author: Shockwave
-  description: ''
+  description: 电眼竞争来到海滩，在人群中寻找目标并争取更多好感。遇到对手争夺时需要迅速反应，在有限时间内积累成绩。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/st-romance-academy-beach-dockkin-paradise-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/St._Romance_Academy_Collection_CN/St._Romance_Academy_Beach_Dockkin_Paradise_CN.swf
+  tags:
+  - 休闲
+  - 敏捷
 - id: st-romance-academy-hot-summer-love-festival-cn
   title: 圣罗曼司学园 盛夏爱意祭典/电眼美女2
   original_title: 聖ロマンス学園ほっとサマーdeらぶ祭り♪
-  category: 休闲
   language: 汉化版
   author: Shockwave
-  description: ''
+  description: 夏日祭典成为新的好感争夺舞台。在人群中选择合适的目标，把握出手时机，面对竞争者时争取维持优势。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/st-romance-academy-hot-summer-love-festival-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/St._Romance_Academy_Collection_CN/St._Romance_Academy_Hot_Summer_Love_Festival_CN.swf
+  tags:
+  - 休闲
+  - 敏捷
 - id: st-romance-academy-hot-summer-peach-festival-cn
   title: 圣罗曼司学园 盛夏桃色祭典♪/电眼美女3
   original_title: 聖ロマンス学園 ほっとサマー de もこ祭り♪
-  category: 休闲
   language: 汉化版
   author: Shockwave
-  description: ''
+  description: 在热闹的夏日祭典上，用爱意光束争取男孩的好感，并与突然出现的竞争者展开决斗。发射光束会消耗爱意，收集爱心可恢复；还要小心在人群中巡视的老师。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/st-romance-academy-hot-summer-peach-festival-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/St._Romance_Academy_Collection_CN/St._Romance_Academy_Hot_Summer_Peach_Festival_CN.swf
+  tags:
+  - 休闲
+  - 敏捷
 - id: st-romance-academy-tokimeki-of-love-masterpiece-war-cn
   title: 圣罗曼司学园 心动恋爱♪大作战/电眼美女
   original_title: 聖ロマンス学園 恋のトキメキ♪大作戦
-  category: 休闲
   language: 汉化版
   author: Shockwave
-  description: ''
+  description: 在校园里展开夸张的电眼争夺战，一边寻找目标积累好感，一边应对竞争者与路上的干扰。合理安排路线，在时间耗尽前争取更好的成绩。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/st-romance-academy-tokimeki-of-love-masterpiece-war-cn/thumbnail.png
   source: ''
   swf: https://games.westcreeper.com/games/St._Romance_Academy_Collection_CN/St._Romance_Academy_Tokimeki_of_Love_Masterpiece_War_CN.swf
+  tags:
+  - 休闲
+  - 敏捷
 - id: stealth-hunter-cn
   title: 秘密潜入
   original_title: Stealth Hunter
-  category: 策略
   language: 汉化版
   author: RAC7
-  description: ''
+  description: 潜入守卫巡逻的设施，利用墙角和时机避开视线。推动箱子、处理敌人并使用炸药清除障碍，寻找每项任务的出口。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/stealth-hunter-cn/thumbnail.png
   source: https://armorgames.com/play/84/stealth-hunter
   swf: https://games.westcreeper.com/games/Stealth_Hunter_CN.swf
+  tags:
+  - 动作
+  - 益智
 - id: steam-king-cn
   title: 勇闯蒸汽王国
   original_title: Steam King
-  category: 动作
   language: 汉化版
   author: IriySoft
-  description: ''
+  description: 被赶出城堡的国王拿起蒸汽武器，踏上夺回王国与营救王后的旅程。边射击边通过平台障碍，搜集齿轮提升装备。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/steam-king-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/iriysoft/steam-king
   swf: https://games.westcreeper.com/games/Steam_King_CN.swf
+  tags:
+  - 动作
+  - 射击
+  - 冒险
 - id: stick-invader-the-game-cn
   title: 火柴人入侵者2
   original_title: Slush Invaders Game
-  category: 策略
   language: 汉化版
   author: gildedguy
-  description: ''
+  description: 召集火柴人战士轮流出击，让主要敌人在空中不断受击并向前飞行。选择队员、衔接攻击并处理其他目标，利用升级延长连击旅程。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/stick-invader-the-game-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/598653
   swf: https://games.westcreeper.com/games/Stick_Invader_The_Game_CN.swf
+  tags:
+  - 动作
+  - 策略
 - id: superfighters-cn
   title: 超级对战
   original_title: Superfighters
-  category: 动作
   language: 汉化版
   author: JohanHjarpe
-  description: ''
+  description: 小型场景中的混乱枪战，近战、枪械、手雷和可破坏环境让局势随时改变。利用高低差与掩体争取优势，也可与朋友在同一键盘上交战。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/superfighters-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/575163
   swf: https://games.westcreeper.com/games/Superfighters_CN.swf
+  tags:
+  - 动作
+  - 射击
 - id: sushi-cat-the-honeymoon-cn
   title: 寿司猫：蜜月
   original_title: Sushi Cat The Honeymoon
-  category: 休闲
   language: 汉化版
   author: joeybetz
-  description: ''
+  description: 寿司猫在蜜月旅途中再次遇到美食难题。选好投放位置，让圆滚滚的身体在障碍间弹跳，吃到足够的寿司再进入下一关。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/sushi-cat-the-honeymoon-cn/thumbnail.png
   source: https://armorgames.com/play/6301/sushi-cat-the-honeymoon
   swf: https://games.westcreeper.com/games/Sushi_Cat_The_Honeymoon_CN.swf
+  tags:
+  - 益智
+  - 休闲
 - id: swordfall-kingdoms-cn
   title: 日不落帝国
   original_title: 'Swordfall: Kingdoms'
-  category: 策略
   language: 汉化版
   author: SamRaski
-  description: ''
+  description: 在欧洲版图上经营王国并争夺领土，培养将领、研究技术，再率军投入战斗。战略地图上的扩张与战场部署共同决定战争走向。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/swordfall-kingdoms-cn/thumbnail.png
   source: https://www.kongregate.com/en/games/samraski/swordfall-kingdoms
   swf: https://games.westcreeper.com/games/Swordfall_Kingdoms_CN.swf
+  tags:
+  - 策略
 - id: talesworth-adventure-cn
   title: 塔斯莱沃斯冒险：追寻龙之财宝
   original_title: 'Talesworth Adventure: Quest for The Dragon’s Hoard'
-  category: 益智
   language: 汉化版
   author: jinxology
-  description: ''
+  description: 勇者会沿着既定规则自行前进，你需要提前布置工具引导他安全通过地牢。利用金币诱饵、单向门等物件改变路线，避开危险并完成目标。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/talesworth-adventure-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/533264
   swf: https://games.westcreeper.com/games/Talesworth_Adventure_CN.swf
+  tags:
+  - 益智
+  - 冒险
 - id: tank-trouble-cn
   title: 坦克动荡
   original_title: Tank Trouble
-  category: 休闲
   language: 汉化版
   author: Purup
-  description: ''
+  description: 几辆小坦克在迷宫里展开追逐，炮弹碰到墙壁会反弹。利用狭窄通道与反射角度攻击对手，也要小心被自己的炮弹击中。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/tank-trouble-cn/thumbnail.png
   source: https://tanktrouble.com/
   swf: https://games.westcreeper.com/games/Tank_Trouble_CN.swf
+  tags:
+  - 射击
+  - 动作
 - id: tavern-of-heroes-cn
   title: 酒馆英雄之战
   original_title: Tavern of Heroes
-  category: 策略
   language: 汉化版
   author: id.net
-  description: ''
+  description: 招募英雄组成队伍，培养他们的能力并参与回合制战斗。根据对手配置调整阵容，选择合适的技能和目标，逐步挑战更强的敌人。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/tavern-of-heroes-cn/thumbnail.png
   source: https://kbhgames.com/game/tavern-of-heroes
   swf: https://games.westcreeper.com/games/Tavern_of_Heroes_CN.swf
+  tags:
+  - 策略
+  - 养成
 - id: tequila-zombies-2-cn
   title: 喝酒杀僵尸2
   original_title: Tequila Zombies 2
-  category: 射击
   language: 汉化版
   author: IriySoft
-  description: ''
+  description: 在僵尸围攻中搜集枪械与补给，利用龙舌兰带来的特殊能力打开局面。不断移动寻找安全位置，在敌群逼近前建立火力优势。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/tequila-zombies-2-cn/thumbnail.png
   source: https://armorgames.com/play/13821/tequila-zombies-2
   swf: https://games.westcreeper.com/games/Tequila_Zombies_2_CN.swf
+  tags:
+  - 射击
+  - 动作
 - id: tequila-zombies-3-cn
   title: 喝酒杀僵尸3
   original_title: Tequila Zombies 3
-  category: 射击
   language: 汉化版
   author: IriySoft
-  description: ''
+  description: 米格尔、杰奎琳与新伙伴继续对抗僵尸，闯入新的危险区域。拾取并切换武器，利用角色能力和补给，应对越来越密集的敌潮。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/tequila-zombies-3-cn/thumbnail.png
   source: https://armorgames.com/play/16128/tequila-zombies-3
   swf: https://games.westcreeper.com/games/Tequila_Zombies_3_CN.swf
+  tags:
+  - 射击
+  - 动作
 - id: territory-war-cn
   title: 火柴人领土战争
   original_title: Territory WAR
-  category: 策略
   language: 汉化版
   author: Afro-Ninja
-  description: ''
+  description: 火柴人小队轮流在平台地形上交战，使用手雷、枪械与近身攻击削弱对手。每次行动都要考虑站位、抛物线和坠落风险。
   play_status: ''
   play_note: ''
   translated: true
   cover: /swf/games/territory-war-cn/thumbnail.png
   source: https://www.newgrounds.com/portal/view/302830
   swf: https://games.westcreeper.com/games/Territory_WAR_CN.swf
+  tags:
+  - 策略
+  - 射击

@@ -66,6 +66,11 @@ index = json.loads((root / 'search.json').read_text(encoding='utf-8'))
 games = json.loads((root / 'games.json').read_text(encoding='utf-8'))
 assert len({game['id'] for game in games}) == len(games), 'Duplicate game IDs.'
 for game in games:
+    tags = game.get('tags')
+    assert isinstance(tags, list) and tags and all(isinstance(tag, str) and tag.strip() for tag in tags), f"Invalid game tags: {game['id']}"
+    assert len(tags) == len(set(tags)), f"Duplicate game tags: {game['id']}"
+    assert 'category' not in game, f"Legacy game category: {game['id']}"
+    assert game.get('description', '').strip(), f"Missing game description: {game['id']}"
     for key in ('url', 'cover'):
         parts = urlsplit(game[key])
         if parts.scheme or parts.netloc:

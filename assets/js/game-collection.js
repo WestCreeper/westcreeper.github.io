@@ -30,7 +30,9 @@
         game.original_title;
       node.querySelector("h3").textContent = game.title;
       node.querySelector(".game-card-body > p").textContent = game.description;
-      node.querySelector("[data-game-category]").textContent = game.category;
+      node.querySelector("[data-game-tags]").textContent = (
+        game.tags || []
+      ).join(" · ");
       node.querySelector("[data-game-status]").textContent = game.play_status;
       node
         .querySelector(".play-label")
@@ -91,12 +93,13 @@
         const query = normalize(input.value);
         const matched = games.filter(
           (game) =>
-            (category === "all" || game.category === category) &&
+            (category === "all" || (game.tags || []).includes(category)) &&
             normalize(
               [
                 game.title,
                 game.original_title,
                 game.author,
+                ...(game.tags || []),
                 game.description,
                 game.language,
               ].join(" "),
@@ -130,7 +133,7 @@
           ? `共 ${games.length} 部 · 符合条件 ${matched.length} 部 · 显示第 ${start + 1}–${Math.min(start + size, matched.length)} 部 · 第 ${page} / ${pages} 页`
           : `共 ${games.length} 部 · 符合条件 0 部`;
         status.hidden = matched.length > 0;
-        status.textContent = "没有找到这款游戏，换个关键词或分类试试。";
+        status.textContent = "没有找到这款游戏，换个关键词或标签试试。";
         chips.forEach((chip) =>
           chip.setAttribute(
             "aria-pressed",
