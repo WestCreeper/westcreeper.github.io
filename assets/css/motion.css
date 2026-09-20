@@ -1,0 +1,148 @@
+/* Local, event-driven motion. Content remains visible without JavaScript. */
+@media (prefers-reduced-motion: no-preference) {
+  .site-header {
+    transition: box-shadow 240ms ease;
+  }
+  .site-header.is-scrolled {
+    box-shadow: 0 8px 24px #10251b0d;
+  }
+  .main-nav > a {
+    position: relative;
+  }
+  .main-nav > a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--green);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 240ms ease;
+  }
+  .main-nav > a:is(:hover, :focus-visible, [aria-current="page"])::after {
+    transform: scaleX(1);
+  }
+  .section-link .icon,
+  .hero-actions .button .icon:last-child,
+  .game-card-title > span {
+    transition: transform 240ms ease;
+  }
+  .section-link:hover .icon,
+  .hero-actions .button:hover .icon:last-child {
+    transform: translateX(4px);
+  }
+  .game-card:hover .game-card-title > span {
+    transform: translate(2px, -2px);
+  }
+  .hero-actions .button-primary {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero-actions .button-primary::after {
+    content: "";
+    position: absolute;
+    inset: -50% -20%;
+    pointer-events: none;
+    background: linear-gradient(
+      110deg,
+      transparent 35%,
+      #fff3 50%,
+      transparent 65%
+    );
+    transform: translateX(-110%);
+  }
+  .hero-actions .button-primary:is(:hover, :focus-visible)::after {
+    transform: translateX(110%);
+    transition: transform 650ms ease;
+  }
+  .hero-actions .button:active,
+  .filter-chip:active,
+  .sponsor-years a:active {
+    transform: scale(0.97);
+  }
+  .post-row h3 a {
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 6px;
+    transition:
+      text-decoration-color 200ms ease,
+      text-underline-offset 200ms ease;
+  }
+  .post-row h3 a:is(:hover, :focus-visible) {
+    text-decoration-color: var(--green);
+    text-underline-offset: 4px;
+  }
+  .sponsor-years a,
+  .filter-chip {
+    transition:
+      background 180ms ease,
+      border-color 180ms ease,
+      transform 180ms ease;
+  }
+  .search-dialog[open] {
+    animation: search-arrive 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  @keyframes search-arrive {
+    from {
+      opacity: 0;
+      translate: 0 -10px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+  .reading-progress {
+    background: linear-gradient(90deg, var(--green), #a6bd71);
+    box-shadow: 0 0 8px #729e5650;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .motion-ready .hero-visual > img {
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg))
+      rotateY(var(--tilt-y, 0deg));
+    transition: transform 220ms ease-out;
+  }
+  .motion-ready .hero-visual::before {
+    content: "";
+    position: absolute;
+    inset: 4%;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at var(--light-x, 50%) var(--light-y, 50%),
+      #8aac6330,
+      transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+  .motion-ready .hero-visual.is-pointer-lit::before {
+    opacity: 1;
+  }
+  .motion-ready .game-card.is-pointer-lit {
+    transform: perspective(900px) translateY(-5px) rotateX(var(--tilt-x, 0deg))
+      rotateY(var(--tilt-y, 0deg));
+  }
+  .motion-ready .game-cover::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: radial-gradient(
+      circle at var(--light-x, 50%) var(--light-y, 50%),
+      #ffffff24,
+      transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+  .motion-ready .game-card.is-pointer-lit .game-cover::before {
+    opacity: 1;
+  }
+}
