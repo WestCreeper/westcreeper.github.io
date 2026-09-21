@@ -12,7 +12,7 @@
   .main-nav > a::after {
     content: "";
     position: absolute;
-    bottom: 0;
+    bottom: 22px;
     left: 0;
     width: 100%;
     height: 2px;
@@ -98,6 +98,12 @@
   .reading-progress {
     background: linear-gradient(90deg, var(--green), #a6bd71);
     box-shadow: 0 0 8px #729e5650;
+  }
+}
+
+@media (max-width: 780px) {
+  .main-nav > a::after {
+    display: none;
   }
 }
 
