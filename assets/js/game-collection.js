@@ -15,8 +15,19 @@
     const template = root.querySelector("[data-game-template]");
     const card = (game) => {
       const node = template.content.firstElementChild.cloneNode(true);
-      node.href = game.url;
+      node.querySelector(".game-card-link").href = game.url;
       node.dataset.gameId = game.id;
+      const favorite = node.querySelector("[data-favorite]");
+      favorite.dataset.favorite = game.id;
+      favorite.dataset.title = game.title;
+      const lastPlayed = window.WCGameLibrary?.snapshot().recent.find(
+        (item) => item.id === game.id,
+      );
+      if (lastPlayed) {
+        const date = new Date(lastPlayed.at);
+        node.querySelector("[data-last-played]").textContent =
+          `${date.toLocaleDateString("zh-CN", { month: "short", day: "numeric" })} 玩过`;
+      }
       const cover = node.querySelector(".game-cover");
       cover.classList.add("game-cover--" + game.id);
       const image = node.querySelector("img");
@@ -51,6 +62,7 @@
           [pool[i], pool[j]] = [pool[j], pool[i]];
         }
         grid.replaceChildren(...pool.slice(0, size).map(card));
+        window.WCGameLibrary?.syncButtons();
         status.hidden = pool.length > 0;
         status.textContent = "更多游戏正在整理中。";
         return;
@@ -73,9 +85,13 @@
         sensitivity: "base",
       });
       let page = 1,
-        category = "all";
+        category = "all",
+        libraryView = "all";
       const fromUrl = () => {
         const params = new URLSearchParams(location.search);
+        libraryView = ["favorites", "recent"].includes(params.get("view"))
+          ? params.get("view")
+          : "all";
         const requested = Number(params.get("page"));
         page = Number.isSafeInteger(requested) && requested > 0 ? requested : 1;
         category = params.get("tag") || "all";
@@ -91,8 +107,38 @@
       };
       const update = (writeHistory = false) => {
         const query = normalize(input.value);
+        const library = window.WCGameLibrary?.snapshot() || {
+          favorites: [],
+          recent: [],
+        };
+        const times = new Map(library.recent.map((item) => [item.id, item.at]));
+        const counts = {
+          all: games.length,
+          favorites: games.filter((g) => library.favorites.includes(g.id))
+            .length,
+          recent: games.filter((g) => times.has(g.id)).length,
+        };
+        root.querySelectorAll("[data-library-count]").forEach((node) => {
+          node.textContent = counts[node.dataset.libraryCount];
+        });
+        root
+          .querySelectorAll("[data-library-view]")
+          .forEach((node) =>
+            node.setAttribute(
+              "aria-pressed",
+              String(node.dataset.libraryView === libraryView),
+            ),
+          );
+        root.querySelector("[data-clear-recent]").hidden =
+          libraryView !== "recent" || !library.recent.length;
+        sort.options[0].textContent =
+          libraryView === "recent" ? "最近玩过优先" : "默认顺序";
         const matched = games.filter(
           (game) =>
+            (libraryView === "all" ||
+              (libraryView === "favorites"
+                ? library.favorites.includes(game.id)
+                : times.has(game.id))) &&
             (category === "all" || (game.tags || []).includes(category)) &&
             normalize(
               [
@@ -106,6 +152,8 @@
             ).includes(query),
         );
         order.disabled = sort.value === "default";
+        if (sort.value === "default" && libraryView === "recent")
+          matched.sort((a, b) => times.get(b.id) - times.get(a.id));
         if (sort.value !== "default") {
           const collator = sort.value === "original_title" ? english : chinese;
           const direction = order.value === "desc" ? -1 : 1;
@@ -128,12 +176,25 @@
         const pages = Math.max(1, Math.ceil(matched.length / size));
         page = Math.min(page, pages);
         const start = (page - 1) * size;
-        grid.replaceChildren(...matched.slice(start, start + size).map(card));
+        const visibleGames = matched.slice(start, start + size);
+        const sameCards =
+          grid.children.length === visibleGames.length &&
+          visibleGames.every(
+            (game, index) => grid.children[index].dataset.gameId === game.id,
+          );
+        // Keep cards (and keyboard focus) stable when only a heart changes.
+        if (!sameCards) grid.replaceChildren(...visibleGames.map(card));
+        window.WCGameLibrary?.syncButtons();
         count.textContent = matched.length
           ? `共 ${games.length} 部 · 符合条件 ${matched.length} 部 · 显示第 ${start + 1}–${Math.min(start + size, matched.length)} 部 · 第 ${page} / ${pages} 页`
           : `共 ${games.length} 部 · 符合条件 0 部`;
         status.hidden = matched.length > 0;
         status.textContent = "没有找到这款游戏，换个关键词或标签试试。";
+        if (!counts[libraryView] && libraryView !== "all")
+          status.textContent =
+            libraryView === "favorites"
+              ? "还没有收藏。点击游戏卡片上的 ♡，把喜欢的游戏留在这里。"
+              : "还没有游玩记录。成功启动游戏后，它会出现在这里。";
         chips.forEach((chip) =>
           chip.setAttribute(
             "aria-pressed",
@@ -153,6 +214,7 @@
         if (writeHistory) {
           const url = new URL(location.href);
           for (const [key, value] of [
+            ["view", libraryView === "all" ? "" : libraryView],
             ["page", page > 1 ? page : ""],
             ["tag", category === "all" ? "" : category],
             ["q", input.value.trim()],
@@ -173,6 +235,25 @@
         update(true);
         root.scrollIntoView({ block: "start" });
       };
+      root.querySelectorAll("[data-library-view]").forEach((button) =>
+        button.addEventListener("click", () => {
+          libraryView = button.dataset.libraryView;
+          page = 1;
+          update(true);
+        }),
+      );
+      addEventListener("wc-library-change", () => {
+        const focusedId = document.activeElement?.dataset.favorite;
+        update();
+        if (focusedId) {
+          const target = [...grid.querySelectorAll("[data-favorite]")].find(
+            (button) => button.dataset.favorite === focusedId,
+          );
+          (
+            target || root.querySelector(`[data-library-view="${libraryView}"]`)
+          ).focus({ preventScroll: true });
+        }
+      });
       prev.addEventListener("click", () => turn(page - 1));
       next.addEventListener("click", () => turn(page + 1));
       select.addEventListener("change", () => turn(Number(select.value)));

@@ -6,6 +6,7 @@
   const launch = shell.querySelector("[data-player-launch]");
   const start = shell.querySelector("[data-player-start]");
   const restart = shell.querySelector("[data-player-restart]");
+  const saves = shell.querySelector("[data-player-saves]");
   const message = document.querySelector("[data-player-message]");
   let player;
   let busy = false;
@@ -55,6 +56,7 @@
   const boot = async () => {
     if (busy) return;
     busy = true;
+    saves.disabled = true;
     shell.dispatchEvent(new CustomEvent("player-loading"));
     start.disabled = true;
     restart.disabled = true;
@@ -108,10 +110,23 @@
     } finally {
       clearTimeout(timer);
       busy = false;
+      saves.disabled = false;
       start.disabled = false;
     }
   };
   start.addEventListener("click", boot);
+  shell.addEventListener("player-stop-for-import", () => {
+    shell.dispatchEvent(new CustomEvent("player-loading"));
+    if (player) player.remove();
+    player = null;
+    mount.replaceChildren();
+    mount.hidden = true;
+    launch.hidden = false;
+    restart.disabled = true;
+    start.disabled = false;
+    start.textContent = "开始游戏";
+    message.textContent = "游戏已停止。存档导入完成后，点击「开始游戏」读取进度。";
+  });
   restart.addEventListener("click", () => {
     if (confirm("重新开始会结束当前这一局，确定重新开始吗？")) boot();
   });

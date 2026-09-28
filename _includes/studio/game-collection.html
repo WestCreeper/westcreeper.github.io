@@ -1,5 +1,9 @@
 <div data-game-collection data-mode="{{ include.mode }}" data-limit="{{ include.limit }}" data-exclude="{{ include.exclude | escape }}" data-games-url="{{ '/games.json' | relative_url }}">
-  {% if include.mode == 'archive' %}{% include studio/filters.html type='games' %}
+  {% if include.mode == 'archive' %}
+  <div class="library-heading"><div class="library-tabs" role="group" aria-label="我的游戏库"><button data-library-view="all" aria-pressed="true">全部游戏 <span data-library-count="all"></span></button><button data-library-view="favorites" aria-pressed="false">♡ 我的收藏 <span data-library-count="favorites"></span></button><button data-library-view="recent" aria-pressed="false">↺ 最近玩过 <span data-library-count="recent"></span></button></div><button class="filter-chip" data-clear-recent hidden>清空历史</button></div>
+  <p class="library-note">收藏与最近 60 款游玩记录仅保存在当前浏览器。清理网站数据会移除记录，不会自动跨设备同步。</p>
+  <p class="library-status" data-library-status role="status" aria-live="polite"></p>
+  {% include studio/filters.html type='games' %}
   <div class="game-sort-controls">
     <label>排序方式 <select data-games-sort><option value="default">默认顺序</option><option value="title">中文名称</option><option value="original_title">英文名称</option><option value="author">作者名称</option></select></label>
     <label>排列方向 <select data-games-order><option value="asc">正序（A → Z）</option><option value="desc">倒序（Z → A）</option></select></label>
@@ -12,7 +16,7 @@
     <label>跳转到 <select data-page-select aria-label="选择游戏页码"></select></label>
     <button class="filter-chip" data-page-next>下一页</button>
   </nav>
-  <template data-game-template><a class="game-card"><div class="game-cover"><img loading="lazy" width="400" height="230"><span class="game-badge"></span><span class="game-launch">{% include studio/icon.html name='play' %}</span><span class="game-cover-caption"></span></div><div class="game-card-body"><div class="game-card-title"><h3></h3><span aria-hidden="true">↗</span></div><p></p><div class="game-card-meta"><span data-game-tags></span><span class="play-label"><i></i><span data-game-status></span></span></div></div></a></template>
+  <template data-game-template><article class="game-card"><a class="game-card-link"><div class="game-cover"><img loading="lazy" width="400" height="230"><span class="game-badge"></span><span class="game-launch">{% include studio/icon.html name='play' %}</span><span class="game-cover-caption"></span></div><div class="game-card-body"><div class="game-card-title"><h3></h3><span aria-hidden="true">↗</span></div><p></p><div class="game-card-meta"><span data-game-tags></span><span class="play-label"><i></i><span data-game-status></span></span></div></div></a><div class="game-card-library"><small data-last-played></small><button data-favorite aria-pressed="false">♡ 收藏</button></div></article></template>
   <noscript><p>启用 JavaScript 可使用随机推荐、搜索和分页。</p><div class="game-grid">{% assign fallback_count = 0 %}{% for fallback_game in site.data.games %}{% unless fallback_game.id == include.exclude %}{% if fallback_count < include.limit %}{% include studio/game-card.html game=fallback_game %}{% assign fallback_count = fallback_count | plus: 1 %}{% endif %}{% endunless %}{% endfor %}</div></noscript>
 </div>
 <script src="{{ '/assets/js/game-collection.js' | relative_url }}" defer></script>

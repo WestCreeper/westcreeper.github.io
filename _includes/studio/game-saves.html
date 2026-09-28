@@ -1,0 +1,10 @@
+<dialog class="save-dialog" data-save-dialog aria-labelledby="save-title">
+  <header><div><span class="eyebrow">TAKE YOUR PROGRESS WITH YOU</span><h2 id="save-title">把进度，随身带走。</h2></div><button type="button" data-save-close>关闭</button></header>
+  <p>备份游戏已写入浏览器的存档；不是即时存档。请先在游戏内保存。没有保存功能、只使用密码或在线账号保存的游戏可能没有可导出的存档。</p>
+  <p class="save-warning">共享位置中的存档可能属于同域名下其他游戏，默认不选中。请核对名称再选择；导入会覆盖选中条目。操作前请关闭其他正在运行本站游戏的标签页。</p>
+  <div class="save-list" data-save-list></div>
+  <p data-save-status role="status" aria-live="polite"></p>
+  <footer><button type="button" data-save-export>导出选中存档</button><label class="save-file-label">选择本站存档备份<input type="file" accept=".json,application/json" data-save-file></label><button type="button" data-save-apply hidden>确认导入选中存档</button><button type="button" data-save-cancel-import hidden>取消导入</button></footer>
+  <p>备份文件仅在本机处理，不会上传服务器。支持本站同一游戏、相同资源地址的 JSON 备份，可在其他设备导入。收藏、浏览记录和网站设置不包含在游戏存档中。导入后点击「开始游戏」重新读取进度；不同游戏版本可能不兼容。</p>
+</dialog>
+<script src="{{ '/assets/js/game-saves.js' | relative_url }}" defer></script>

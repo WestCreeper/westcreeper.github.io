@@ -5,7 +5,7 @@
   const activeAnimations = new Set();
   const seen = new WeakSet();
   const revealSelector =
-    ".hero-copy, .hero-visual, .page-intro, .article-header, .site-note, .section-heading, .post-row, .author-card, .sidebar-note, .sponsor-support, .sponsor-year, .game-card";
+    ".hero-copy, .hero-visual, .page-intro, .article-header, .site-note, .section-heading, .post-row, .author-card, .sidebar-note, .sponsor-support, .sponsor-year, .game-card, .archive-stat";
   // Animate on arrival, never hide content while waiting for the observer.
   const reveal =
     "IntersectionObserver" in window
