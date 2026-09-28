@@ -1,0 +1,193 @@
+.sponsor-entry {
+  position: fixed;
+  right: max(22px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 25;
+  width: 246px;
+  padding-top: 12px;
+  filter: drop-shadow(0 5px 0 #172d2018);
+  animation: sponsor-arrive 0.35s ease-out both;
+}
+.sponsor-entry[hidden] {
+  display: none;
+}
+.sponsor-entry-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 76px;
+  padding: 8px 20px 8px 4px;
+  border: 2px solid var(--green);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 3px var(--green-light);
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform 0.18s ease;
+}
+.sponsor-entry-link:hover {
+  transform: translateY(-3px);
+}
+.sponsor-entry-link img {
+  width: 80px;
+  height: 80px;
+  margin-top: -30px;
+  image-rendering: pixelated;
+}
+.sponsor-entry-copy {
+  display: grid;
+  gap: 5px;
+}
+.sponsor-entry-copy small {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.sponsor-entry-copy strong {
+  font-size: 14px;
+  white-space: nowrap;
+}
+.sponsor-entry-copy .icon {
+  width: 12px;
+  height: 12px;
+  color: #976653;
+  --icon-panel: #d69a77;
+}
+.sponsor-entry-close {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--green);
+  cursor: pointer;
+}
+.sponsor-entry-close::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 2px solid var(--green);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 2px var(--green-light);
+}
+.sponsor-entry-close .icon {
+  position: relative;
+  width: 12px;
+  height: 12px;
+}
+.sponsor-entry-close:hover {
+  color: var(--ink);
+}
+.sponsor-entry :focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 4px;
+}
+body:has(dialog[open]) .sponsor-entry,
+body:has([data-menu-toggle][aria-expanded="true"]) .sponsor-entry {
+  visibility: hidden;
+  pointer-events: none;
+}
+body.has-sponsor-entry {
+  padding-bottom: 100px;
+}
+@keyframes sponsor-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (max-width: 600px) {
+  .sponsor-entry {
+    width: 205px;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+  .sponsor-entry-link {
+    min-height: 58px;
+    padding: 6px 14px 6px 2px;
+    gap: 2px;
+  }
+  .sponsor-entry-link img {
+    width: 64px;
+    height: 64px;
+    margin-top: -18px;
+  }
+  .sponsor-entry-copy small {
+    font-size: 10px;
+    letter-spacing: 0;
+  }
+  .sponsor-entry-copy strong {
+    font-size: 12px;
+  }
+  body.has-sponsor-entry {
+    padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sponsor-entry {
+    animation: none;
+  }
+  .sponsor-entry-link {
+    transition: none;
+  }
+  .sponsor-entry-link:hover {
+    transform: none;
+  }
+}
+
+.sponsor-entry-link[hidden],
+.sponsor-entry-prompt[hidden] {
+  display: none;
+}
+.sponsor-entry-prompt {
+  padding: 16px;
+  background: var(--surface);
+  border: 2px solid var(--green);
+  box-shadow: inset 0 0 0 3px var(--green-light);
+}
+.sponsor-entry-prompt p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.sponsor-entry-prompt label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.sponsor-entry-prompt input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--green);
+}
+.sponsor-entry-prompt > div {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.sponsor-entry-prompt button {
+  min-height: 36px;
+  flex: 1;
+  border: 1px solid var(--line);
+  background: var(--soft);
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.sponsor-entry-prompt button[type="submit"] {
+  background: var(--green);
+  color: var(--surface);
+  border-color: var(--green);
+}

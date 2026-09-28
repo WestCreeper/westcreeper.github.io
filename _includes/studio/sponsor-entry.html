@@ -1,0 +1,13 @@
+<aside class="sponsor-entry" data-sponsor-entry aria-label="支持这个小站" hidden>
+  <a class="sponsor-entry-link" href="{{ '/sponsors/' | relative_url }}#support-title">
+    <img src="{{ '/assets/images/sponsor-cactus.svg' | relative_url }}" width="80" height="80" alt="">
+    <span class="sponsor-entry-copy"><small>让热爱继续生长</small><strong>支持这个小站 {% include studio/icon.html name='heart' %}</strong></span>
+  </a>
+  <button class="sponsor-entry-close" type="button" data-sponsor-dismiss aria-label="关闭赞助入口" aria-expanded="false" aria-controls="sponsor-dismiss-options">{% include studio/icon.html name='close' %}</button>
+  <form class="sponsor-entry-prompt" id="sponsor-dismiss-options" data-sponsor-dismiss-form aria-label="关闭赞助入口的选项" hidden>
+    <p>暂时收起这份小心意？</p>
+    <label><input type="checkbox" data-sponsor-dismiss-week>7 天内不再显示</label>
+    <div><button type="button" data-sponsor-dismiss-cancel>取消</button><button type="submit">关闭入口</button></div>
+  </form>
+</aside>
+<script src="{{ '/assets/js/sponsor-entry.js' | relative_url }}?v=optional-week" defer></script>

@@ -1,173 +1,38 @@
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="600"
-  height="440"
-  viewBox="0 0 600 440"
->
-  <defs>
-    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-      <path d="M24 0H0v24" fill="none" stroke="#d9dfd1" stroke-width=".8" />
-    </pattern>
-    <pattern id="scan" width="4" height="5" patternUnits="userSpaceOnUse">
-      <path d="M0 0h4" stroke="#183e33" opacity=".2" />
-    </pattern>
-  </defs>
-  <rect x="16" y="28" width="570" height="380" rx="24" fill="#eef0e5" />
-  <rect x="16" y="28" width="570" height="380" rx="24" fill="url(#grid)" />
-  <circle cx="320" cy="220" r="168" fill="#e3e9d7" />
-  <ellipse cx="313" cy="371" rx="220" ry="19" fill="#d2d9c8" />
-  <g transform="rotate(-5 282 230)">
-    <path
-      d="M123 89h299l20 224H112Z"
-      fill="#a5ab91"
-      stroke="#536450"
-      stroke-width="2"
-    />
-    <rect
-      x="108"
-      y="83"
-      width="316"
-      height="227"
-      rx="17"
-      fill="#e0debd"
-      stroke="#536450"
-      stroke-width="2"
-    />
-    <rect x="127" y="101" width="277" height="173" rx="12" fill="#65765e" />
-    <rect x="138" y="111" width="255" height="153" rx="7" fill="#173f35" />
-    <path
-      d="M139 217h26v-18h22v-19h24v-21h23v25h19v21h26v-24h20v-23h22v21h20v19h23v-24h15v-26h13v116H139Z"
-      fill="#4c7759"
-    />
-    <path
-      d="M139 242h27v-10h32v-14h24v11h34v-10h20v-10h25v15h35v-11h23v15h34v36H139Z"
-      fill="#7f9c69"
-    />
-    <g fill="#c2d6a1">
-      <path
-        d="M171 131h4v4h-4zM351 128h4v4h-4zM324 157h4v4h-4zM208 155h3v3h-3zM371 183h3v3h-3z"
-      />
-      <path d="M300 124h13v4h5v13h-5v5h-13v-5h-5v-13h5z" />
-    </g>
-    <path d="M153 250h230" stroke="#b6c98e" stroke-width="4" />
-    <text
-      x="265"
-      y="191"
-      font-family="monospace"
-      font-size="28"
-      font-weight="bold"
-      text-anchor="middle"
-      fill="#edf1bc"
-    >
-      PRESS START
-    </text>
-    <text
-      x="265"
-      y="211"
-      font-family="monospace"
-      font-size="9"
-      letter-spacing="3"
-      text-anchor="middle"
-      fill="#d4dfb0"
-    >
-      A LITTLE NOSTALGIA, RELOADED.
-    </text>
-    <rect x="138" y="111" width="255" height="153" rx="7" fill="url(#scan)" />
-    <path d="M142 120h235" stroke="#fff" opacity=".13" stroke-width="3" />
-    <text
-      x="131"
-      y="294"
-      font-family="monospace"
-      font-size="9"
-      fill="#536450"
-      letter-spacing="2"
-    >
-      WESTCREEPER / PERSONAL COMPUTER
-    </text>
-    <circle cx="390" cy="290" r="4" fill="#7c9b5f" />
-    <path
-      d="M229 311v25h82v-25"
-      fill="#aaaf93"
-      stroke="#536450"
-      stroke-width="2"
-    />
-    <path
-      d="M205 336h130l14 12H192Z"
-      fill="#d7d6b4"
-      stroke="#536450"
-      stroke-width="2"
-    />
-  </g>
-  <g transform="rotate(-5 280 360)">
-    <path
-      d="M159 345h201l25 35H145Z"
-      fill="#e1dfc1"
-      stroke="#536450"
-      stroke-width="2"
-    />
-    <path
-      d="M169 353h184m-189 8h195m-202 8h208M182 350l-5 22m25-22-3 22m24-22-2 22m24-22v22m24-22v22m24-22 2 22m21-22 3 22m19-22 5 22"
-      stroke="#9ca58b"
-      stroke-width="3"
-    />
-  </g>
-  <path
-    d="M428 368c-18-6-16-25 0-30 9-3 20-1 25 8l5 17c0 11-20 10-30 5Z"
-    fill="#dedcbc"
-    stroke="#536450"
-    stroke-width="2"
-  />
-  <path
-    d="m437 337-2 13m1-15c-2-22 37-32 24-57"
-    fill="none"
-    stroke="#536450"
-    stroke-width="2"
-  />
-  <g transform="translate(475 220)">
-    <path
-      d="M12 80V8h18v72M12 51H-4V23h-11v40h27M30 39h12V13h12v39H30"
-      fill="#4c7b50"
-      stroke="#385d3d"
-      stroke-width="3"
-    />
-    <path d="M21 14v63M-9 28v29m56-37v26" stroke="#91a66a" stroke-width="3" />
-    <path
-      d="M-2 80h49l-8 49H6Z"
-      fill="#c79267"
-      stroke="#886b4c"
-      stroke-width="2"
-    />
-    <path
-      d="M-6 80h57v10H-6Z"
-      fill="#d5a77b"
-      stroke="#886b4c"
-      stroke-width="2"
-    />
-  </g>
-  <g fill="#738768">
-    <path
-      d="M76 111h3v13h-3zM71 116h13v3H71zM485 128h3v13h-3zM480 133h13v3h-13z"
-    />
-  </g>
-  <g transform="rotate(9 459 84)">
-    <rect
-      x="399"
-      y="66"
-      width="117"
-      height="30"
-      rx="3"
-      fill="#f7f6e9"
-      stroke="#9aa88b"
-    />
-    <text
-      x="457"
-      y="85"
-      text-anchor="middle"
-      font-family="monospace"
-      font-size="11"
-      fill="#4d6c50"
-    >
-      EST. 2021 ✳
-    </text>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="440" viewBox="0 0 150 110" shape-rendering="crispEdges" role="img" aria-labelledby="title desc">
+<title id="title">旧时光，新故事</title><desc id="desc">方块像素风复古电脑，屏幕写着 PRESS START，旁边放着仙人掌与礼物。木色机壳、苔绿山野和铜色花盆。</desc>
+<defs><pattern id="tiles" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 0h8v8H0z" fill="#e9eddf"/><path d="M0 7h8v1H0zM7 0h1v7H7z" fill="#e0e5d5"/></pattern></defs>
+<!-- A stepped frame and a quiet tiled backdrop. -->
+<path fill="#b1bba3" d="M8 5h134v3h3v94h-3v3H8v-3H5V8h3z"/>
+<path fill="url(#tiles)" d="M9 6h132v3h3v92h-3v3H9v-3H6V9h3z"/>
+<path fill="#d6dec7" d="M48 14h56v6h10v8h6v46h-8v8H38v-8h-8V32h8V22h10z"/>
+<path fill="#c0cbb1" d="M20 92h112v3h6v5H16v-5h4z"/>
+<!-- CRT, square bevels, recessed screen. -->
+<path fill="#56694e" d="M23 19h83v4h4v58H25v-3h-6V23h4z"/>
+<path fill="#a6ac84" d="M100 23h8v56h-8zM25 75h75v4H25z"/>
+<path fill="#dcdbb1" d="M23 21h79v54H21V25h2z"/>
+<path fill="#f0ebc9" d="M23 21h79v2H23zM21 25h2v48h-2z"/>
+<path fill="#b7bd92" d="M23 73h79v2H23zM100 23h2v50h-2z"/>
+<path fill="#718561" d="M26 26h71v40H26z"/><path fill="#a2b38b" d="M26 26h71v2H26zM26 28h2v38h-2z"/>
+<path fill="#153d31" d="M29 29h65v34H29z"/><path fill="#23513e" d="M31 31h61v1H31z"/>
+<!-- Screen landscape: nested green blocks, never gradients. -->
+<path fill="#345f43" d="M29 53h7v-7h6v-5h8v9h8v5h7v-9h7v-8h8v10h6v-7h8v22H29z"/>
+<path fill="#557c4e" d="M29 57h9v-4h12v4h10v-3h11v-6h10v7h13v8H29z"/>
+<path fill="#7d9b60" d="M29 60h13v-2h12v2h15v-3h11v2h14v4H29z"/>
+<path fill="#b7c983" d="M30 62h63v1H30zM78 33h4v1h1v4h-1v1h-4v-1h-1v-4h1zM37 34h1v1h-1zM87 37h1v1h-1zM47 37h1v1h-1z"/>
+<path transform="translate(-2 0)" fill="#e8edb0" d="M32 44h1v1h-1zM33 44h1v1h-1zM34 44h1v1h-1zM35 44h1v1h-1zM32 45h1v1h-1zM36 45h1v1h-1zM32 46h1v1h-1zM33 46h1v1h-1zM34 46h1v1h-1zM35 46h1v1h-1zM32 47h1v1h-1zM32 48h1v1h-1zM38 44h1v1h-1zM39 44h1v1h-1zM40 44h1v1h-1zM41 44h1v1h-1zM38 45h1v1h-1zM42 45h1v1h-1zM38 46h1v1h-1zM39 46h1v1h-1zM40 46h1v1h-1zM41 46h1v1h-1zM38 47h1v1h-1zM40 47h1v1h-1zM38 48h1v1h-1zM41 48h1v1h-1zM44 44h1v1h-1zM45 44h1v1h-1zM46 44h1v1h-1zM47 44h1v1h-1zM48 44h1v1h-1zM44 45h1v1h-1zM44 46h1v1h-1zM45 46h1v1h-1zM46 46h1v1h-1zM47 46h1v1h-1zM44 47h1v1h-1zM44 48h1v1h-1zM45 48h1v1h-1zM46 48h1v1h-1zM47 48h1v1h-1zM48 48h1v1h-1zM51 44h1v1h-1zM52 44h1v1h-1zM53 44h1v1h-1zM54 44h1v1h-1zM50 45h1v1h-1zM51 46h1v1h-1zM52 46h1v1h-1zM53 46h1v1h-1zM54 47h1v1h-1zM50 48h1v1h-1zM51 48h1v1h-1zM52 48h1v1h-1zM53 48h1v1h-1zM57 44h1v1h-1zM58 44h1v1h-1zM59 44h1v1h-1zM60 44h1v1h-1zM56 45h1v1h-1zM57 46h1v1h-1zM58 46h1v1h-1zM59 46h1v1h-1zM60 47h1v1h-1zM56 48h1v1h-1zM57 48h1v1h-1zM58 48h1v1h-1zM59 48h1v1h-1zM67 44h1v1h-1zM68 44h1v1h-1zM69 44h1v1h-1zM70 44h1v1h-1zM66 45h1v1h-1zM67 46h1v1h-1zM68 46h1v1h-1zM69 46h1v1h-1zM70 47h1v1h-1zM66 48h1v1h-1zM67 48h1v1h-1zM68 48h1v1h-1zM69 48h1v1h-1zM72 44h1v1h-1zM73 44h1v1h-1zM74 44h1v1h-1zM75 44h1v1h-1zM76 44h1v1h-1zM74 45h1v1h-1zM74 46h1v1h-1zM74 47h1v1h-1zM74 48h1v1h-1zM79 44h1v1h-1zM80 44h1v1h-1zM81 44h1v1h-1zM78 45h1v1h-1zM82 45h1v1h-1zM78 46h1v1h-1zM79 46h1v1h-1zM80 46h1v1h-1zM81 46h1v1h-1zM82 46h1v1h-1zM78 47h1v1h-1zM82 47h1v1h-1zM78 48h1v1h-1zM82 48h1v1h-1zM84 44h1v1h-1zM85 44h1v1h-1zM86 44h1v1h-1zM87 44h1v1h-1zM84 45h1v1h-1zM88 45h1v1h-1zM84 46h1v1h-1zM85 46h1v1h-1zM86 46h1v1h-1zM87 46h1v1h-1zM84 47h1v1h-1zM86 47h1v1h-1zM84 48h1v1h-1zM87 48h1v1h-1zM90 44h1v1h-1zM91 44h1v1h-1zM92 44h1v1h-1zM93 44h1v1h-1zM94 44h1v1h-1zM92 45h1v1h-1zM92 46h1v1h-1zM92 47h1v1h-1zM92 48h1v1h-1z"/><path fill="#829375" d="M29 68h20v1H29zM29 70h14v1H29zM87 68h3v3h-3z"/><path fill="#bccc85" d="M93 68h3v3h-3z"/>
+<!-- Pedestal, mechanical keyboard and mouse. -->
+<path fill="#586c50" d="M55 79h22v6h7v4H47v-4h8z"/><path fill="#b7bd92" d="M57 80h18v5H57zM49 86h33v1H49z"/>
+<path fill="#56694e" d="M29 86h59v3h4v4h4v5H23v-5h3v-4h3z"/>
+<path fill="#dbddb7" d="M30 88h56v3h4v4h3v1H26v-2h3v-3h1z"/>
+<path fill="#9aa884" d="M31 89h4v2h-4zM37 89h4v2h-4zM43 89h4v2h-4zM49 89h4v2h-4zM55 89h4v2h-4zM61 89h4v2h-4zM67 89h4v2h-4zM73 89h4v2h-4zM79 89h6v2h-6zM29 93h6v2h-6zM37 93h4v2h-4zM43 93h28v2H43zM73 93h4v2h-4zM79 93h9v2h-9z"/>
+<path fill="#7b8b6c" d="M97 78h5v1h-4v6h-1zM100 85h8v2h2v8h-2v2h-8v-2h-2v-8h2z"/><path fill="#d8dcb8" d="M101 87h2v4h-3v3h8v-6h-3v3h-1v-4z"/>
+<!-- Potted cactus: inset leaf panels and a copper pot. -->
+<path fill="#3d6643" d="M121 51h6v13h3v-9h5v15h-8v9h-6V68h-7V57h5v6h2z"/>
+<path fill="#80a367" d="M122 52h3v25h-3zM115 58h2v7h5v2h-7zM131 56h2v12h-6v-2h4z"/>
+<path fill="#aec184" d="M123 53h1v21h-1zM116 59h1v5h-1zM132 57h1v8h-1z"/>
+<path fill="#77543b" d="M115 77h20v4h-2v12h-16V81h-2z"/><path fill="#c28e61" d="M117 79h16v1h-16zM119 82h12v9h-12z"/><path fill="#e0b485" d="M119 82h2v8h-2z"/><path fill="#a7744f" d="M128 84h3v7h-10v-2h7z"/>
+<!-- Copper keepsake and date plaque. -->
+<path fill="#8d6948" d="M108 16h29v11h-29z"/><path fill="#f0e7c4" d="M109 17h27v8h-27z"/>
+<path fill="#8d6948" d="M111 19h1v1h-1zM112 19h1v1h-1zM113 19h1v1h-1zM114 19h1v1h-1zM115 20h1v1h-1zM112 21h1v1h-1zM113 21h1v1h-1zM114 21h1v1h-1zM111 22h1v1h-1zM111 23h1v1h-1zM112 23h1v1h-1zM113 23h1v1h-1zM114 23h1v1h-1zM115 23h1v1h-1zM118 19h1v1h-1zM119 19h1v1h-1zM120 19h1v1h-1zM117 20h1v1h-1zM121 20h1v1h-1zM117 21h1v1h-1zM119 21h1v1h-1zM121 21h1v1h-1zM117 22h1v1h-1zM121 22h1v1h-1zM118 23h1v1h-1zM119 23h1v1h-1zM120 23h1v1h-1zM123 19h1v1h-1zM124 19h1v1h-1zM125 19h1v1h-1zM126 19h1v1h-1zM127 20h1v1h-1zM124 21h1v1h-1zM125 21h1v1h-1zM126 21h1v1h-1zM123 22h1v1h-1zM123 23h1v1h-1zM124 23h1v1h-1zM125 23h1v1h-1zM126 23h1v1h-1zM127 23h1v1h-1zM131 19h1v1h-1zM130 20h1v1h-1zM131 20h1v1h-1zM131 21h1v1h-1zM131 22h1v1h-1zM130 23h1v1h-1zM131 23h1v1h-1zM132 23h1v1h-1z"/><path fill="#9aa981" d="M12 32h2v-2h1v2h2v1h-2v2h-1v-2h-2zM134 40h2v-2h1v2h2v1h-2v2h-1v-2h-2z"/>
+<path fill="#8f6346" d="M9 80h10v11H9z"/><path fill="#cc9b68" d="M10 81h8v3h-8zM10 85h8v5h-8z"/><path fill="#ebd39a" d="M13 81h2v9h-2z"/>
 </svg>

@@ -71,3 +71,11 @@ GitHub Actions 会在推送到 `master` 后自动构建、检查和部署。首�
 本站最初基于 [TeXt Theme](https://github.com/kitian616/jekyll-TeXt-theme) 创建，现已使用独立的博客布局，并清理上游模板的示例、截图及主题开发文件。原模板的版权与 MIT 许可声明保留在 [LICENSE](LICENSE)。文章许可说明见各文章页；游戏及其他素材的权利归各自作者所有。
 
 收藏与历史保存在 `wc-game-library-v1`，不上传服务器；仅成功加载的游戏会计入最近玩过，最多保留 60 款。游戏存档与收藏记录分开管理。存档备份支持在不同设备的本站同一游戏中恢复，资源域名与路径需保持一致；暂不接收第三方 `.sol` / `.zip` 文件。读取规则对应固定版本 Ruffle 0.6.0 的本地 SharedObject 格式，升级模拟器时应复核。可运行 `node tools/check-game-features.cjs` 检查存储隔离、无效备份拒绝和失败回滚。
+
+## 赞助入口与首页插画
+
+首页、文章目录、游戏档案馆和关于页显示右下角赞助入口，跳转至现有赞助页面。正文、游戏详情、赞助页和其他工具页面不加载该组件；打开搜索或手机导航时暂时隐藏。点击关闭按钮后，可选择是否勾选「7 天内不再显示」；默认不勾选，仅收起当前页面，下次进入或刷新会再次显示。勾选后，关闭记录 `wc-sponsor-dismissed-until` 保存在当前浏览器，7 天内不再显示，并同步至同源的其他标签页；禁用存储时仍可关闭当前页入口。导航中的赞助名单始终保留。
+
+组件位于 `_includes/studio/sponsor-entry.html`，显示页面由 `_layouts/studio.html` 的 `show_sponsor_entry` 控制。`sponsor-entry.css` / `sponsor-entry.js` 仅在这些页面加载。入口只有一次入场与悬停反馈，尊重系统减少动态效果设置，不轮询、不向第三方发请求。
+
+首页 `assets/images/desktop.svg` 与入口 `assets/images/sponsor-cactus.svg` 为原创方块 SVG，参考 re-ocd 的有限色阶、层叠边框与像素轮廓；首页插画文字也由路径绘制，不依赖外部字体。

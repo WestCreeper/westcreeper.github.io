@@ -4,7 +4,7 @@ layout: studio
 <div class="container">
   <section class="hero">
     <div class="hero-copy"><div class="eyebrow"><span class="status-dot"></span> A SMALL CORNER OF THE INTERNET</div><h1>旧时光，<br><span>新故事。</span></h1><p>这里是西部苦力怕的自留地。<br>写点文字，汉化游戏，让那些闪光的记忆继续运行。</p><div class="hero-actions"><a class="button button-primary" href="{{ '/swf/' | relative_url }}">{% include studio/icon.html name='game' %}去玩点什么 {% include studio/icon.html name='arrow' %}</a><a class="button button-text" href="{{ '/archive.html' | relative_url }}">读读文章 {% include studio/icon.html name='external' %}</a></div><div class="hero-footnote"><span>FLASH NEVER DIES</span><i></i> 热爱总有回响</div></div>
-    <div class="hero-visual"><img src="{{ '/assets/images/desktop.svg' | relative_url }}" width="600" height="440" alt="一台显示着像素山野和 PRESS START 的复古电脑，旁边是一盆仙人掌"><span class="hero-sticker">让喜欢的东西，<br>留得再久一点。</span></div>
+    <div class="hero-visual"><img src="{{ '/assets/images/desktop.svg' | relative_url }}?v=reocd-1" width="600" height="440" alt="方块像素风复古电脑，屏幕显示 PRESS START，旁边是仙人掌和礼物"><span class="hero-sticker">让喜欢的东西，<br>留得再久一点。</span></div>
   </section>
   <div class="site-note"><span><span class="status-dot"></span> 欢迎来到我的数字花园</span><p>一些认真写下的文字，一些舍不得关掉的小游戏。</p><a href="{{ '/about.html' | relative_url }}">认识一下 {% include studio/icon.html name='arrow' %}</a></div>
   <section class="section games-section"><div class="section-heading"><div><div class="eyebrow">THE FLASH COLLECTION</div><h2>记忆里的游戏<span class="count">{{ site.data.games | size }}</span></h2><p>不用翻出旧电脑，点开就能重逢。</p></div><a class="section-link" href="{{ '/swf/' | relative_url }}">走进档案馆 {% include studio/icon.html name='arrow' %}</a></div>{% include studio/game-collection.html mode='random' limit=3 %}</section>
