@@ -38,7 +38,9 @@
   function updateVolume() {
     slider.value = volume;
     $("[data-player-volume-value]").textContent = `${volume}%`;
-    mute.textContent = volume ? "音量" : "静音";
+    (mute.querySelector("[data-icon-label]") || mute).textContent = volume
+      ? "音量"
+      : "静音";
     mute.setAttribute("aria-pressed", String(volume === 0));
     mute.setAttribute("aria-label", volume ? "静音" : "取消静音");
     if (player) player.ruffle().volume = volume / 100;
@@ -111,7 +113,9 @@
     document.documentElement.classList.toggle("has-player-overlay", on);
     isolatePage(on);
     webButton.setAttribute("aria-pressed", String(on));
-    webButton.textContent = on ? "退出网页全屏" : "网页内全屏";
+    (webButton.querySelector("[data-icon-label]") || webButton).textContent = on
+      ? "退出网页全屏"
+      : "网页内全屏";
     updateSize();
     if (!on) {
       window.scrollTo({ top: savedScroll, behavior: "instant" });

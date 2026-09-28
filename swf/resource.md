@@ -8,19 +8,19 @@ description: 留给 Flash 爱好者的一只小工具箱。
 
 在现代浏览器中运行 Flash 内容的模拟器，也是本站游戏档案馆使用的播放器。兼容情况以实际运行与官方说明为准。
 
-[项目主页与下载 ↗](https://ruffle.rs/)
+[项目主页与下载 {% include studio/icon.html name='external' %}](https://ruffle.rs/)
 
 ## Flashpoint Archive
 
 收集和保存网络游戏与动画的项目。想找一款记忆里的小游戏时，可以从这里开始探索。
 
-[访问 Flashpoint Archive ↗](https://flashpointarchive.org/)
+[访问 Flashpoint Archive {% include studio/icon.html name='external' %}](https://flashpointarchive.org/)
 
 ## JPEXS Free Flash Decompiler
 
 用于查看和编辑 SWF 文件的开源工具，可用于研究 ActionScript 与游戏资源。
 
-[项目仓库与使用说明 ↗](https://github.com/jindrapetrik/jpexs-decompiler)
+[项目仓库与使用说明 {% include studio/icon.html name='external' %}](https://github.com/jindrapetrik/jpexs-decompiler)
 
 ---
 

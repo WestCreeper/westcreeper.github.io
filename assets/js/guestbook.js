@@ -29,6 +29,8 @@
   };
   const link = (text, url) => {
     const element = node("a", "guestbook-link", text);
+    const icon = find("link-icon")?.content.firstElementChild;
+    if (icon) element.append(" ", icon.cloneNode(true));
     element.href = url;
     element.target = "_blank";
     element.rel = "noopener noreferrer";
@@ -147,7 +149,7 @@
             author(reply.user),
             date(reply.created_at),
             link(
-              "查看原回复 ↗",
+              "查看原回复",
               `${github}/${issue.number}#issuecomment-${reply.id}`,
             ),
           );
@@ -198,7 +200,7 @@
     );
     const actions = node("div", "guestbook-entry-actions");
     actions.append(
-      link("在 GitHub 回复 ↗", `${github}/${issue.number}#new_comment_field`),
+      link("在 GitHub 回复", `${github}/${issue.number}#new_comment_field`),
     );
     if (issue.locked)
       actions.append(

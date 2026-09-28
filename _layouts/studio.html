@@ -14,7 +14,8 @@
   <link rel="stylesheet" href="{{ '/assets/css/studio.css' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/motion.css' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/game-library.css' | relative_url }}">
-  <script src="{{ '/assets/js/game-library.js' | relative_url }}" defer></script>
+  <link rel="stylesheet" href="{{ '/assets/css/icons.css' | relative_url }}">
+  <script src="{{ '/assets/js/game-library.js' | relative_url }}?v=20260928-icons" defer></script>
   <script src="{{ '/assets/js/studio.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/js/motion.js' | relative_url }}" defer></script>
 </head>
@@ -24,17 +25,17 @@
     <div class="header-inner">
       <a class="brand" href="{{ '/' | relative_url }}" aria-label="WestCreeper 首页"><img src="{{ '/assets/images/cactus.svg' | relative_url }}" width="34" height="38" alt=""><span>WestCreeper<span class="brand-dot">.</span><small>西部苦力怕的自留地</small></span></a>
       <nav class="main-nav" id="main-nav" aria-label="主导航">
-        <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}aria-current="page"{% endif %}>首页</a>
-        <a href="{{ '/archive.html' | relative_url }}" {% if page.url == '/archive.html' or page.layout == 'article' %}aria-current="page"{% endif %}>文章</a>
-        <a href="{{ '/swf/' | relative_url }}" {% if page.url contains '/swf/' %}aria-current="page"{% endif %}>游戏档案馆<span class="nav-dot"></span></a>
-        <a href="{{ '/sponsors/' | relative_url }}" {% if page.url == '/sponsors/' %}aria-current="page"{% endif %}>赞助名单</a>
-        <a href="{{ '/about.html' | relative_url }}" {% if page.url == '/about.html' %}aria-current="page"{% endif %}>关于</a>
+        <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}aria-current="page"{% endif %}>{% include studio/icon.html name='home' %}首页</a>
+        <a href="{{ '/archive.html' | relative_url }}" {% if page.url == '/archive.html' or page.layout == 'article' %}aria-current="page"{% endif %}>{% include studio/icon.html name='book' %}文章</a>
+        <a href="{{ '/swf/' | relative_url }}" {% if page.url contains '/swf/' %}aria-current="page"{% endif %}>{% include studio/icon.html name='archive' %}游戏档案馆<span class="nav-dot"></span></a>
+        <a href="{{ '/sponsors/' | relative_url }}" {% if page.url == '/sponsors/' %}aria-current="page"{% endif %}>{% include studio/icon.html name='gift' %}赞助名单</a>
+        <a href="{{ '/about.html' | relative_url }}" {% if page.url == '/about.html' %}aria-current="page"{% endif %}>{% include studio/icon.html name='profile' %}关于</a>
       </nav>
-      <div class="header-actions"><button class="icon-button" data-open-search aria-label="搜索文章和游戏">{% include studio/icon.html name='search' %}</button><button class="icon-button" data-theme-toggle aria-label="切换深色模式" aria-pressed="false">{% include studio/icon.html name='moon' %}</button><button class="icon-button menu-toggle" data-menu-toggle aria-label="展开导航" aria-expanded="false" aria-controls="main-nav">{% include studio/icon.html name='menu' %}</button></div>
+      <div class="header-actions"><button class="icon-button" data-open-search aria-label="搜索文章和游戏">{% include studio/icon.html name='search' %}</button><button class="icon-button" data-theme-toggle aria-label="切换深色模式" aria-pressed="false">{% include studio/icon.html name='moon' %}{% include studio/icon.html name='sun' %}</button><button class="icon-button menu-toggle" data-menu-toggle aria-label="展开导航" aria-expanded="false" aria-controls="main-nav">{% include studio/icon.html name='menu' %}</button></div>
     </div>
   </header>
   <main id="main" tabindex="-1">{{ content }}</main>
-  <footer class="site-footer container"><div><a class="footer-brand" href="{{ '/' | relative_url }}">WestCreeper<span class="brand-dot">.</span></a><p>在互联网的一角，保存热爱。</p></div><div class="footer-links"><a href="{{ '/resources/' | relative_url }}">资源库</a><a href="{{ '/friends/' | relative_url }}">友情链接</a><a href="{{ '/guestbook/' | relative_url }}">留言板</a><a href="{{ '/feed.xml' | relative_url }}">RSS 订阅 ↗</a><span>© {{ site.time | date: '%Y' }} 西部苦力怕 · Built with Jekyll</span></div></footer>
+  <footer class="site-footer container"><div><a class="footer-brand" href="{{ '/' | relative_url }}">WestCreeper<span class="brand-dot">.</span></a><p>在互联网的一角，保存热爱。</p></div><div class="footer-links"><a href="{{ '/resources/' | relative_url }}">{% include studio/icon.html name='archive' %}资源库</a><a href="{{ '/friends/' | relative_url }}">{% include studio/icon.html name='link' %}友情链接</a><a href="{{ '/guestbook/' | relative_url }}">{% include studio/icon.html name='message' %}留言板</a><a href="{{ '/feed.xml' | relative_url }}">{% include studio/icon.html name='rss' %}RSS 订阅</a><span>© {{ site.time | date: '%Y' }} 西部苦力怕 · Built with Jekyll</span></div></footer>
   <dialog class="search-dialog" id="search-dialog" aria-labelledby="search-title"><div class="search-heading"><h2 id="search-title">找点有意思的</h2><button class="icon-button" data-close-search aria-label="关闭搜索">{% include studio/icon.html name='close' %}</button></div><label class="search-field">{% include studio/icon.html name='search' %}<input id="site-search" type="search" placeholder="搜索文章、游戏、关键词…" autocomplete="off" aria-label="搜索文章和游戏"></label><p class="search-status" id="search-status" role="status">输入关键词，探索文章与游戏。</p><div class="search-results" id="search-results"></div><p class="search-hint"><kbd>Esc</kbd> 关闭 <span>文章与游戏，都在这里</span></p></dialog>
 </body>
 </html>

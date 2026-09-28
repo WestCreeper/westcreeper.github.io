@@ -193,7 +193,7 @@
         if (!counts[libraryView] && libraryView !== "all")
           status.textContent =
             libraryView === "favorites"
-              ? "还没有收藏。点击游戏卡片上的 ♡，把喜欢的游戏留在这里。"
+              ? "还没有收藏。点击游戏卡片上的收藏按钮，把喜欢的游戏留在这里。"
               : "还没有游玩记录。成功启动游戏后，它会出现在这里。";
         chips.forEach((chip) =>
           chip.setAttribute(

@@ -3,9 +3,9 @@
 <section class="archive-overview" aria-label="档案馆统计">
   <div class="archive-overview-heading"><div><span class="eyebrow">EVERY GAME HAS A STORY</span><h2>一点一点，收藏成宇宙。</h2></div><span class="archive-live"><i></i>持续收录中</span></div>
   <div class="archive-stats">
-    <div class="archive-stat"><span>01 / 游戏档案</span><strong data-stat-count="{{ site.data.games.size }}">{{ site.data.games.size }}</strong><small>部旧时光，仍然闪亮</small></div>
-    <div class="archive-stat"><span>02 / 汉化作品</span><strong data-stat-count="{{ translated_games.size }}">{{ translated_games.size }}</strong><small>用熟悉的语言，重逢</small></div>
-    <div class="archive-stat"><span>03 / 原版作品</span><strong data-stat-count="{{ site.data.games.size | minus: translated_games.size }}">{{ site.data.games.size | minus: translated_games.size }}</strong><small>保留最初的模样</small></div>
-    <div class="archive-stat"><span>04 / 游戏标签</span><strong data-stat-count="{{ archive_tags.size }}">{{ archive_tags.size }}</strong><small>总有一种，合你心意</small></div>
+    <div class="archive-stat">{% include studio/icon.html name='archive' %}<span>01 / 游戏档案</span><strong data-stat-count="{{ site.data.games.size }}">{{ site.data.games.size }}</strong><small>部旧时光，仍然闪亮</small></div>
+    <div class="archive-stat">{% include studio/icon.html name='book' %}<span>02 / 汉化作品</span><strong data-stat-count="{{ translated_games.size }}">{{ translated_games.size }}</strong><small>用熟悉的语言，重逢</small></div>
+    <div class="archive-stat">{% include studio/icon.html name='game' %}<span>03 / 原版作品</span><strong data-stat-count="{{ site.data.games.size | minus: translated_games.size }}">{{ site.data.games.size | minus: translated_games.size }}</strong><small>保留最初的模样</small></div>
+    <div class="archive-stat">{% include studio/icon.html name='tag' %}<span>04 / 游戏标签</span><strong data-stat-count="{{ archive_tags.size }}">{{ archive_tags.size }}</strong><small>总有一种，合你心意</small></div>
   </div>
 </section>

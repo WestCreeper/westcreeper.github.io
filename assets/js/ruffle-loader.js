@@ -60,7 +60,8 @@
     shell.dispatchEvent(new CustomEvent("player-loading"));
     start.disabled = true;
     restart.disabled = true;
-    start.textContent = "正在加载…";
+    (start.querySelector("[data-icon-label]") || start).textContent =
+      "正在加载…";
     message.textContent = "正在加载模拟器与游戏资源，请稍候…";
     let timer;
     try {
@@ -103,7 +104,8 @@
       mount.replaceChildren();
       mount.hidden = true;
       launch.hidden = false;
-      start.textContent = "重试加载";
+      (start.querySelector("[data-icon-label]") || start).textContent =
+        "重试加载";
       message.textContent =
         "未能启动游戏，请检查网络后重试。若仍无法运行，可下载 SWF 使用本地播放器，或通过留言板反馈。";
       console.warn("Ruffle could not start:", error);
@@ -124,8 +126,10 @@
     launch.hidden = false;
     restart.disabled = true;
     start.disabled = false;
-    start.textContent = "开始游戏";
-    message.textContent = "游戏已停止。存档导入完成后，点击「开始游戏」读取进度。";
+    (start.querySelector("[data-icon-label]") || start).textContent =
+      "开始游戏";
+    message.textContent =
+      "游戏已停止。存档导入完成后，点击「开始游戏」读取进度。";
   });
   restart.addEventListener("click", () => {
     if (confirm("重新开始会结束当前这一局，确定重新开始吗？")) boot();

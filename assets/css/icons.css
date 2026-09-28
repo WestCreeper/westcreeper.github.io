@@ -1,0 +1,120 @@
+/* Original 16px SVG tiles. Shared sprite, no icon font or animation runtime. */
+:root {
+  --icon-panel: #dce5d1;
+  --icon-accent: #b58c57;
+}
+:root[data-theme="dark"] {
+  --icon-panel: #394b37;
+  --icon-accent: #d3aa76;
+}
+.icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  vertical-align: -2px;
+  overflow: visible;
+  stroke: none;
+  pointer-events: none;
+}
+.icon-button .icon {
+  width: 24px;
+  height: 24px;
+}
+.main-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.main-nav .icon {
+  color: var(--green);
+}
+.footer-links a .icon,
+.library-tabs button > .icon,
+[data-favorite] > .icon,
+.game-library-actions a > .icon,
+.player-adjustments button > .icon,
+.keyboard-heading button > .icon,
+.keyboard-mode-tools button > .icon,
+.player-immersive-unlock > .icon,
+.player-help-actions button > .icon,
+.save-dialog button > .icon,
+.save-file-label > .icon,
+.key-config-dialog button > .icon {
+  margin-right: 6px;
+}
+.player-tools .icon {
+  width: 16px;
+  height: 16px;
+}
+.post-art .icon {
+  width: 48px;
+  height: 48px;
+}
+.game-card-title .icon-external {
+  width: 16px;
+  height: 16px;
+}
+.archive-stat {
+  position: relative;
+}
+.archive-stat > .icon {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  width: 24px;
+  height: 24px;
+  color: var(--green);
+}
+.archive-stat > span {
+  padding-right: 28px;
+}
+[data-favorite][aria-pressed="true"] > .icon-heart {
+  --icon-panel: #b77660;
+  --icon-accent: #f2c394;
+  color: #815448;
+}
+[data-theme="dark"] [data-favorite][aria-pressed="true"] > .icon-heart {
+  --icon-panel: #ad715e;
+  color: #eac0a1;
+}
+[data-theme-toggle] .icon-sun,
+[data-theme="dark"] [data-theme-toggle] .icon-moon,
+[data-player-mute] .icon-mute,
+[data-player-mute][aria-pressed="true"] .icon-volume {
+  display: none;
+}
+[data-theme="dark"] [data-theme-toggle] .icon-sun,
+[data-player-mute][aria-pressed="true"] .icon-mute {
+  display: inline-block;
+}
+@media (max-width: 1100px) and (min-width: 761px) {
+  .main-nav .icon {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .archive-stat > .icon {
+    right: 12px;
+    top: 18px;
+    width: 16px;
+    height: 16px;
+  }
+  .archive-stat > span {
+    padding-right: 18px;
+  }
+}
+/* These controls always sit on a dark surface, including in the light theme. */
+.player-toolbar,
+.player-launch,
+.player-keyboard,
+.player-help,
+.player-immersive-unlock,
+.button-primary,
+.game-launch {
+  --icon-panel: #394b37;
+  --icon-accent: #d3aa76;
+}
+.player-launch > .icon {
+  width: 48px;
+  height: 48px;
+}

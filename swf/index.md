@@ -8,5 +8,5 @@ permalink: /swf/
   {% include studio/archive-stats.html %}
   {% include studio/game-collection.html mode='archive' limit=12 %}
   <script src="{{ '/assets/js/archive-stats.js' | relative_url }}" defer></script>
-  <div class="collection-help"><h2>游玩小贴士</h2><p>点击游戏进入详情页，再按「开始游戏」加载。无需安装 Flash 插件，建议使用电脑和键盘游玩。首次加载可能需要一些时间；若模拟器无法运行某款游戏，可以下载 SWF 文件使用本地播放器打开。<a href="{{ '/guestbook/' | relative_url }}">反馈游戏问题 ↗</a></p></div>
+  <div class="collection-help"><h2>游玩小贴士</h2><p>点击游戏进入详情页，再按「开始游戏」加载。无需安装 Flash 插件，建议使用电脑和键盘游玩。首次加载可能需要一些时间；若模拟器无法运行某款游戏，可以下载 SWF 文件使用本地播放器打开。<a href="{{ '/guestbook/' | relative_url }}">反馈游戏问题 {% include studio/icon.html name='external' %}</a></p></div>
 </div>

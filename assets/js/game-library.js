@@ -43,7 +43,9 @@
         "aria-label",
         `${saved ? "取消收藏" : "收藏"}：${button.dataset.title || "这款游戏"}`,
       );
-      button.textContent = saved ? "♥ 已收藏" : "♡ 收藏";
+      (button.querySelector("[data-icon-label]") || button).textContent = saved
+        ? "已收藏"
+        : "收藏";
     });
   };
   const commit = (change) => {
