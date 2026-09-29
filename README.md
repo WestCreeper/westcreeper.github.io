@@ -79,3 +79,11 @@ GitHub Actions 会在推送到 `master` 后自动构建、检查和部署。首�
 组件位于 `_includes/studio/sponsor-entry.html`，显示页面由 `_layouts/studio.html` 的 `show_sponsor_entry` 控制。`sponsor-entry.css` / `sponsor-entry.js` 仅在这些页面加载。入口只有一次入场与悬停反馈，尊重系统减少动态效果设置，不轮询、不向第三方发请求。
 
 首页 `assets/images/desktop.svg` 与入口 `assets/images/sponsor-cactus.svg` 为原创方块 SVG，参考 re-ocd 的有限色阶、层叠边框与像素轮廓；首页插画文字也由路径绘制，不依赖外部字体。
+
+## 手机悬浮触控
+
+在游戏页打开「虚拟键盘」，选择方向键、WASD 或自定义布局，以及十字键／八向摇杆，然后点击「悬浮触控」。该模式进入沉浸画面，把原有控件放在左下和右下，取消下方按键区域的占位。左上角随时隐藏／显示按键，右上角解锁并恢复进入前的布局。完整键盘仍使用原有下方布局。
+
+触控层只有摇杆与按钮接收点击，其他区域穿透到 Ruffle；隐藏、退出、窗口尺寸改变、失焦时释放按键，避免卡键。透明背景保留游戏画面可见性，未增加网络请求、定时轮询或额外动画。仅按住实体映射键时沿用原有键盘重复事件。
+
+样式在 `assets/css/player-touch.css`，交互复用 `assets/js/player-controls.js`。运行 `node tools/check-player-controls.cjs` 可检查斜向与动作键同时按下、隐藏释放、旧触点失效、旋转释放、退出恢复及完整键盘限制。点击穿透依据 [MDN pointer-events](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/pointer-events) 的父层禁用、控件单独启用规则。

@@ -18,6 +18,32 @@
     previousVolume = 100;
   let savedScroll = 0;
   let immersiveBefore = null;
+  const touchLayer = document.createElement("div");
+  touchLayer.className = "player-touch-overlay";
+  touchLayer.hidden = true;
+  $(".player-stage").append(touchLayer);
+  const touchToggle = $("[data-player-touch-toggle]");
+  const floatingButton = $("[data-player-floating]");
+  function setFloatingControls(on) {
+    releaseAll();
+    keys.hidden = false;
+    shell.classList.toggle("is-floating-controls", on);
+    (on ? touchLayer : keyboard).append(keys);
+    touchLayer.hidden = !on;
+    touchToggle.hidden = !on;
+    keyboard.hidden = on;
+    floatingButton.setAttribute("aria-pressed", String(on));
+    touchToggle.setAttribute("aria-expanded", "true");
+    touchToggle.querySelector("span").textContent = "隐藏按键";
+  }
+  touchToggle.addEventListener("click", () => {
+    releaseAll();
+    keys.hidden = !keys.hidden;
+    touchToggle.setAttribute("aria-expanded", String(!keys.hidden));
+    touchToggle.querySelector("span").textContent = keys.hidden
+      ? "显示按键"
+      : "隐藏按键";
+  });
   let resetJoystick = () => {};
   const held = new Map();
   const pointers = new Map();
@@ -194,7 +220,7 @@
     keyboard.hidden = !on;
     keyboardButton.setAttribute("aria-expanded", String(on));
   }
-  function setImmersive(on) {
+  function setImmersive(on, floating = false) {
     releaseAll();
     if (on === !!immersiveBefore) return;
     if (on) {
@@ -207,6 +233,7 @@
       setHelp(false);
       setKeyboard(true);
       shell.classList.add("is-immersive");
+      setFloatingControls(floating);
       $("[data-player-immersive-unlock]").hidden = false;
       $("[data-player-immersive]").setAttribute("aria-pressed", "true");
       $("[data-player-immersive-unlock]").focus({ preventScroll: true });
@@ -214,6 +241,7 @@
       const before = immersiveBefore;
       immersiveBefore = null;
       shell.classList.remove("is-immersive");
+      setFloatingControls(false);
       $("[data-player-immersive-unlock]").hidden = true;
       $("[data-player-immersive]").setAttribute("aria-pressed", "false");
       setKeyboard(before.keyboard);
@@ -228,6 +256,13 @@
   $("[data-player-immersive-unlock]").addEventListener("click", () =>
     setImmersive(false),
   );
+  floatingButton.addEventListener("click", () => {
+    if (layoutSelect.value === "all") {
+      report("悬浮触控适合方向键、WASD 或自定义布局；请先切换按键布局。");
+      return;
+    }
+    setImmersive(true, true);
+  });
   mobileButton.addEventListener("click", () => setHelp(help.hidden));
   $("[data-player-help-close]").addEventListener("click", () => setHelp(false));
   keyboardButton.addEventListener("click", () => setKeyboard(keyboard.hidden));
@@ -583,6 +618,11 @@
     const layout = layoutSelect.value;
     keys.dataset.layout = layout;
     directionSelect.disabled = layout === "all";
+    floatingButton.disabled = layout === "all";
+    floatingButton.title =
+      layout === "all"
+        ? "请先选择方向键、WASD 或自定义布局"
+        : "在游戏画面上悬浮显示按键";
     directionSelect.title =
       layout === "all" ? "请先选择方向键、WASD 或自定义布局" : "";
     resetJoystick = () => {};
@@ -697,6 +737,7 @@
     persistKeys();
   });
   window.addEventListener("blur", releaseAll);
+  window.addEventListener("resize", releaseAll);
   window.addEventListener("pagehide", releaseAll);
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) releaseAll();

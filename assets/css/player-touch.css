@@ -1,0 +1,123 @@
+/* Float the existing controls over the stage; empty space must reach Ruffle. */
+.floating-controls-hint {
+  color: #a7bda0;
+  font-size: 11px;
+}
+.player-touch-overlay[hidden],
+.player-touch-toggle[hidden],
+.player-touch-overlay .virtual-key-grid[hidden] {
+  display: none;
+}
+.player-touch-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  padding: max(56px, env(safe-area-inset-top))
+    max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom))
+    max(14px, env(safe-area-inset-left));
+  display: flex;
+  align-items: flex-end;
+  --icon-panel: #394b37;
+}
+.player-touch-overlay .virtual-key-grid {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  align-items: flex-end;
+  gap: 20px;
+  pointer-events: none;
+}
+.player-touch-overlay .virtual-key-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(44px, 52px));
+  gap: 8px;
+  pointer-events: none;
+}
+.player-touch-overlay .virtual-dpad {
+  pointer-events: none;
+}
+.player-touch-overlay .virtual-key,
+.player-touch-overlay .virtual-joystick {
+  pointer-events: auto;
+  background: #263e2c8c;
+  border-color: #d2e5bfaa;
+  color: #f3f8ef;
+  text-shadow: 0 1px 2px #152015;
+  box-shadow: 0 2px 5px #0003;
+}
+.player-touch-overlay .virtual-key {
+  min-width: 44px;
+  min-height: 48px;
+  padding: 6px;
+}
+.player-touch-overlay .virtual-key-wide {
+  min-width: 44px;
+}
+.player-touch-overlay .virtual-joystick {
+  width: 132px;
+  height: 132px;
+  flex-basis: 132px;
+}
+.player-touch-overlay .joystick-marker {
+  transform: rotate(var(--angle)) translateX(52px)
+    rotate(calc(-1 * var(--angle)));
+}
+.player-touch-overlay .joystick-thumb {
+  background: #90b077aa;
+}
+.player-touch-overlay .is-held {
+  background: #b6d494db;
+  color: #1c2d1e;
+  text-shadow: none;
+}
+.player-touch-toggle {
+  position: absolute;
+  top: max(8px, env(safe-area-inset-top));
+  left: max(8px, env(safe-area-inset-left));
+  z-index: 5;
+  min-height: 44px;
+  border: 1px solid #759568;
+  border-radius: 20px;
+  padding: 8px 12px;
+  background: #1b2c20d9;
+  color: #e3eddc;
+  font-size: 12px;
+  line-height: 1.4;
+  font-family: inherit;
+  cursor: pointer;
+}
+.player-touch-toggle .icon {
+  margin-right: 6px;
+}
+.player-shell.is-floating-controls .player-immersive-unlock {
+  min-height: 44px;
+}
+@media (max-width: 380px) {
+  .player-touch-overlay {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .player-touch-overlay .virtual-key-grid {
+    gap: 8px;
+  }
+  .player-touch-overlay .virtual-key-row {
+    grid-template-columns: repeat(3, 44px);
+    gap: 4px;
+  }
+  .player-touch-overlay .virtual-dpad {
+    gap: 4px;
+  }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  .player-touch-overlay {
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+  .player-touch-overlay .virtual-key-row {
+    grid-template-columns: repeat(4, 48px);
+    gap: 6px;
+  }
+  .player-touch-overlay .virtual-key {
+    min-height: 44px;
+  }
+}
