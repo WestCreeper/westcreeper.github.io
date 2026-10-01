@@ -1,0 +1,29 @@
+<section class="community section" data-community data-scope="{{ include.scope | escape }}" data-api="{{ site.data.community.api_url | escape }}" data-site-key="{{ site.data.community.turnstile_site_key | escape }}" data-enabled="{{ site.data.community.enabled }}" aria-label="{{ include.title | escape }}">
+  <div class="section-heading"><div><div class="eyebrow">A LITTLE CONVERSATION</div><h2>{% include studio/icon.html name='message' %}{{ include.title }}</h2></div></div>
+  <p class="community-lead">{{ include.description }}</p>
+  <div class="community-toolbar">
+    {% if include.scope == 'board' %}<label>讨论分类 <select data-community-category><option value="">全部讨论</option><option value="feedback">意见反馈</option><option value="find">寻找游戏</option><option value="chat">闲聊交流</option></select></label>{% endif %}
+    <button class="button" type="button" data-community-load>查看{% if include.scope == 'board' %}讨论{% else %}评论{% endif %}</button>
+    <button class="button button-primary" type="button" data-community-write hidden>{% if include.scope == 'board' %}发起讨论{% else %}写评论{% endif %}</button>
+  </div>
+  <p data-community-status role="status" aria-live="polite"></p>
+  <div data-community-entries></div>
+  <button class="button" type="button" data-community-more hidden>再看 20 条</button>
+  <form class="community-form" data-community-form hidden>
+    <h3 data-community-form-title>写下你的想法</h3>
+    <p class="community-notice">昵称发言 · 先审核后公开 · 昵称不代表已认证身份</p>
+    <label>昵称<input name="nickname" autocomplete="nickname" maxlength="32" required placeholder="希望大家如何称呼你"></label>
+    {% if include.scope == 'board' %}
+    <div data-community-topic-fields><label>话题<select name="category"><option value="feedback">意见反馈</option><option value="find">寻找游戏</option><option value="chat">闲聊交流</option></select></label><label>标题<input name="title" minlength="2" maxlength="80" required placeholder="一句话说说你想聊的内容"></label></div>
+    {% endif %}
+    <label>内容<textarea name="body" minlength="2" maxlength="2000" rows="5" required placeholder="分享游玩心得，或说明遇到的问题…"></textarea></label>
+    <p data-community-hint class="community-notice"></p>
+    <div data-community-challenge></div>
+    <div class="community-toolbar"><button class="button button-primary" type="submit">送交审核</button><button class="button" type="button" data-community-cancel>取消</button></div>
+    <p data-community-form-status role="status" aria-live="polite"></p>
+    <p class="community-notice">请勿填写密码、联系方式等私密信息。审核通过后昵称和内容将公开；不支持匿名身份的跨设备编辑。人机验证由 Cloudflare Turnstile 提供。</p>
+  </form>
+  <noscript><p>启用 JavaScript 后可查看讨论；也可通过讨论版的 GitHub 入口联系站长。</p></noscript>
+</section>
+<link rel="stylesheet" href="{{ '/assets/css/community.css' | relative_url }}">
+<script src="{{ '/assets/js/community.js' | relative_url }}" defer></script>

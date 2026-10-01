@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>讨论审核 · WestCreeper</title>
+    <link rel="stylesheet" href="/admin/admin.css" />
+    <script src="/admin/admin.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">WESTCREEPER / COMMUNITY</p>
+        <h1>讨论审核台</h1>
+        <p>先读一读，再让声音被看见。</p>
+        <p id="identity"></p>
+      </header>
+      <nav aria-label="审核队列">
+        <label
+          >查看
+          <select id="filter">
+            <option value="pending">待审核</option>
+            <option value="approved">已公开</option>
+            <option value="rejected">已拒绝</option>
+            <option value="hidden">已隐藏</option>
+          </select></label
+        ><button id="refresh">刷新</button>
+      </nav>
+      <p id="status" role="status" aria-live="polite"></p>
+      <section id="entries" aria-label="审核内容"></section>
+      <button id="more" hidden>加载下一页</button>
+      <footer>
+        隐藏主帖也会收起公开回复。审核备注仅管理员可见。昵称不代表经过身份认证。
+      </footer>
+    </main>
+  </body>
+</html>

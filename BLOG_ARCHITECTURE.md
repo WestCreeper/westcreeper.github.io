@@ -13,7 +13,7 @@
 | `/sponsors/` | 赞助名单、留言与赞助方式 |
 | `/releases/` | 旧地址，自动跳转至赞助名单 |
 | `/resources/` | 工具与资源 |
-| `/guestbook/` | GitHub Issues 留言列表、回复与写入入口 |
+| `/guestbook/` | 讨论版；新服务未开放时保留 GitHub 历史留言 |
 | `/friends/` | 友情链接 |
 | `/about.html` | 关于我 |
 | `/search.json` | 全站静态搜索索引 |
@@ -45,7 +45,7 @@
 
 留言页额外加载 `assets/js/guestbook.js`，从公开 GitHub Issues API 读取留言及回复，支持分页和重试。正文以纯文本显示，写入和管理均在 GitHub 完成。
 
-没有站内管理后台和数据库。文章发布通过更新 `_posts/` 完成，留言通过 GitHub Issues 收集。
+评论与讨论版的新服务位于 `tools/community/`（不发布到 GitHub Pages）：Cloudflare Worker + D1 + Turnstile，Access 保护审核台。`_data/community.yml` 控制启用状态、公开 API 地址和 Turnstile 公钥，默认未启用。每个游戏通过 `studio/community.html` 接入独立讨论；主帖和回复先审核后公开。上线步骤和实现边界见 [评论服务说明](tools/community/README.md)。文章发布仍通过更新 `_posts/` 完成。
 
 ## 构建
 

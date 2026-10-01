@@ -15,6 +15,8 @@ layout: studio
   </section>
   <p class="player-message" data-player-message role="status" aria-live="polite">首次启动需要加载模拟器，请稍等片刻。模拟器的兼容情况可能因游戏和浏览器而异。</p>
   <div class="game-details-grid"><div class="prose">{{ content }}</div><aside class="game-facts"><h2>档案信息</h2><dl><dt>原作名称</dt><dd>{{ game.original_title }}</dd><dt>开发者</dt><dd>{{ game.author }}</dd><dt>游戏标签</dt><dd class="game-tag-links">{% for tag in game.tags %}<a href="{{ '/swf/' | relative_url }}?tag={{ tag | url_encode }}">{{ tag | escape }}</a>{% endfor %}</dd><dt>语言版本</dt><dd>{{ game.language }}</dd><dt>运行方式</dt><dd>Ruffle 模拟器</dd></dl>{% if game.source and game.source != '' %}<a href="{{ game.source }}" target="_blank" rel="noopener noreferrer">访问原作页面 {% include studio/icon.html name='external' %}</a>{% endif %}<a href="{{ '/guestbook/' | relative_url }}">遇到问题？反馈给我 {% include studio/icon.html name='external' %}</a></aside></div>
+  {% capture discussion_scope %}game:{{ page.game_id }}{% endcapture %}
+  {% include studio/community.html scope=discussion_scope title='游戏讨论' description='聊聊这部游戏的回忆、攻略与汉化问题。无需注册，审核后公开。' %}
   <section class="section"><div class="section-heading"><div><div class="eyebrow">ONE MORE GAME?</div><h2>再玩一局</h2></div><a class="section-link" href="{{ '/swf/' | relative_url }}">全部游戏 {% include studio/icon.html name='external' %}</a></div>{% include studio/game-collection.html mode='random' limit=3 exclude=current_game.id %}</section>
 </div>
 <link rel="stylesheet" href="{{ '/assets/css/player-touch.css' | relative_url }}">

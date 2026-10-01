@@ -104,13 +104,20 @@ bundle exec jekyll build
 - 全站搜索支持 `Ctrl/Cmd + K`，使用静态 `search.json`，不调用搜索服务。
 - 首页每次访问随机展示 3 部游戏，详情页随机推荐 3 部其他游戏，不足 3 部时展示全部候选。档案馆每页 12 部，分类和搜索覆盖全部游戏，筛选变化时回到第一页；页码与筛选条件保存在网址中，支持刷新和浏览器前进 / 后退。
 - 游戏列表读取轻量的 `games.json`，只创建当前页或随机选中的卡片，并按需加载封面；不会一次性渲染全部卡片。分页大小由 `swf/index.md` 中的 `limit=12` 控制。
-- 留言板通过 GitHub Issues 收集留言，并在站内读取、展示公开留言与回复。具体行为见下方说明。
+- 讨论版与游戏评论采用 Cloudflare 审核服务；未开启时保留 GitHub 历史留言。配置见下方说明。
 - 已有文章正文及外部图片地址保留，外部图片可用性仍取决于原托管站点。
 
-## 留言板维护
+## 讨论版与游戏评论
+
+第一版已加入昵称投稿、游戏独立评论、意见反馈／寻找游戏／闲聊分类及审核后台。新服务默认关闭，待 Cloudflare Worker、D1、Turnstile 与 Access 配置并验收后，修改 `_data/community.yml` 开启。完整部署、费用与回退说明见 [tools/community/README.md](tools/community/README.md)。不要在该 YAML 或博客前端填写私钥。
+
+## GitHub 历史留言维护
+
+以下说明适用于新服务尚未开启时的历史列表。GitHub 内容直接公开，不能用于先审后发。
+
 
 - `swf/guestbook.md` 是留言板页面，`assets/js/guestbook.js` 负责读取公开 GitHub REST API。仓库由 `_config.yml` 的 `repository` 指定，必须公开并启用 Issues。
-- 「写留言」打开 GitHub 的 Issue 模板选择页；「在 GitHub 回复」打开对应 Issue。写入需要用户在 GitHub 登录，博客不保存登录凭据，也不需要配置 Token、OAuth 或评论应用。
+- 「查看 GitHub 历史留言」打开仓库 Issues；「在 GitHub 回复」打开对应 Issue。写入需要用户在 GitHub 登录，博客不保存登录凭据，也不需要配置 Token、OAuth 或评论应用。
 - 每页请求 20 条记录，按创建时间倒序，包含开放和已关闭的 Issues，过滤 Pull Request。因此包含 Pull Request 的页面可能少于 20 条留言。使用上一页 / 下一页浏览。
 - 回复展开时才请求，每批 20 条；可加载更多。关闭 Issue 不会隐藏留言；不适合公开的内容需要在 GitHub 删除或编辑。所有公开 Issues 都会展示，未按标签筛选。
 - 正文使用 GitHub 提供的纯文本，安全地写入 DOM；不执行留言 HTML。图片、Markdown 排版及附件请通过原帖链接查看。
