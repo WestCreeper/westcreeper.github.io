@@ -374,6 +374,36 @@ export async function identityAdmin(request, env, url, email) {
       .first();
     if (!row || row.revision !== revision)
       fail(409, "身份已更新，请刷新重试。");
+    if (data.action === "reset-recovery") {
+      if (
+        data.verified !== true ||
+        data.confirm_public_id !== row.public_id ||
+        reason.length < 20
+      )
+        fail(400, "请完成归属核验、输入完整编号，并填写至少 20 字核验依据。");
+      if (row.state !== "active")
+        fail(409, "请先处理停用状态，再协助重置恢复码。");
+      await limit(env, "admin-reset:" + email, 20, 86400);
+      await limit(env, "admin-reset-id:" + row.id, 3, 86400);
+      const code = secret(),
+        hash = await digest("recovery", code);
+      const changed = await env.DB.batch([
+        env.DB.prepare(
+          "UPDATE identities SET recovery_hash=?,credential_version=credential_version+1,revision=revision+1 WHERE id=? AND revision=? AND state='active'",
+        ).bind(hash, row.id, revision),
+        env.DB.prepare(
+          "INSERT INTO identity_log(identity_id,actor,action,detail,created_at) SELECT ?,?,'admin-reset-recovery',?,? WHERE changes()=1",
+        ).bind(row.id, email, reason, now()),
+      ]);
+      if (!changed[0].meta.changes) fail(409, "身份已更新，请刷新重试。");
+      return json({
+        message:
+          "已重置恢复码，旧码和全部设备登录已失效。请通过已核验的私密渠道交付新码。",
+        public_id: row.public_id,
+        nickname: row.nickname,
+        recovery_code: code.match(/.{8}/g).join("-"),
+      });
+    }
     let sql,
       args,
       action = data.action;

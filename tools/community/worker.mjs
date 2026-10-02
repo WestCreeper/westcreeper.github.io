@@ -1,3 +1,4 @@
+import { addReactions, react } from "./reactions.mjs";
 import { receiveMail, inboxAdmin } from "./inbox.mjs";
 import {
   identityApi,
@@ -45,6 +46,8 @@ async function parent(db, id, targetScope) {
 async function publicApi(request, env, url) {
   if (url.pathname.startsWith("/api/identity/"))
     return identityApi(request, env, url);
+  if (/^\/api\/entries\/\d+\/reactions$/.test(url.pathname))
+    return react(request, env, url);
   if (url.pathname !== "/api/entries") fail(404, "页面不存在。");
   if (request.method === "GET") {
     const requestedScope = url.searchParams.get("scope");
@@ -87,7 +90,14 @@ async function publicApi(request, env, url) {
     )
       .bind(...args)
       .all();
-    return json(page(results));
+    const out = page(results);
+    const viewer = await visitor(request, env);
+    out.items = await addReactions(
+      env,
+      out.items,
+      viewer?.state === "active" ? viewer : null,
+    );
+    return json(out);
   }
   if (request.method !== "POST") fail(405, "不支持此操作。");
   if (env.SUBMISSIONS_ENABLED !== "true")
@@ -210,7 +220,7 @@ async function adminApi(request, env, url, email) {
       args.push(query, query, query);
     }
     const { results } = await env.DB.prepare(
-      `SELECT e.*,(SELECT public_id FROM identities WHERE id=e.author_id) AS author_code,p.title AS parent_title,p.body AS parent_body,p.status AS parent_status FROM entries e LEFT JOIN entries p ON p.id=e.parent_id WHERE ${clauses.join(" AND ")} ORDER BY e.id DESC LIMIT 21`,
+      `SELECT e.*,(SELECT public_id FROM identities WHERE id=e.author_id) AS author_code,(SELECT avatar FROM identities WHERE id=e.author_id) AS author_avatar,p.title AS parent_title,p.body AS parent_body,p.status AS parent_status FROM entries e LEFT JOIN entries p ON p.id=e.parent_id WHERE ${clauses.join(" AND ")} ORDER BY e.id DESC LIMIT 21`,
     )
       .bind(...args)
       .all();
@@ -363,9 +373,13 @@ export default {
           if (request.method !== "GET") fail(405, "不支持此操作。");
           const path = url.pathname.replace(/^\/admin\/?/, "") || "index.html";
           if (
-            !["index.html", "admin.js", "management.js", "admin.css"].includes(
-              path,
-            )
+            ![
+              "index.html",
+              "admin.js",
+              "management.js",
+              "avatars.js",
+              "admin.css",
+            ].includes(path)
           )
             fail(404, "页面不存在。");
           // Ask for the canonical asset URL. /index.html redirects to / and
@@ -398,7 +412,7 @@ export default {
     if (admin)
       response.headers.set(
         "Content-Security-Policy",
-        "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+        "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' https://westcreeper.com; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
       );
     else {
       response.headers.set("Vary", "Origin");

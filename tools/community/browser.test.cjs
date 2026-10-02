@@ -60,12 +60,25 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         revision: 1,
         avatar: "moss",
       };
+    let reactionChoice = null;
     const recoveryCode = "abcd1234-".repeat(7) + "abcd1234";
     await page.route(
       "https://community.westcreeper.com/api/**",
       async (route) => {
         const req = route.request(),
           url = new URL(req.url());
+        if (/\/reactions$/.test(url.pathname)) {
+          reactionChoice = req.postDataJSON().reaction;
+          return route.fulfill({
+            json: {
+              id: 9,
+              reactions_owner: profile?.public_id,
+              reactions: reactionChoice
+                ? [{ key: reactionChoice, count: 1, mine: true }]
+                : [],
+            },
+          });
+        }
         if (url.pathname === "/api/identity/me")
           return route.fulfill({
             json: { enabled: identityEnabled, identity: profile },
@@ -177,6 +190,45 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     assert.equal(publicRequests.at(-1).data.scope, "game:dadnme");
     assert.equal(publicRequests.at(-1).data.parent_id, 9);
     assert.equal(publicRequests.at(-1).data.nickname, undefined);
+    const like = page.locator(
+      "[data-community-entries] > article > .community-reactions [data-reaction=like]",
+    );
+    await like.click();
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector(
+            "[data-community-entries] > article > .community-reactions [data-reaction=like]",
+          )
+          .getAttribute("aria-pressed") === "true",
+    );
+    assert.equal(reactionChoice, "like");
+    await like.click();
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector(
+            "[data-community-entries] > article > .community-reactions [data-reaction=like]",
+          )
+          .getAttribute("aria-pressed") === "false",
+    );
+    assert.equal(reactionChoice, null);
+    await page
+      .locator(".reaction-particle")
+      .first()
+      .waitFor({ state: "detached" });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await like.click();
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector(
+            "[data-community-entries] > article > .community-reactions [data-reaction=like]",
+          )
+          .getAttribute("aria-pressed") === "true",
+    );
+    assert.equal(await page.locator(".reaction-particle").count(), 0);
+    await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.getByRole("button", { name: "取消", exact: true }).click();
     const screenshot = path.join(
       os.tmpdir(),
@@ -303,11 +355,48 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         .querySelector("[data-cookie-summary]")
         .textContent.includes("浏览器玩家"),
     );
+    await page.goto(origin + "/swf/games/dadnme/");
+    await page.locator("[data-cookie-avatars] summary").waitFor();
+    await page.locator("[data-cookie-avatars] summary").click();
+    assert.equal(await page.locator("[data-cookie-avatar]").count(), 8);
+    await page.locator("[data-community-load]").click();
+    await page.locator(".community-card .community-avatar").first().waitFor();
+    assert.ok(
+      (
+        await page
+          .locator(".community-card .community-avatar")
+          .first()
+          .getAttribute("src")
+      ).includes("/assets/images/avatars/"),
+    );
+    assert.equal(
+      await page
+        .locator(".community-card")
+        .first()
+        .locator("[data-reaction]")
+        .count(),
+      6,
+    );
     let rows = [{ ...board, status: "approved", revision: 1, parent_id: null }];
     const adminRequests = [];
     await page.route("http://community.test/**", async (route) => {
       const req = route.request(),
         url = new URL(req.url());
+      if (
+        url.pathname.startsWith("/api/admin/identities") &&
+        req.method() === "POST"
+      ) {
+        const d = req.postDataJSON();
+        adminRequests.push(d);
+        return route.fulfill({
+          json: {
+            message: "已重置恢复码",
+            public_id: "12345678",
+            nickname: "浏览器玩家",
+            recovery_code: recoveryCode,
+          },
+        });
+      }
       if (url.pathname.startsWith("/api/admin/identities"))
         return route.fulfill({
           json: {
@@ -362,13 +451,15 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
           }));
         return route.fulfill({ json: { message: "已保存。" } });
       }
-      const name = url.pathname.endsWith("/management.js")
-        ? "management.js"
-        : url.pathname.endsWith(".js")
-          ? "admin.js"
-          : url.pathname.endsWith(".css")
-            ? "admin.css"
-            : "index.html";
+      const name = url.pathname.endsWith("/avatars.js")
+        ? "avatars.js"
+        : url.pathname.endsWith("/management.js")
+          ? "management.js"
+          : url.pathname.endsWith(".js")
+            ? "admin.js"
+            : url.pathname.endsWith(".css")
+              ? "admin.css"
+              : "index.html";
       return route.fulfill({
         body: readFileSync(path.join(__dirname, "admin", name)),
         contentType: name.endsWith(".js")
@@ -415,6 +506,31 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     await page.getByRole("button", { name: "饼干管理", exact: true }).click();
     await page.locator("#cookies-list article").waitFor();
     assert.match(await page.locator("#cookies-list").innerText(), /12345678/);
+    await page
+      .locator("#cookies-list textarea")
+      .fill("已通过此前私密联系记录与独立核验信息确认用户的身份归属");
+    const handle = (d) =>
+      d.accept(d.type() === "prompt" ? "12345678" : undefined);
+    page.on("dialog", handle);
+    await page
+      .getByRole("button", { name: "核验后重置恢复码", exact: true })
+      .click();
+    await page.locator(".recovery-dialog").waitFor();
+    assert.equal(
+      await page.locator(".recovery-dialog input").inputValue(),
+      recoveryCode,
+    );
+    assert.equal(adminRequests.at(-1).action, "reset-recovery");
+    assert.equal(adminRequests.at(-1).verified, true);
+    await page.screenshot({
+      path: path.join(os.tmpdir(), "westcreeper-admin-recovery.png"),
+      fullPage: true,
+    });
+    await page
+      .getByRole("button", { name: "我已安全保存", exact: true })
+      .click();
+    page.off("dialog", handle);
+    assert.equal(await page.locator(".recovery-dialog").count(), 0);
     await page.getByRole("button", { name: "邮件收件箱", exact: true }).click();
     await page.locator("#inbox-list article").waitFor();
     await page.locator("#inbox-list summary").click();

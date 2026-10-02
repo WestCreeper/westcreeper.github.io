@@ -19,6 +19,7 @@ for (const name of [
   "0003_identities.sql",
   "0004_inbox.sql",
   "0005_avatars.sql",
+  "0006_reactions.sql",
 ])
   sqlite.exec(
     readFileSync(new URL("migrations/" + name, import.meta.url), "utf8"),

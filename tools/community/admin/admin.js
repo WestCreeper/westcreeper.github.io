@@ -53,6 +53,7 @@
   }
   function card(item) {
     const article = el("article");
+    article.append(window.communityAvatar(item.author_avatar));
     article.append(
       el(
         "p",

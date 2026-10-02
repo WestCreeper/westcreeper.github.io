@@ -175,3 +175,31 @@ select:focus-visible {
 #inbox-list details {
   margin: 16px 0;
 }
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+  border-radius: 4px;
+}
+.recovery-dialog {
+  max-width: min(560px, calc(100vw - 40px));
+  box-sizing: border-box;
+  background: var(--bg);
+  color: var(--ink);
+  border: 2px solid var(--green);
+  border-radius: 12px;
+  padding: 24px;
+  overflow-wrap: anywhere;
+}
+.recovery-dialog::backdrop {
+  background: #0009;
+}
+.recovery-dialog input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: monospace;
+}
+.recovery-dialog button {
+  margin: 14px 8px 0 0;
+}

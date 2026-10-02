@@ -41,6 +41,58 @@
     parent.append(b);
     return b;
   }
+  let recoveryPending = false;
+  window.addEventListener("beforeunload", (event) => {
+    if (recoveryPending) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+  });
+  function deliverRecovery(data) {
+    const dialog = el("dialog");
+    dialog.className = "recovery-dialog";
+    dialog.setAttribute("aria-label", "新恢复码，只显示一次");
+    dialog.append(
+      el("h2", "新恢复码 · #" + data.public_id),
+      el("p", data.message),
+      el(
+        "p",
+        "仅凭昵称、公开留言或来信地址不能证明归属。请通过核验过的私密渠道交付，切勿贴入留言。",
+      ),
+    );
+    const code = el("input");
+    code.readOnly = true;
+    code.value = data.recovery_code;
+    dialog.append(label("新恢复码（只显示一次）", code));
+    let backup = `WestCreeper 饼干\n编号：${data.public_id}\n昵称：${data.nickname}\n恢复码：${data.recovery_code}\n登录：https://westcreeper.com/guestbook/\n请登录后自行重置恢复码并妥善保存。\n`;
+    action(dialog, "下载交付文件", () => {
+      const url = URL.createObjectURL(
+        new Blob([backup], { type: "text/plain;charset=utf-8" }),
+      );
+      const a = el("a");
+      a.href = url;
+      a.download = "cookie-" + data.public_id + "-recovery.txt";
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+    const close = () => {
+      if (!confirm("确认已安全保存或交付新恢复码？关闭后不能再次查看。"))
+        return;
+      recoveryPending = false;
+      code.value = "";
+      backup = "";
+      dialog.close();
+      dialog.remove();
+    };
+    action(dialog, "我已安全保存", close);
+    dialog.addEventListener("cancel", (e) => {
+      e.preventDefault();
+      close();
+    });
+    document.body.append(dialog);
+    recoveryPending = true;
+    dialog.showModal();
+  }
   const loaders = {};
   for (const kind of ["cookies", "inbox"]) {
     const form = $("#" + kind + "-search"),
@@ -108,6 +160,7 @@
               note: note.value,
             },
           );
+          if (v.recovery_code) deliverRecovery(v);
           await load();
           status.textContent = v.message;
         } catch (e) {
@@ -118,6 +171,7 @@
         }
       }
       if (kind === "cookies") {
+        a.append(window.communityAvatar(item.avatar));
         a.append(
           el("h3", item.nickname + " · #" + item.public_id),
           el(
@@ -145,6 +199,33 @@
           $("#kind").value = "";
           $("#progress").value = "";
           $("#search").requestSubmit();
+        });
+        action(buttons, "核验后重置恢复码", () => {
+          if (recoveryPending) return;
+          if (note.value.trim().length < 20) {
+            result.textContent =
+              "请填写至少 20 字的身份归属核验依据；昵称和发件地址不能单独证明归属。";
+            return;
+          }
+          const id = prompt(
+            "已完成归属核验后，输入完整饼干编号确认。旧恢复码和全部登录将立即失效。",
+          );
+          if (id !== item.public_id) {
+            result.textContent = "编号不匹配或操作已取消。";
+            return;
+          }
+          if (
+            confirm(
+              "确认已经独立核验归属，并重置 #" +
+                item.public_id +
+                " 的恢复码？新码只显示一次，需私密交付。",
+            )
+          )
+            save({
+              action: "reset-recovery",
+              verified: true,
+              confirm_public_id: id,
+            });
         });
         for (const [op, title] of [
           [

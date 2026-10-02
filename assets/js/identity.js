@@ -51,14 +51,33 @@
           ),
         );
       }
-      $("[data-cookie-avatars]").hidden =
-        !profile || profile.state !== "active";
-      for (const b of panel.querySelectorAll("[data-cookie-avatar]"))
+      $("[data-cookie-avatars]").hidden = false;
+      const selected = panel.querySelector(
+        `[data-cookie-avatar="${profile?.avatar || "moss"}"] img`,
+      );
+      if (selected) $("[data-cookie-current-avatar]").src = selected.src;
+      for (const b of panel.querySelectorAll("[data-cookie-avatar]")) {
+        b.disabled = !profile || profile.state !== "active";
         b.setAttribute(
           "aria-pressed",
           String(b.dataset.cookieAvatar === (profile?.avatar || "moss")),
         );
+      }
       onChange(enabled ? profile : null);
+      root.dispatchEvent(
+        new CustomEvent("community-identity-changed", {
+          detail: { public_id: profile?.public_id || null },
+        }),
+      );
+      if (profile)
+        root.dispatchEvent(
+          new CustomEvent("community-avatar-changed", {
+            detail: {
+              public_id: profile.public_id,
+              avatar: profile.avatar || "moss",
+            },
+          }),
+        );
     }
     async function refresh() {
       try {
@@ -173,7 +192,9 @@
           await refresh();
         } finally {
           busy = false;
-          buttons.forEach((e) => (e.disabled = false));
+          buttons.forEach(
+            (e) => (e.disabled = !profile || profile.state !== "active"),
+          );
         }
       });
     $("[data-cookie-cancel]").addEventListener("click", () => {
@@ -280,8 +301,12 @@
         event.returnValue = "";
       }
     });
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && !busy && backup.hidden) refresh();
+    });
     const ready = refresh();
     return {
+      getId: () => profile?.public_id || null,
       async ensure() {
         await ready;
         if (!(await refresh()) || failed) return false;

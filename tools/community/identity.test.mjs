@@ -44,6 +44,7 @@ test.beforeEach(() => {
     "0003_identities.sql",
     "0004_inbox.sql",
     "0005_avatars.sql",
+    "0006_reactions.sql",
   ])
     db.exec(
       readFileSync(new URL("migrations/" + name, import.meta.url), "utf8"),
@@ -549,4 +550,176 @@ test("owner name is reserved and special eight-zero ID uses normal recovery auth
   assert.equal(signed.status, 200);
   assert.equal(signed.data.identity.is_owner, true);
   assert.equal(signed.data.identity.public_id, "00000000");
+});
+
+test("reactions require login and approved content, are idempotent, replaceable and removable", async () => {
+  const a = await register(),
+    b = await register("另位访客", "192.0.2.3");
+  await call(
+    "/api/entries",
+    {
+      scope: "board",
+      category: "chat",
+      title: "回应测试",
+      body: "这是测试正文",
+      token: "valid",
+    },
+    { cookie: a.cookie },
+  );
+  const id = db.prepare("SELECT id FROM entries").get().id,
+    path = `/api/entries/${id}/reactions`;
+  assert.equal((await call(path, { reaction: "like" })).status, 401);
+  assert.equal(
+    (await call(path, { reaction: "like" }, { cookie: a.cookie })).status,
+    404,
+  );
+  db.exec("UPDATE entries SET status='approved'");
+  assert.equal(
+    (await call(path, { reaction: "<script>" }, { cookie: a.cookie })).status,
+    400,
+  );
+  for (let i = 0; i < 2; i++)
+    assert.equal(
+      (await call(path, { reaction: "like" }, { cookie: a.cookie })).status,
+      200,
+    );
+  await call(path, { reaction: "like" }, { cookie: b.cookie });
+  let feed = (await call("/api/entries?scope=all", null, { cookie: a.cookie }))
+    .data.items[0];
+  assert.deepEqual(feed.reactions, [{ key: "like", count: 2, mine: true }]);
+  assert.equal(feed.reactions_owner, a.data.identity.public_id);
+  await call(path, { reaction: "love" }, { cookie: a.cookie });
+  assert.equal(
+    db.prepare("SELECT COUNT(*) AS n FROM entry_reactions").get().n,
+    2,
+  );
+  let r = await call(path, { reaction: null }, { cookie: a.cookie });
+  assert.deepEqual(r.data.reactions, [{ key: "like", count: 1, mine: false }]);
+  assert.equal(
+    (await call(path, { reaction: null }, { cookie: a.cookie })).status,
+    200,
+  );
+  assert.equal(
+    (
+      await call(
+        path,
+        { reaction: "fire" },
+        { cookie: b.cookie, origin: "https://evil.test" },
+      )
+    ).status,
+    403,
+  );
+  db.exec("UPDATE entries SET status='hidden'");
+  assert.equal(
+    (await call(path, { reaction: "like" }, { cookie: a.cookie })).status,
+    404,
+  );
+  assert.equal((await call("/api/entries?scope=all")).data.items.length, 0);
+});
+test("reply reactions obey parent visibility and banned identities cannot react", async () => {
+  const a = await register();
+  db.exec(
+    "INSERT INTO entries(scope,category,nickname,body,status) VALUES ('board','chat','旧访客','主帖','approved'); INSERT INTO entries(scope,parent_id,category,nickname,body,status) VALUES ('board',1,'chat','旧访客','回复','approved')",
+  );
+  assert.equal(
+    (
+      await call(
+        "/api/entries/2/reactions",
+        { reaction: "clap" },
+        { cookie: a.cookie },
+      )
+    ).status,
+    200,
+  );
+  db.exec("UPDATE entries SET status='hidden' WHERE id=1");
+  assert.equal(
+    (
+      await call(
+        "/api/entries/2/reactions",
+        { reaction: null },
+        { cookie: a.cookie },
+      )
+    ).status,
+    404,
+  );
+  db.exec(
+    "UPDATE entries SET status='approved' WHERE id=1; UPDATE identities SET state='banned'",
+  );
+  assert.equal(
+    (
+      await call(
+        "/api/entries/2/reactions",
+        { reaction: "clap" },
+        { cookie: a.cookie },
+      )
+    ).status,
+    403,
+  );
+  const feed = (await call("/api/entries?scope=board&parent=1")).data;
+  assert.deepEqual(feed.items[0].reactions, []);
+  db.exec("UPDATE identities SET state='active'");
+  for (let i = 0; i < 30; i++)
+    await call(
+      "/api/entries/2/reactions",
+      { reaction: "clap" },
+      { cookie: a.cookie },
+    );
+  assert.equal(
+    (
+      await call(
+        "/api/entries/2/reactions",
+        { reaction: "clap" },
+        { cookie: a.cookie },
+      )
+    ).status,
+    429,
+  );
+});
+test("admin recovery reset requires verification and revision; invalidates codes/sessions without logging secrets", async () => {
+  const r = await register();
+  const data = {
+    action: "reset-recovery",
+    expected_revision: 1,
+    reason: "已通过线下核对和此前的私密联系记录确认身份归属",
+    verified: true,
+    confirm_public_id: r.data.identity.public_id,
+  };
+  assert.equal(
+    (await call("/api/admin/identities/" + r.data.identity.public_id, data))
+      .status,
+    403,
+  );
+  await assert.rejects(() => manage(r, { ...data, verified: false }));
+  await assert.rejects(() =>
+    manage(r, { ...data, confirm_public_id: "87654321" }),
+  );
+  const response = await manage(r, data),
+    value = await response.json();
+  assert.match(value.recovery_code, /^(?:[a-f0-9]{8}-){7}[a-f0-9]{8}$/);
+  assert.equal((await login(r)).status, 401);
+  assert.equal(
+    (await call("/api/identity/me", null, { cookie: r.cookie })).data.identity,
+    null,
+  );
+  assert.equal(
+    (
+      await call("/api/identity/login", {
+        public_id: r.data.identity.public_id,
+        recovery_code: value.recovery_code,
+        token: "valid",
+      })
+    ).status,
+    200,
+  );
+  const log = db
+    .prepare("SELECT * FROM identity_log WHERE action='admin-reset-recovery'")
+    .get();
+  assert.equal(log.detail, data.reason);
+  assert.ok(!JSON.stringify(log).includes(value.recovery_code));
+  await assert.rejects(() => manage(r, data));
+  const current = db
+    .prepare("SELECT revision,nickname,avatar FROM identities")
+    .get();
+  assert.equal(current.revision, 2);
+  assert.equal(current.nickname, r.data.identity.nickname);
 });

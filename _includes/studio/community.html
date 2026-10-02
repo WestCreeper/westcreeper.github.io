@@ -1,9 +1,9 @@
-<section class="community section" data-community data-feed="{{ include.feed | escape }}" data-scope="{{ include.scope | escape }}" data-api="{{ site.data.community.api_url | escape }}" data-site-key="{{ site.data.community.turnstile_site_key | escape }}" data-enabled="{{ site.data.community.enabled }}" aria-label="{{ include.title | escape }}">
+<section class="community section" data-community data-avatar-base="{{ '/assets/images/avatars/' | relative_url }}" data-avatars="{{ site.data.community_avatars | map: 'id' | jsonify | escape }}" data-reactions="{{ site.data.community_reactions | jsonify | escape }}" data-feed="{{ include.feed | escape }}" data-scope="{{ include.scope | escape }}" data-api="{{ site.data.community.api_url | escape }}" data-site-key="{{ site.data.community.turnstile_site_key | escape }}" data-enabled="{{ site.data.community.enabled }}" aria-label="{{ include.title | escape }}">
   <div class="section-heading"><div><div class="eyebrow">A LITTLE CONVERSATION</div><h2>{% include studio/icon.html name='message' %}{{ include.title }}</h2></div></div>
   <p class="community-lead">{{ include.description }}</p>
   <section class="cookie-panel" data-cookie-panel hidden aria-label="我的饼干">
-    <h3>我的饼干</h3><p data-cookie-summary role="status"></p>
-    <details data-cookie-avatars hidden><summary>选择我的头像</summary><p class="community-notice">八款像素头像，点击即可保存。不会改变昵称的 7 天冷却。</p><div class="cookie-avatar-grid" aria-label="默认头像">{% for avatar in site.data.community_avatars %}<button type="button" class="cookie-avatar-option" data-cookie-avatar="{{ avatar.id }}" aria-pressed="false"><img src="{{ '/assets/images/avatars/' | append: avatar.id | append: '.svg' | relative_url }}" width="48" height="48" alt="" loading="lazy"><span>{{ avatar.name }}</span></button>{% endfor %}</div></details>
+    <h3>我的饼干</h3><img class="community-avatar" data-cookie-current-avatar src="{{ '/assets/images/avatars/moss.svg' | relative_url }}" width="40" height="40" alt="当前头像"><p data-cookie-summary role="status"></p>
+    <details data-cookie-avatars><summary>选择我的头像</summary><p class="community-notice">登录后可选择头像，留言板、游戏评论和回复共用。改头像不影响昵称冷却。</p><div class="cookie-avatar-grid" aria-label="默认头像">{% for avatar in site.data.community_avatars %}<button type="button" class="cookie-avatar-option" data-cookie-avatar="{{ avatar.id }}" disabled aria-pressed="false"><img src="{{ '/assets/images/avatars/' | append: avatar.id | append: '.svg' | relative_url }}" width="48" height="48" alt="" loading="lazy"><span>{{ avatar.name }}</span></button>{% endfor %}</div></details>
     <div class="community-toolbar"><button class="button" type="button" data-cookie-open="register">领取饼干</button><button class="button" type="button" data-cookie-open="login">恢复码登录</button><button class="button" type="button" data-cookie-open="rename" hidden>修改昵称</button><button class="button" type="button" data-cookie-rotate hidden>重置恢复码</button><button class="button" type="button" data-cookie-logout hidden>退出</button></div>
     <form data-cookie-form hidden>
       <h4 data-cookie-title></h4>
@@ -45,6 +45,7 @@
   </form>
   <noscript><p>启用 JavaScript 后可查看留言和回复，并提交讨论。</p></noscript>
 </section>
-<link rel="stylesheet" href="{{ '/assets/css/community.css' | relative_url }}?v=20261002-avatars">
-<script src="{{ '/assets/js/identity.js' | relative_url }}?v=20261002-avatars" defer></script>
-<script src="{{ '/assets/js/community.js' | relative_url }}?v=20261002-avatars" defer></script>
+<link rel="stylesheet" href="{{ '/assets/css/community.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+<script src="{{ '/assets/js/identity.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+<script src="{{ '/assets/js/reactions.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+<script src="{{ '/assets/js/community.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>

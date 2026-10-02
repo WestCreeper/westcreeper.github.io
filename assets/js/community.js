@@ -122,6 +122,13 @@
         b.querySelector("img").getAttribute("src"),
       ]),
     );
+    try {
+      for (const id of JSON.parse(root.dataset.avatars || "[]")) {
+        if (/^[a-z]+$/.test(id) && root.dataset.avatarBase)
+          avatarSources.set(id, root.dataset.avatarBase + id + ".svg");
+      }
+    } catch {}
+    const reactions = window.WCReactions?.(root, base, identity);
     root.addEventListener("community-avatar-changed", (event) => {
       const src = avatarSources.get(event.detail.avatar);
       if (!src) return;
@@ -193,6 +200,7 @@
       }
       if (item.title) article.append(el("h3", item.title));
       article.append(el("p", item.body, "community-card-body"));
+      if (reactions) article.append(reactions(item));
       if (!isReply) {
         const reply = el("button", "回复", "button");
         reply.type = "button";

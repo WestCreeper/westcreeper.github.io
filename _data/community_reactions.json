@@ -1,0 +1,32 @@
+[
+  {
+    "key": "like",
+    "emoji": "👍",
+    "label": "赞"
+  },
+  {
+    "key": "love",
+    "emoji": "❤️",
+    "label": "喜欢"
+  },
+  {
+    "key": "laugh",
+    "emoji": "😂",
+    "label": "好笑"
+  },
+  {
+    "key": "wow",
+    "emoji": "😮",
+    "label": "惊讶"
+  },
+  {
+    "key": "clap",
+    "emoji": "👏",
+    "label": "鼓掌"
+  },
+  {
+    "key": "fire",
+    "emoji": "🔥",
+    "label": "精彩"
+  }
+]
