@@ -30,13 +30,14 @@
       return value;
     }
     function render() {
-      panel.hidden = !enabled;
+      panel.hidden = false;
       summary.textContent = profile
         ? `${profile.nickname} · 饼干 #${profile.public_id}${profile.state === "banned" ? "（已停用）" : ""} · 可改名时间：${new Date(profile.rename_after * 1000).toLocaleString("zh-CN")}`
         : "领取一次，以后自动记住昵称。已有饼干请用恢复码登录。";
       for (const button of panel.querySelectorAll("[data-cookie-open]"))
         button.hidden =
-          button.dataset.cookieOpen === "rename" ? !profile : !!profile;
+          !enabled ||
+          (button.dataset.cookieOpen === "rename" ? !profile : !!profile);
       $("[data-cookie-rotate]").hidden = !profile || profile.state !== "active";
       $("[data-cookie-logout]").hidden = !profile;
       onChange(enabled ? profile : null);
@@ -44,10 +45,12 @@
     async function refresh() {
       try {
         const data = await api("me");
-        enabled = data.enabled;
-        profile = data.identity;
+        enabled = data.enabled === true;
+        profile = enabled ? data.identity : null;
         failed = false;
         render();
+        if (!enabled)
+          status.textContent = "饼干服务暂未开放，仍可阅读已公开的留言。";
         return true;
       } catch (e) {
         failed = true;
@@ -87,7 +90,7 @@
       }
     }
     function open(next) {
-      if (busy || !backup.hidden) return;
+      if (!enabled || busy || !backup.hidden) return;
       clearChallenge();
       mode = next;
       form.hidden = false;
@@ -237,7 +240,7 @@
       async ensure() {
         await ready;
         if (!(await refresh()) || failed) return false;
-        if (!enabled) return true;
+        if (!enabled) return false;
         if (profile?.state === "active") return true;
         panel.hidden = false;
         panel.scrollIntoView({ block: "nearest" });

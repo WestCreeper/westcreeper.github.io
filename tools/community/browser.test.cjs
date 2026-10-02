@@ -48,11 +48,16 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         remove: () => {},
       };
     });
-    let identityEnabled = false,
-      profile = null;
+    let identityEnabled = true,
+      profile = {
+        public_id: "12345678",
+        nickname: "浏览器玩家",
+        state: "active",
+        rename_after: Math.floor(Date.now() / 1000) + 604800,
+      };
     const recoveryCode = "abcd1234-".repeat(7) + "abcd1234";
     await page.route(
-      "https://westcreeper-community.xiaoshuochyo.workers.dev/api/**",
+      "https://community.westcreeper.com/api/**",
       async (route) => {
         const req = route.request(),
           url = new URL(req.url());
@@ -138,9 +143,12 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
       "game:dadnme",
     );
     await page.getByRole("button", { name: "回复", exact: true }).click();
-    await page
-      .locator("[data-community-form] input[name=nickname]")
-      .fill("西部苦力怕");
+    assert.equal(
+      await page
+        .locator("[data-community-form] input[name=nickname]")
+        .inputValue(),
+      "浏览器玩家",
+    );
     await page.locator("textarea[name=body]").fill("感谢分享连招心得");
     await page.getByRole("button", { name: "送交审核" }).click();
     await page.waitForFunction(() =>
@@ -150,6 +158,7 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     );
     assert.equal(publicRequests.at(-1).data.scope, "game:dadnme");
     assert.equal(publicRequests.at(-1).data.parent_id, 9);
+    assert.equal(publicRequests.at(-1).data.nickname, undefined);
     await page.getByRole("button", { name: "取消", exact: true }).click();
     const screenshot = path.join(
       os.tmpdir(),
@@ -198,7 +207,7 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
       }
     }
 
-    identityEnabled = true;
+    profile = null;
     await page.goto(origin + "/guestbook/");
     await page.locator("[data-cookie-panel]").waitFor();
     await page.getByRole("button", { name: "发起讨论", exact: true }).click();

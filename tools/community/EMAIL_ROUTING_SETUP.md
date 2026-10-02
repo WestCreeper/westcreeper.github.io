@@ -1,5 +1,7 @@
 # contact@westcreeper.com 接入后台收件箱
 
+2026-10-02：用户已确认完成收信配置；以下步骤保留作维护参考。
+
 请使用带 @ 的邮箱地址 contact@westcreeper.com；contact.westcreeper.com 是域名格式。
 
 ## Cloudflare 操作
@@ -24,8 +26,8 @@
 
 当前邮件限制：512 KiB，纯文本优先；附件不保存，正文过长会截断并标明。发件地址和邮件声称的饼干编号均不能直接用于重置身份。已经失去所有凭据的用户可提交求助，但不能保证找回。
 
-## 饼干正式启用的另一项配置
+## 饼干与社区域名
 
-Worker 的 Settings → Domains & Routes → Add → Custom Domain 中添加 community.westcreeper.com。为这个域名的 /admin、/admin/*、/api/admin/* 补充现有 Access 应用保护。博客前端 API 地址与 Worker 的 IDENTITY_ORIGIN 保持一致。完成域名、前端发布与 Cookie 验证后，再开启 IDENTITY_ENABLED；邮件路由本身不会开启饼干投稿。
+community.westcreeper.com 已可访问，饼干开关已启用；博客前端 API 地址与 Worker 的 IDENTITY_ORIGIN 均为该域名。审核后台继续使用上文已有 Access 保护的 workers.dev 地址。如需改用新域名审核，先为其 /admin、/admin/*、/api/admin/* 补充同一个 Access 应用保护。邮件路由与饼干开关相互独立。
 
 [Cloudflare 官方路由说明](https://developers.cloudflare.com/email-service/get-started/route-emails/)

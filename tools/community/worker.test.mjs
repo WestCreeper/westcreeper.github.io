@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync } from "node:fs";
 import worker from "./worker.mjs";
+import { digest } from "./identity.mjs";
 const sqlite = new DatabaseSync(":memory:");
 sqlite.exec("PRAGMA foreign_keys=ON");
 sqlite.exec(
@@ -58,6 +59,8 @@ const env = {
   TURNSTILE_HOSTNAMES: "westcreeper.com",
   TURNSTILE_SECRET: "test-secret",
   SUBMISSIONS_ENABLED: "true",
+  IDENTITY_ENABLED: "true",
+  IDENTITY_ORIGIN: "https://community.example.test",
   POST_LIMITER: {
     async limit() {
       return { success: true };
@@ -125,9 +128,11 @@ async function call(
     origin,
     customEnv = {},
     method,
+    cookie = testCookie,
   } = {},
 ) {
   const headers = {};
+  if (!admin && cookie) headers.Cookie = cookie;
   if (admin) headers["Cf-Access-Jwt-Assertion"] = token;
   if (data) {
     headers["Content-Type"] = "application/json";
@@ -155,6 +160,21 @@ const draft = {
   body: "小人可以搬箱子，还记得有很多关卡。",
   token: "valid",
 };
+const testToken = "a".repeat(64);
+const testCookie = "__Host-wc_session=" + testToken;
+sqlite
+  .prepare(
+    "INSERT INTO identities(public_id,nickname,nickname_key,recovery_hash,created_at,nickname_changed_at) VALUES ('12345678',?,'player','test-only',0,0)",
+  )
+  .run(draft.nickname);
+sqlite
+  .prepare(
+    "INSERT INTO identity_sessions(token_hash,identity_id,credential_version,expires_at,created_at) VALUES (?,1,1,?,0)",
+  )
+  .run(
+    await digest("session", testToken),
+    Math.floor(Date.now() / 1000) + 3600,
+  );
 const latest = () =>
   Number(sqlite.prepare("SELECT MAX(id) AS id FROM entries").get().id);
 async function moderate(
@@ -178,6 +198,8 @@ async function moderate(
     },
   });
 }
+test.beforeEach(() => sqlite.exec("DELETE FROM identity_limits"));
+
 test("pending → approved → replies → hidden: no private content leaks through public routes", async () => {
   assert.equal(
     (
@@ -320,7 +342,7 @@ test("Turnstile, origin, limits, lengths and disabled configuration fail closed"
   assert.equal(
     (await call("/api/entries", { data: { ...draft, nickname: "   " } }))
       .status,
-    400,
+    202,
   );
   assert.equal(
     (await call("/api/entries", { data: { ...draft, body: "x".repeat(2001) } }))
@@ -435,7 +457,7 @@ test("pagination has no overlap; moderation conflicts do not create audit record
     before,
   );
 });
-test("owner-like nicknames submit as ordinary pending comments without gaining privileges", async () => {
+test("client nickname and role cannot override the signed-in author or moderation", async () => {
   for (const nickname of ["西部苦力怕", "WestCreeper", "站长", "管理员"]) {
     const response = await call("/api/entries", {
       data: { ...draft, nickname, status: "approved", role: "admin" },
@@ -445,7 +467,7 @@ test("owner-like nicknames submit as ordinary pending comments without gaining p
     const row = sqlite
       .prepare("SELECT nickname,status FROM entries WHERE id=?")
       .get(id);
-    assert.equal(row.nickname, nickname);
+    assert.equal(row.nickname, draft.nickname);
     assert.equal(row.status, "pending");
     const publicEntries = (await call("/api/entries?scope=board")).value.items;
     assert.ok(!publicEntries.some((entry) => entry.id === id));
@@ -489,7 +511,7 @@ test("admin edits are validated, audited, conflict-safe and preserve approval st
   const edit = {
     action: "edit",
     expected_revision: 2,
-    nickname: "修订玩家",
+    nickname: draft.nickname,
     title: "修正标题",
     body: "<script>文本不会作为 HTML 执行</script>",
     category: "feedback",
@@ -551,7 +573,7 @@ test("admin edits are validated, audited, conflict-safe and preserve approval st
   });
   assert.equal(stale.status, 409);
   const filtered = await call(
-    "/api/admin/entries?status=all&category=feedback&kind=topic&progress=open&q=修订玩家&scope=board",
+    "/api/admin/entries?status=all&category=feedback&kind=topic&progress=open&q=玩家甲&scope=board",
     { admin: true },
   );
   assert.deepEqual(

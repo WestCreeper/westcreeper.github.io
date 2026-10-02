@@ -45,6 +45,8 @@ function fixture({
   replyCount = 0,
   feed = "",
   itemScope = "board",
+  identityAvailable = true,
+  signedIn = true,
 } = {}) {
   const nodes = {};
   for (const name of [
@@ -93,6 +95,12 @@ function fixture({
     head: new Element(),
   };
   const window = {
+    WCIdentity: identityAvailable
+      ? (root, base, load, changed) => {
+          changed(signedIn ? { nickname: "饼干玩家" } : null);
+          return { ensure: async () => signedIn };
+        }
+      : undefined,
     turnstile: {
       render(node, options) {
         challenge = options;
@@ -190,7 +198,7 @@ test("reading is user-triggered and remote markup is rendered as text", async ()
   assert.ok(
     !f.created.some((e) => e.tagName === "img" || e.tagName === "script"),
   );
-  assert.equal(f.calls[0].options.credentials, "omit");
+  assert.equal(f.calls[0].options.credentials, "include");
 });
 test("submission waits for review, clears successful body, retains receipt after captcha reset", async () => {
   const f = fixture();
@@ -205,6 +213,7 @@ test("submission waits for review, clears successful body, retains receipt after
   assert.equal(f.form.elements.body.value, "");
   assert.match(f.nodes["form-status"].textContent, /已送交审核/);
   assert.equal(JSON.parse(f.calls[0].options.body).scope, "board");
+  assert.equal(JSON.parse(f.calls[0].options.body).nickname, undefined);
 });
 test("failed submissions retain text; reply fields exclude new-topic validation", async () => {
   const f = fixture();
@@ -263,4 +272,17 @@ test("unified board auto-loads and replies retain the original game scope", asyn
   f.form.elements.title.value = "寻找游戏";
   await f.form.fire("submit");
   assert.equal(JSON.parse(f.calls.at(-1).options.body).scope, "board");
+});
+
+test("missing identity component and signed-out visitors cannot open or submit nickname-only forms", async () => {
+  for (const config of [{ identityAvailable: false }, { signedIn: false }]) {
+    const f = fixture(config);
+    await f.nodes.write.fire("click");
+    await f.form.fire("submit");
+    assert.equal(f.calls.length, 0);
+    await f.nodes.load.fire("click");
+    await settle();
+    assert.equal(f.calls.length, 1);
+    assert.equal(f.calls[0].options.method, "GET");
+  }
 });

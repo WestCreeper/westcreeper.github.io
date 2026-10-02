@@ -92,6 +92,11 @@ async function publicApi(request, env, url) {
   if (request.method !== "POST") fail(405, "不支持此操作。");
   if (env.SUBMISSIONS_ENABLED !== "true")
     fail(503, "暂时停止接收新留言，请稍后再来。");
+  if (env.IDENTITY_ENABLED !== "true")
+    fail(503, "饼干服务暂未开放，暂时无法投稿。");
+  if (url.origin !== env.IDENTITY_ORIGIN)
+    fail(403, "留言已升级为饼干登录，请刷新博客后从正式社区地址投稿。");
+  const identity = await visitor(request, env, true);
   if (
     !env.TURNSTILE_SECRET ||
     !env.POST_LIMITER ||
@@ -105,14 +110,8 @@ async function publicApi(request, env, url) {
   const data = await body(request);
   const s = scope(data.scope),
     parentId = number(data.parent_id);
-  const identity =
-    env.IDENTITY_ENABLED === "true" ? await visitor(request, env, true) : null;
-  if (identity && url.origin !== env.IDENTITY_ORIGIN)
-    fail(403, "请从正式社区地址投稿。");
-  if (identity) await limit(env, "post:" + identity.id, 10, 60);
-  const nickname = identity
-    ? identity.nickname
-    : text(data.nickname, 1, 32, "昵称");
+  await limit(env, "post:" + identity.id, 10, 60);
+  const nickname = identity.nickname;
   const message = text(data.body, 2, 2000, "内容");
   const p = parentId ? await parent(env.DB, parentId, s) : null;
   const category = p ? p.category : s === "board" ? data.category : "game";
@@ -127,7 +126,7 @@ async function publicApi(request, env, url) {
   // Client-supplied moderation fields are deliberately ignored. The SQL default is pending.
   const result = await env.DB.prepare(
     `INSERT INTO entries(scope,parent_id,category,title,nickname,body,author_id)
-    SELECT ?,?,?,?,?,?,? WHERE (? IS NULL OR EXISTS (SELECT 1 FROM entries WHERE id=? AND scope=? AND parent_id IS NULL AND status='approved' AND deleted_at IS NULL)) AND (? IS NULL OR EXISTS (SELECT 1 FROM identities WHERE id=? AND state='active' AND credential_version=?))`,
+    SELECT ?,?,?,?,?,?,? WHERE (? IS NULL OR EXISTS (SELECT 1 FROM entries WHERE id=? AND scope=? AND parent_id IS NULL AND status='approved' AND deleted_at IS NULL)) AND EXISTS (SELECT 1 FROM identities WHERE id=? AND state='active' AND credential_version=?)`,
   )
     .bind(
       s,
@@ -136,13 +135,12 @@ async function publicApi(request, env, url) {
       title,
       nickname,
       message,
-      identity?.id || null,
+      identity.id,
       parentId,
       parentId,
       s,
-      identity?.id || null,
-      identity?.id || null,
-      identity?.credential_version || null,
+      identity.id,
+      identity.credential_version,
     )
     .run();
   if (!result.meta.changes) fail(409, "这条讨论已被收起，请刷新页面。");

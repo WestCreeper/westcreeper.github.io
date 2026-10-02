@@ -6,7 +6,7 @@
 
 使用现有 Worker + D1；博客仍为 GitHub Pages。已实现领取、恢复码登录、昵称唯一与 7 天冷却、会话退出、恢复码重置、8 位作者编号、后台饼干查询／按编号查看留言／停用／撤销登录，以及 contact@westcreeper.com 收件箱。无需注册邮箱，也不自动发送邮件。
 
-当前 `IDENTITY_ENABLED=false`：先部署兼容现有投稿的后台，再接好社区自定义域名和前端，最后开启强制饼干投稿。数据库增量迁移为 `0003_identities.sql` 和 `0004_inbox.sql`。上线前必须确认用户能保存 Cookie；不能直接在 workers.dev 跨站模式下启用。
+当前 `IDENTITY_ENABLED=true`，公共 API 使用 https://community.westcreeper.com，博客在 westcreeper.com 上以同站 Cookie 登录。数据库迁移 `0003_identities.sql` 和 `0004_inbox.sql` 已执行。免登录昵称投稿分支已移除；关闭开关会停止身份服务和新投稿，已公开内容仍可阅读。
 
 ## 产品规则
 
@@ -59,9 +59,9 @@ Worker 实现 email() 接收器，仅接受 contact@westcreeper.com。Cloudflare
 4. Cloudflare Email Routing 添加／修改精确的 contact 规则，目标选择该 Worker。不要额外开 Catch-all。具体操作见 [邮件路由配置](EMAIL_ROUTING_SETUP.md)。
 5. 为 Worker 添加 community.westcreeper.com 自定义域名；为新域名的后台路径补充同一 Access 应用保护（Worker 本身继续验证 JWT）。前端 API 地址改为该域名，保留精确 Origin 校验及带凭据 CORS。
 6. 发布博客新前端后，确认自定义域名、Cookie、真实 Turnstile 和后台登录正常，再设置 `IDENTITY_ENABLED=true`。公开阅读仍不要求登录。
-7. 运行时依赖位于 tools 下，不发布到 GitHub Pages；旧评论投稿在开关关闭时保持原行为。
+7. 运行时依赖位于 tools 下，不发布到 GitHub Pages。开关关闭时拒绝所有新投稿，历史留言仍可阅读。
 
-自动测试覆盖昵称规范化冲突、7 天边界、额度、验证码、恢复登录、凭据重置与撤销、身份伪造、后台无凭据泄漏、收件 MIME／去重／地址限制、公开邮件隔离；浏览器使用模拟接口验证手机领取、保存恢复码、登录、昵称锁定和后台标签页。真实 Cookie、Email Routing 收信仍需配置后验收，测试不自动向任何邮箱发信。
+自动测试覆盖昵称规范化冲突、7 天边界、额度、验证码、恢复登录、凭据重置与撤销、身份伪造、后台无凭据泄漏、收件 MIME／去重／地址限制、公开邮件隔离；浏览器使用模拟接口验证手机领取、保存恢复码、登录、昵称锁定和后台标签页。邮件路由已由用户确认配置；真实领取、恢复登录与 Cookie 持久性仍需正式站验收，测试不自动向任何邮箱发信。
 
 ## 官方资料
 
@@ -70,3 +70,9 @@ Worker 实现 email() 接收器，仅接受 contact@westcreeper.com。Cloudflare
 - [Email Routing 接入](https://developers.cloudflare.com/email-service/get-started/route-emails/)
 - [Email Worker 接收 API](https://developers.cloudflare.com/email-service/api/route-emails/email-handler/)
 - [OWASP 凭据找回设计](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html)
+
+### 2026-10-02 切换记录
+
+已启用饼干投稿，前端使用自定义域名。新增回归检查：无会话拒绝投稿、身份开关关闭不可退回旧逻辑、昵称无法由请求覆盖、身份组件缺失时阻止表单、旧留言保留且无虚构作者编号。
+
+后续仅更新代码和变量可用 `wrangler versions upload` 上传，再用 `wrangler versions deploy <版本ID>@100% --yes` 切换，避免无意修改控制台中的域名与邮件触发配置。后台仍使用已有 Access 保护的 workers.dev 地址。

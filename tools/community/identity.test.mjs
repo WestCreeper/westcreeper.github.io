@@ -416,3 +416,40 @@ test("inbox accepts only the contact address, parses MIME as inert text, dedupli
   await worker.email(large, env);
   assert.ok(large.rejected);
 });
+
+test("all new posts require a cookie; disabling identity never restores nickname-only posts", async () => {
+  const draft = {
+    scope: "board",
+    category: "chat",
+    title: "饼干测试",
+    body: "新的身份留言",
+    nickname: "伪造昵称",
+    token: "valid",
+  };
+  assert.equal((await call("/api/entries", draft)).status, 401);
+  const r = await register();
+  assert.equal(
+    (await call("/api/entries", draft, { cookie: r.cookie })).status,
+    202,
+  );
+  env.IDENTITY_ENABLED = "false";
+  assert.equal((await call("/api/entries", draft)).status, 503);
+  assert.equal(
+    (await call("/api/entries", draft, { cookie: r.cookie })).status,
+    503,
+  );
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM entries").get().n, 1);
+  env.IDENTITY_ENABLED = "true";
+  env.IDENTITY_ORIGIN = "https://different.example.test";
+  assert.equal(
+    (await call("/api/entries", draft, { cookie: r.cookie })).status,
+    403,
+  );
+  db.prepare(
+    "INSERT INTO entries(scope,category,title,nickname,body,status) VALUES ('board','chat','旧留言','历史访客','历史内容保留','approved')",
+  ).run();
+  const feed = await call("/api/entries?scope=all");
+  assert.equal(feed.status, 200);
+  assert.equal(feed.data.items[0].author_code, null);
+  assert.equal(feed.data.items[0].nickname, "历史访客");
+});

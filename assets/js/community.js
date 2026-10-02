@@ -85,7 +85,7 @@
       loadTurnstile,
       (profile) => {
         form.elements.nickname.value = profile?.nickname || "";
-        form.elements.nickname.readOnly = !!profile;
+        form.elements.nickname.readOnly = true;
       },
     );
     writeButton.hidden = false;
@@ -99,7 +99,7 @@
           method: data ? "POST" : "GET",
           headers: data ? { "Content-Type": "application/json" } : {},
           body: data ? JSON.stringify(data) : undefined,
-          credentials: identity ? "include" : "omit",
+          credentials: "include",
           cache: "no-store",
           signal: AbortSignal.timeout(15000),
         },
@@ -282,7 +282,11 @@
     }
     async function openForm(item = null) {
       if (submitting) return;
-      if (identity && !(await identity.ensure())) return;
+      if (!identity) {
+        status.textContent = "饼干登录组件未能加载，请刷新页面后重试。";
+        return;
+      }
+      if (!(await identity.ensure())) return;
       receipt = false;
       parentId = item?.id || null;
       replyScope = item?.scope || scope;
@@ -301,7 +305,10 @@
       }
       hint();
       form.scrollIntoView({ block: "nearest" });
-      form.elements.nickname.focus();
+      (parentId
+        ? form.elements.body
+        : form.elements.title || form.elements.body
+      ).focus();
       challenge();
     }
     function closeForm() {
@@ -317,7 +324,7 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (submitting) return;
-      if (identity && !(await identity.ensure())) return;
+      if (!identity || !(await identity.ensure())) return;
       if (!token) {
         formStatus.textContent = "请先完成人机验证。";
         return;
@@ -325,7 +332,6 @@
       const payload = {
         scope: replyScope,
         parent_id: parentId,
-        nickname: form.elements.nickname.value,
         body: form.elements.body.value,
         category: form.elements.category?.value,
         title: form.elements.title?.value,

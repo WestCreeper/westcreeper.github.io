@@ -1,4 +1,4 @@
 # Enable only after the Worker, D1, Turnstile and Access have passed deployment checks.
 enabled: true
-api_url: "https://westcreeper-community.xiaoshuochyo.workers.dev"
+api_url: "https://community.westcreeper.com"
 turnstile_site_key: "0x4AAAAAAFLQho3Fwdg1i8mJ"

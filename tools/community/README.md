@@ -1,8 +1,13 @@
 # 评论与讨论版：实现及 Cloudflare 上线说明
 
-更新：2026-10-02。当前状态：统一留言板与后台管理代码已完成，已在站长创建的 D1 数据库 `westcreeper_blog` 执行初始迁移及 `0002_management.sql` 增量迁移。Worker 已部署并绑定该 D1，线上读取、未授权后台拒绝访问和暂停投稿检查通过；Turnstile 已创建，公钥已写入博客且私钥已保存为 Worker Secret；Access 团队、应用 AUD 与管理员邮箱已部署，管理员已通过截图确认真实登录及空队列读取正常。服务端投稿与本地博客开关已开启；正式博客原有评论入口已发布；本次统一留言板前端与顶部导航待推送仓库发布。新版 Worker 与审核后台已部署。仍需完成一次真实投稿、通过、隐藏的验收。
+更新：2026-10-02。Worker 已启用 `IDENTITY_ENABLED=true`，留言与回复统一使用饼干身份，免登录昵称投稿分支已移除。D1 已完成 `0001` 至 `0004` 迁移，现有留言保留且不根据昵称自动归属新身份。用户已确认完成收信配置。
 
-服务地址：`https://westcreeper-community.xiaoshuochyo.workers.dev`。当前版本：`cb55a71a-ee1d-4094-a420-67823e58d101`。部署配置 `wrangler.jsonc` 保存在本机并已忽略提交。已修复静态资源将后台首页重定向到根目录的问题；回归测试包含后台首页的三个入口。管理员实际登录已于 2026-10-01 由站长截图确认。
+公开社区地址：`https://community.westcreeper.com`。审核后台继续使用 `https://westcreeper-community.xiaoshuochyo.workers.dev/admin/`（现有 Access 登录）。自定义域名的后台尚未配置 Access 登录入口，Worker 验签会拒绝未授权访问；如要从新域名登录，应先把其后台路径加入同一个 Access 应用。不要把整个公共服务加上 Access。
+
+当前 Worker 版本：`440db92e-0471-4984-813f-970769f5a3c9`。本次通过 `versions upload` 与 `versions deploy` 更新代码和变量，保留已配置的邮件路由、自定义域名及定时任务。本地 `wrangler.jsonc` 已同步开关与域名，并忽略提交。24 项自动测试、浏览器模拟交互、根路径及子路径构建通过。真实领取与恢复登录需要用户在正式站完成 Turnstile 后验收；测试未创建线上饼干、留言或发送邮件。
+
+详细规则见 [身份方案](IDENTITY_PLAN.md)，邮件配置见 [邮件路由配置](EMAIL_ROUTING_SETUP.md)。
+
 
 ## 研究结论
 
@@ -14,12 +19,13 @@
 
 - 所有采用 `game` 布局的游戏页自动加入评论区，以 `game:<game_id>` 关联，改显示名称不影响评论。评论位于播放器外，不进入沉浸模式。
 - `/guestbook/` 保留原地址，作为“留言板”汇总所有已公开的主帖，回复按主帖展开；顶部导航可直接进入。支持全部留言、游戏评论区、寻找游戏、问题建议、闲聊交流分类。游戏留言显示对应游戏名称与返回链接。寻游和反馈可在后台标记进度；寻游分别显示寻找中、有线索、已找到。
-- 访客填写昵称并完成人机验证，主帖及回复都先进入待审核。昵称仅是展示文字，不授予身份或管理员权限；站长自己的昵称也可以正常投稿；第一版无访客编辑、账号、私信、附件或邮件通知。
+- 所有新留言和回复必须先领取 8 位数字身份或使用恢复码登录，服务器自动读取昵称。昵称唯一且每次更改间隔至少 7 天，历史留言保留昵称快照。主帖及回复都先进入待审核，饼干不授予管理员权限。没有访客编辑、私信、附件或邮件通知。
 - 主帖支持一层回复，回复本身不能继续产生嵌套层级。主帖和回复各按新到旧分页，每页 20 条。
 - 留言板进入时自动读取首屏 20 条，游戏页评论仍由用户点击触发；Turnstile 在打开投稿表单后才加载。无定时轮询，不会为全部游戏分别请求评论数量。
 - 提交成功明确告知等待审核，不将待审核内容插入公开列表。失败保留填写的文字；网络中断的提交可能已经到达服务器，提示用户避免重复提交。
 - 审核台 `/admin/` 支持待审核、已公开、已拒绝、已隐藏或全部状态，并按分类、主帖/回复、处理进度和昵称/标题/内容关键词组合筛选；每页 20 条。支持查看回复原文、通过、拒绝、隐藏、处理进度、编辑昵称/标题/正文/主帖分类、删除及私有操作备注。
 - 已隐藏主帖的回复不会通过公开接口返回，即使知道帖子编号也不行。恢复主帖后，原来已通过的回复也会恢复公开。
+- 后台新增饼干查询、停用与撤销登录；邮件收件箱支持纯文本查看、搜索、状态、备注和删除。邮件仅供管理员查看，当前不提供发信功能。
 
 ## 审核与数据边界
 
@@ -31,13 +37,13 @@
 
 后台不仅依赖 Access 网关，还会验证 Access JWT 的签名、签发方、应用 AUD、有效期和管理员邮箱白名单。遗漏 Access 配置时拒绝访问，不设公开的开发绕过。审核写入要求同源 JSON 请求。正文以纯文本渲染，数据库查询均使用参数绑定。
 
-投稿限长并使用 Turnstile 服务端验证，同时校验 hostname 和 action。验证失败或配置缺失时拒绝写入。Worker 的 IP 限流是每个 Cloudflare 位置内的尽力限制，不是全局精确计数；共享手机网络可能受到同一限额影响。可调整为合适的额度。本站 D1 不保存访客 IP、邮箱和 Turnstile token；Cloudflare 验证与网络服务仍会处理其运行所需的数据。
+投稿限长并使用 Turnstile 服务端验证，同时校验 hostname 和 action。验证失败或配置缺失时拒绝写入。Worker 的边缘 IP 限流是每个 Cloudflare 位置内的尽力限制；饼干领取另有 D1 原子计数，具体额度见身份方案。共享手机网络可能受到同一限额影响。D1 不保存明文访客 IP 或 Turnstile token；身份限流保存短期 IP 的 HMAC 值，收件箱保存发件地址与邮件正文。Cloudflare 验证与网络服务仍会处理其运行所需的数据。
 
 公开响应暂用 `no-store`，防止审核隐藏后仍返回缓存正文。已在读者屏幕上的旧内容不会主动撤回，刷新后消失。后续增加缓存时必须重新验证撤下内容的传播时间。
 
 ## 配置与部署
 
-以下是完整部署流程。当前 D1 创建、初始迁移和 Worker 部署已完成，不要重复创建数据库；Turnstile 和 Access 接入配置已完成。当前下一步是发布本次留言板前端更新并完成真实投稿审核验收，见 [审核登录配置](ACCESS_SETUP.md)。无须提供账户密码或把密钥发到聊天里。
+以下是完整部署流程。当前数据库、迁移、Worker、Turnstile 和现有域名的 Access 已配置，不要重复创建。社区自定义域名已可访问，邮件路由已由用户配置；后续更新按以下流程操作，参见 [邮件路由配置](EMAIL_ROUTING_SETUP.md) 和 [审核登录配置](ACCESS_SETUP.md)。无须提供账户密码或把密钥发到聊天里。
 
 1. 在此目录复制 `wrangler.example.jsonc` 为 `wrangler.jsonc`。后者已忽略提交；公开示例不含凭据。以下命令的工作目录均为 `tools/community`，需要 Node.js 和 Wrangler 4。
 2. 登录并创建 D1：
@@ -65,27 +71,28 @@
 5. 更新现有部署时先应用新增数据库迁移，再同步游戏清单并部署（当前数据库名为 `westcreeper_blog`）：
 
    ```powershell
+   npm ci
    npx wrangler@4 d1 migrations apply westcreeper_blog --remote
    node sync-games.mjs
-   node --test worker.test.mjs frontend.test.mjs
+   node --test worker.test.mjs frontend.test.mjs identity.test.mjs
    npx wrangler@4 deploy
    ```
 
-   获得 Worker 地址。推荐再绑定独立域名，例如 `community.westcreeper.com`（建议地址，尚未创建）。博客本身仍在 GitHub Pages；无需迁移博客，也无需调整游戏 R2 桶。
+   获得 Worker 地址。本站已绑定独立域名 `community.westcreeper.com`。博客本身仍在 GitHub Pages；无需迁移博客，也无需调整游戏 R2 桶。
 6. 在 Cloudflare Zero Trust → Access 中建立 Self-hosted application。在**同一个应用**内覆盖该服务域名的 `/admin`、`/admin/*`、`/api/admin/*`，只允许站长邮箱登录。**不要保护整个服务域名**，否则访客也必须登录才能读评论。可使用邮件验证码登录。记录团队名称与应用 AUD，填写 Worker 的 `ACCESS_TEAM`、`ACCESS_AUD`、`ADMIN_EMAILS`，再部署。团队名称仅填团队子域名部分。若启用了 workers.dev 或其他域名，不为其配置绕过策略；Worker 自身仍会验证 JWT。
 7. 用正常邮箱登录 `/admin/` 确认可见，退出后确认后台和审核接口都被保护。务必测试 `/admin` 及 `/admin/` 两种入口，Access 应用的 AUD 必须与 Worker 一致。
 8. `_data/community.yml` 中 `api_url` 填服务根地址，例如 `https://community.westcreeper.com`，不含 `/api`；完成 Turnstile 和 Access 配置后，将本机 Worker 配置的 `SUBMISSIONS_ENABLED` 改为 `true` 并部署，先在预发布站完成下述验收，再设博客 `enabled: true` 并正常发布。当前本机部署配置和博客开关已开启；以后回退时请区分服务端投稿开关和博客显示开关。
 
-博客仅展示 Cloudflare 留言，旧 GitHub Issues 接口与历史链接已移除；没有删除或迁移仓库中的任何 Issue。将 `enabled: false` 重新发布后显示暂未开放提示，不恢复旧接口。紧急暂停投稿可把 Worker 的 `SUBMISSIONS_ENABLED` 改为 `false` 并部署，已公开内容仍可阅读。
+博客仅展示 Cloudflare 留言，旧 GitHub Issues 接口与历史链接已移除；没有删除或迁移仓库中的任何 Issue。将 `enabled: false` 重新发布后显示暂未开放提示，不恢复旧接口。紧急暂停投稿可把 Worker 的 `SUBMISSIONS_ENABLED` 改为 `false` 并部署，已公开内容仍可阅读。关闭 `IDENTITY_ENABLED` 也会暂停投稿，不会恢复免登录投稿。
 
 ## 运维与验证
 
 每次新增或修改游戏 ID 后运行 `node sync-games.mjs` 并重新部署 Worker。仅修改游戏标题、简介、封面不需要更新 Worker。改 ID 相当于换讨论区；如需保留评论，应对 D1 scope 做明确迁移。现有清单包含 114 个游戏 ID。
 
-本地测试（Node 24，自带 SQLite，无测试依赖）：
+本地测试（Node 24，自带 SQLite；先在 `tools/community` 执行 `npm ci` 安装邮件解析依赖）：
 
 ```powershell
-node --test tools/community/worker.test.mjs tools/community/frontend.test.mjs
+node --test tools/community/worker.test.mjs tools/community/frontend.test.mjs tools/community/identity.test.mjs
 ```
 
 前端行为测试使用轻量 DOM 模型验证按需加载、纯文本输出、成功回执及失败保留草稿，不能代替浏览器视觉检查。后端测试执行真实 SQLite SQL 和 RSA 签名验证，使用模拟的 D1 绑定、Turnstile 响应、Access 公钥服务；不等价于线上 Cloudflare 联调。覆盖待审核不可见、禁止伪造审核字段、原帖隐藏后回复不可见、游戏隔离、验证码失败、限流、长度、CORS、管理员签名及权限、分页和审计一致性。
@@ -99,7 +106,7 @@ node --test tools/community/worker.test.mjs tools/community/frontend.test.mjs
 - 真实 Turnstile 成功／过期、Access 邮件登录、允许域名及预检通过；检查 Worker CPU、D1 读写用量。
 - 模拟网络故障，确认保留草稿，游戏本身仍然正常运行。
 
-D1 内容与 Git 仓库分开，需要另做备份。可用 `wrangler d1 export ... --remote --output <私有备份路径>` 导出；备份含待审核正文与审核记录，存放在仓库外。若以后放入 R2，应使用独立的私有桶。第一版没有创建定时任务，也没有自动清除被拒绝内容。
+D1 内容与 Git 仓库分开，需要另做备份。可用 `wrangler d1 export ... --remote --output <私有备份路径>` 导出；备份含待审核正文、身份凭据哈希、邮件与审核记录，存放在仓库外。若以后放入 R2，应使用独立的私有桶。每天 UTC 03:17 清理过期会话、限流计数及超过两天的领取记录，不自动删除留言或邮件。
 
 ## 费用与官方依据
 
@@ -119,4 +126,4 @@ D1 内容与 Git 仓库分开，需要另做备份。可用 `wrangler d1 export 
 
 可使用已安装的 Playwright 与 Chromium 运行 `node tools/community/browser.test.cjs`，以 `BLOG_PREVIEW` 指定构建后的本地服务地址（默认 http://127.0.0.1:4000），`PLAYWRIGHT_MODULE` 指定模块路径、`BROWSER_EXE` 指定浏览器可执行文件。测试将全部社区写入请求拦截为模拟响应，不向正式服务写入。检查 390、820、1024、1440 像素布局、筛选、游戏回复、编辑与删除确认；截图放系统临时目录。它不替代正式站 Turnstile 与 Access 的真人登录/投稿验收。
 
-验收记录：15 项本地行为测试通过，真实浏览器的模拟交互与四种宽度检查通过；根路径与 `/preview` 子路径构建均通过（127 页，118 条搜索条目）。线上聚合读取、分类读取及 Access 登录保护已复核。
+验收记录：24 项本地行为测试通过，包含身份规则、凭据撤销及邮件隔离；真实浏览器的模拟交互与四种宽度检查通过，包括领取、恢复登录和后台收件箱。根路径与 `/preview` 子路径构建均通过（127 页，118 条搜索条目）。线上聚合读取及新增后台接口的 Access 登录保护已复核。邮件路由已由用户确认配置；真实领取、恢复登录与手机 Cookie 持久性仍需用户验收。测试没有向任何邮箱发信。
