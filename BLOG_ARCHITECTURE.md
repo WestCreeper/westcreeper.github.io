@@ -13,7 +13,7 @@
 | `/sponsors/` | 赞助名单、留言与赞助方式 |
 | `/releases/` | 旧地址，自动跳转至赞助名单 |
 | `/resources/` | 工具与资源 |
-| `/guestbook/` | 统一留言板：游戏评论、寻游、问题建议与闲聊；保留 GitHub 历史入口 |
+| `/guestbook/` | 统一留言板：游戏评论、寻游、问题建议与闲聊 |
 | `/friends/` | 友情链接 |
 | `/about.html` | 关于我 |
 | `/search.json` | 全站静态搜索索引 |
@@ -43,7 +43,7 @@
 
 首页、游戏详情页和档案馆通过 `_includes/studio/game-collection.html` 与 `assets/js/game-collection.js` 读取 `games.json`。首页与详情页随机取 3 部（详情页排除当前游戏），档案馆每页 12 部；只为当前结果创建卡片与封面。分类、关键词及页码使用 `tag`、`q`、`page` 查询参数，支持历史导航。关闭 JavaScript 时提供有限数量的静态卡片。
 
-新社区服务关闭时，留言页额外加载 `assets/js/guestbook.js`，从公开 GitHub Issues API 读取留言及回复，支持分页和重试。正文以纯文本显示，写入和管理均在 GitHub 完成。
+留言板仅使用 Cloudflare 社区系统，通过顶部导航进入；页脚不重复放置入口。旧 GitHub Issues 读取接口、历史链接及旧版脚本已移除，社区停用时仅显示暂未开放提示。
 
 评论与讨论版的新服务位于 `tools/community/`（不发布到 GitHub Pages）：Cloudflare Worker + D1 + Turnstile，Access 保护审核台。`_data/community.yml` 控制启用状态、公开 API 地址和 Turnstile 公钥，当前已启用。留言板进入时读取全部分类的已公开主帖，支持分类筛选及展开回复；每个游戏通过 `studio/community.html` 接入独立讨论；主帖和回复先审核后公开。后台组合筛选、编辑和逻辑删除均受 Access 验证保护；revision 防止旧页面覆盖更改，操作保留审计记录。上线步骤和实现边界见 [评论服务说明](tools/community/README.md)。文章发布仍通过更新 `_posts/` 完成。
 

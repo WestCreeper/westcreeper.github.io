@@ -6,7 +6,7 @@
 
 ## 研究结论
 
-原版 `assets/js/guestbook.js` 直接读取公开 GitHub Issues，排除 PR，但没有按审核标签过滤，并同时展示打开和关闭的 Issue。关闭 Issue 不等于隐藏；即使在博客侧过滤，内容仍已在 GitHub 公开。因此它不适合作为“先审核后公开”的存储端。
+原版留言板（旧脚本现已移除）直接读取公开 GitHub Issues，排除 PR，但没有按审核标签过滤，并同时展示打开和关闭的 Issue。关闭 Issue 不等于隐藏；即使在博客侧过滤，内容仍已在 GitHub 公开。因此它不适合作为“先审核后公开”的存储端。
 
 新方案使用 GitHub Pages 展示页面，Cloudflare Worker 处理投稿与读取，D1 保存内容和审核记录，Turnstile 减少机器人投稿，Access 保护审核后台。R2 继续承载 SWF；第一版评论不需要 R2，不向公开游戏桶写入待审核内容。以后如加入图片附件，需单独设计私有上传、审核及公开流程。
 
@@ -76,7 +76,7 @@
 7. 用正常邮箱登录 `/admin/` 确认可见，退出后确认后台和审核接口都被保护。务必测试 `/admin` 及 `/admin/` 两种入口，Access 应用的 AUD 必须与 Worker 一致。
 8. `_data/community.yml` 中 `api_url` 填服务根地址，例如 `https://community.westcreeper.com`，不含 `/api`；完成 Turnstile 和 Access 配置后，将本机 Worker 配置的 `SUBMISSIONS_ENABLED` 改为 `true` 并部署，先在预发布站完成下述验收，再设博客 `enabled: true` 并正常发布。当前本机部署配置和博客开关已开启；以后回退时请区分服务端投稿开关和博客显示开关。
 
-开启后，博客不再自动展示旧 GitHub 列表，但保留历史链接；没有删除或迁移任何 Issue。关闭新功能时将 `enabled: false` 重新发布即可恢复旧留言展示。紧急暂停投稿可把 Worker 的 `SUBMISSIONS_ENABLED` 改为 `false` 并部署，已公开内容仍可阅读。
+博客仅展示 Cloudflare 留言，旧 GitHub Issues 接口与历史链接已移除；没有删除或迁移仓库中的任何 Issue。将 `enabled: false` 重新发布后显示暂未开放提示，不恢复旧接口。紧急暂停投稿可把 Worker 的 `SUBMISSIONS_ENABLED` 改为 `false` 并部署，已公开内容仍可阅读。
 
 ## 运维与验证
 

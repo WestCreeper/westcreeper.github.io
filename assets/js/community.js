@@ -59,7 +59,7 @@
       loadButton.hidden = true;
       if (filter) filter.disabled = true;
       status.textContent =
-        "新讨论区正在准备中，暂未开放投稿。可以先到讨论版下方的 GitHub 入口留言。";
+        "讨论区暂未开放，请稍后再来。";
       continue;
     }
     const base = apiURL.origin + apiURL.pathname.replace(/\/$/, "");

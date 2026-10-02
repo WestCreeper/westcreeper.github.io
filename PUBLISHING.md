@@ -104,28 +104,14 @@ bundle exec jekyll build
 - 全站搜索支持 `Ctrl/Cmd + K`，使用静态 `search.json`，不调用搜索服务。
 - 首页每次访问随机展示 3 部游戏，详情页随机推荐 3 部其他游戏，不足 3 部时展示全部候选。档案馆每页 12 部，分类和搜索覆盖全部游戏，筛选变化时回到第一页；页码与筛选条件保存在网址中，支持刷新和浏览器前进 / 后退。
 - 游戏列表读取轻量的 `games.json`，只创建当前页或随机选中的卡片，并按需加载封面；不会一次性渲染全部卡片。分页大小由 `swf/index.md` 中的 `limit=12` 控制。
-- 讨论版与游戏评论采用 Cloudflare 审核服务；未开启时保留 GitHub 历史留言。配置见下方说明。
+- 留言板与游戏评论采用 Cloudflare 审核服务；停用时显示暂未开放提示。配置见下方说明。
 - 已有文章正文及外部图片地址保留，外部图片可用性仍取决于原托管站点。
 
 ## 留言板与游戏评论
 
 当前已接入并开启 Cloudflare Worker、D1、Turnstile 与 Access。顶部“留言板”汇总游戏评论、寻找游戏、问题建议与闲聊，主帖和回复均先审核后公开。后台支持组合筛选、编辑和删除；删除主帖会一并移除其回复并保留私有审计记录。更新服务前先应用 D1 迁移，再部署 Worker；博客导航与留言页修改仍需推送 GitHub Pages。完整部署、费用与回退说明见 [tools/community/README.md](tools/community/README.md)。不要在该 YAML 或博客前端填写私钥。
 
-## GitHub 历史留言维护
-
-以下说明适用于新服务尚未开启时的历史列表。GitHub 内容直接公开，不能用于先审后发。
-
-
-- `swf/guestbook.md` 是留言板页面，`assets/js/guestbook.js` 负责读取公开 GitHub REST API。仓库由 `_config.yml` 的 `repository` 指定，必须公开并启用 Issues。
-- 「查看 GitHub 历史留言」打开仓库 Issues；「在 GitHub 回复」打开对应 Issue。写入需要用户在 GitHub 登录，博客不保存登录凭据，也不需要配置 Token、OAuth 或评论应用。
-- 每页请求 20 条记录，按创建时间倒序，包含开放和已关闭的 Issues，过滤 Pull Request。因此包含 Pull Request 的页面可能少于 20 条留言。使用上一页 / 下一页浏览。
-- 回复展开时才请求，每批 20 条；可加载更多。关闭 Issue 不会隐藏留言；不适合公开的内容需要在 GitHub 删除或编辑。所有公开 Issues 都会展示，未按标签筛选。
-- 正文使用 GitHub 提供的纯文本，安全地写入 DOM；不执行留言 HTML。图片、Markdown 排版及附件请通过原帖链接查看。
-- 页面打开及手动刷新时读取最新内容，不轮询。发言后回到博客点击「刷新留言」。网络超时、访问限制和不可访问状态均提示重试；刷新或翻页失败时保留上次成功加载的内容。
-- 未登录的 API 请求受到 GitHub 的访问频率限制，共用出口网络的访客可能共享额度。不要把私有 Token 写进前端代码；受限时可直接在 GitHub 查看。关闭 JavaScript 时仍可使用 GitHub 入口。
-- 本地回归脚本：安装 Playwright 后运行 `node tools/test-guestbook.cjs`，通过 `PLAYWRIGHT_MODULE` 和 `BROWSER_EXECUTABLE` 指定现有运行时与浏览器，`BLOG_PREVIEW_URL` 可覆盖默认的 `http://127.0.0.1:4000`。测试使用模拟响应，不会创建公开留言。截图默认写入系统临时目录，可用 `BLOG_TEST_OUTPUT` 指定仓库外的输出目录。
-
-参考：[GitHub Issues API](https://docs.github.com/en/rest/issues/issues#list-repository-issues)、[回复 API](https://docs.github.com/en/rest/issues/comments#list-issue-comments)、[访问频率限制](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api)。
+GitHub Issues 留言接口、历史入口及旧版脚本已移除；停用社区服务不会切回 GitHub。仓库中的原有 Issues 不受影响。
 
 ## 更新赞助名单
 
