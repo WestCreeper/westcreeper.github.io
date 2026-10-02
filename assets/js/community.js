@@ -58,8 +58,7 @@
     if (root.dataset.enabled !== "true" || !apiURL || !root.dataset.siteKey) {
       loadButton.hidden = true;
       if (filter) filter.disabled = true;
-      status.textContent =
-        "讨论区暂未开放，请稍后再来。";
+      status.textContent = "讨论区暂未开放，请稍后再来。";
       continue;
     }
     const base = apiURL.origin + apiURL.pathname.replace(/\/$/, "");
@@ -80,6 +79,15 @@
       mounting = false,
       token = "",
       receipt = false;
+    const identity = window.WCIdentity?.(
+      root,
+      base,
+      loadTurnstile,
+      (profile) => {
+        form.elements.nickname.value = profile?.nickname || "";
+        form.elements.nickname.readOnly = !!profile;
+      },
+    );
     writeButton.hidden = false;
     status.textContent = "点击查看，加载已通过审核的内容。";
     async function api(params, data) {
@@ -91,7 +99,7 @@
           method: data ? "POST" : "GET",
           headers: data ? { "Content-Type": "application/json" } : {},
           body: data ? JSON.stringify(data) : undefined,
-          credentials: "omit",
+          credentials: identity ? "include" : "omit",
           cache: "no-store",
           signal: AbortSignal.timeout(15000),
         },
@@ -135,6 +143,13 @@
         if (["find", "feedback"].includes(item.category))
           meta.append(el("span", progressLabel(item), "community-badge"));
       }
+      meta.append(
+        el(
+          "span",
+          item.author_code ? "饼干 #" + item.author_code : "旧版访客",
+          "community-badge",
+        ),
+      );
       article.append(meta);
       const game = gameLinks.get(item.scope);
       if (game && !isReply) {
@@ -265,8 +280,9 @@
         mounting = false;
       }
     }
-    function openForm(item = null) {
+    async function openForm(item = null) {
       if (submitting) return;
+      if (identity && !(await identity.ensure())) return;
       receipt = false;
       parentId = item?.id || null;
       replyScope = item?.scope || scope;
@@ -301,6 +317,7 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (submitting) return;
+      if (identity && !(await identity.ensure())) return;
       if (!token) {
         formStatus.textContent = "请先完成人机验证。";
         return;

@@ -16,6 +16,9 @@
     "ACCESS_AUD": "",
     "ADMIN_EMAILS": "",
     "SUBMISSIONS_ENABLED": "true",
+    "IDENTITY_ENABLED": "false",
+    "IDENTITY_ORIGIN": "https://community.westcreeper.com",
+    "CONTACT_EMAIL": "contact@westcreeper.com",
   },
   "d1_databases": [
     {
@@ -25,6 +28,7 @@
       "migrations_dir": "migrations",
     },
   ],
+  "triggers": { "crons": ["17 3 * * *"] },
   "ratelimits": [
     {
       "name": "POST_LIMITER",

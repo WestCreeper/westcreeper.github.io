@@ -137,3 +137,32 @@
   color: var(--green);
   font-size: 13px;
 }
+.cookie-panel {
+  margin: 24px 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 3px 3px 0 var(--green-light);
+}
+.cookie-panel .cookie-ack {
+  display: flex;
+  align-items: start;
+  gap: 10px;
+}
+.cookie-panel .cookie-ack input {
+  width: auto;
+  margin-top: 3px;
+  flex: 0 0 auto;
+}
+.cookie-panel [data-cookie-backup] {
+  padding: 16px;
+  border: 2px solid var(--green);
+  border-radius: 8px;
+}
+.cookie-panel [data-cookie-backup-code] {
+  font-family: ui-monospace, monospace;
+}
+.cookie-panel p {
+  overflow-wrap: anywhere;
+}

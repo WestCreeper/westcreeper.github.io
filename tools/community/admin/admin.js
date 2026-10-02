@@ -3,7 +3,7 @@
   const entries = $("#entries"),
     status = $("#status"),
     more = $("#more");
-  const filters = ["filter", "category", "kind", "progress", "query"];
+  const filters = ["filter", "category", "kind", "progress", "query", "author"];
   const labels = {
     game: "游戏评论区",
     feedback: "问题建议",
@@ -66,7 +66,13 @@
         item.title || `${item.nickname} 的${item.parent_id ? "回复" : "评论"}`,
       ),
     );
-    article.append(el("p", `昵称：${item.nickname}`, "meta"));
+    article.append(
+      el(
+        "p",
+        `昵称：${item.nickname} · ${item.author_code ? "饼干 #" + item.author_code : "旧版访客"}`,
+        "meta",
+      ),
+    );
     if (item.parent_id)
       article.append(
         el(
@@ -140,6 +146,7 @@
     editor.hidden = true;
     const nickname = el("input");
     nickname.value = item.nickname;
+    nickname.readOnly = !!item.author_id;
     nickname.maxLength = 32;
     nickname.required = true;
     const title = el("input");
@@ -223,6 +230,7 @@
         ["kind", "kind"],
         ["progress", "progress"],
         ["query", "q"],
+        ["author", "author"],
       ]) {
         const value = $("#" + id).value.trim();
         if (value) params.set(key, value);

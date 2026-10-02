@@ -163,3 +163,15 @@ select:focus-visible {
     width: 100%;
   }
 }
+.management-tabs {
+  margin: 24px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.management-tabs [aria-pressed="true"] {
+  background: var(--green);
+  color: var(--bg);
+}
+#inbox-list details {
+  margin: 16px 0;
+}

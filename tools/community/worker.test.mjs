@@ -14,6 +14,10 @@ sqlite.exec(
     "utf8",
   ),
 );
+for (const name of ["0003_identities.sql", "0004_inbox.sql"])
+  sqlite.exec(
+    readFileSync(new URL("migrations/" + name, import.meta.url), "utf8"),
+  );
 const statement = (sql, args = []) => ({
   bind(...params) {
     return statement(sql, params);

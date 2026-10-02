@@ -1,0 +1,9 @@
+{
+  "name": "westcreeper-community",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "dependencies": {
+    "postal-mime": "4.0.2"
+  }
+}

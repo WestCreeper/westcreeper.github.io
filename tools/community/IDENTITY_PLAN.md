@@ -1,77 +1,72 @@
-# 邮箱验证的饼干身份：接入研究
+# 自动饼干、恢复码与求助收件箱
 
-日期：2026-10-02。状态：研究建议，未实现、未改变线上投稿规则，未开通邮件服务。
+更新：2026-10-02。本方案替代此前的邮箱验证码方案。
 
-## 结论与用户体验
+## 已实现与上线开关
 
-适合现有 GitHub Pages + Worker + D1 + Turnstile 架构。属于增加轻量身份系统，需要后端验证和会话管理，不能仅靠前端保存昵称实现。
+使用现有 Worker + D1；博客仍为 GitHub Pages。已实现领取、恢复码登录、昵称唯一与 7 天冷却、会话退出、恢复码重置、8 位作者编号、后台饼干查询／按编号查看留言／停用／撤销登录，以及 contact@westcreeper.com 收件箱。无需注册邮箱，也不自动发送邮件。
 
-建议允许任何人阅读，新投稿及回复需持有邮箱验证过的身份；仍先审核后公开。首次操作为：输入邮箱 → 收取验证码 → 验证 → 设置昵称 → 自动领取饼干。以后自动读取昵称，无需每次输入邮箱或昵称。跨设备、清除浏览器数据或会话过期后，用同一邮箱重新验证即可取回同一身份。每台设备获得独立会话；不复制、导出登录密钥。
+当前 `IDENTITY_ENABLED=false`：先部署兼容现有投稿的后台，再接好社区自定义域名和前端，最后开启强制饼干投稿。数据库增量迁移为 `0003_identities.sql` 和 `0004_inbox.sql`。上线前必须确认用户能保存 Cookie；不能直接在 workers.dev 跨站模式下启用。
 
-公开示例：`像素旅人 · 饼干 #58210473`。编号为随机数字，数据库唯一约束并处理碰撞。编号永久关联站内身份，昵称可另行修改；不使用邮箱、邮箱哈希或 IP 生成公开编号。公开编号不是登录凭据。持久公开编号会使不同游戏下的发言可关联，需要在领取时明确说明；称为化名发言，不承诺对站方完全匿名。
+## 产品规则
 
-## 当前代码与接入点
+- 一次填写昵称并通过 Turnstile 后领取。8 位数字编号使用加密安全随机源分配（10000000–99999999），数据库唯一约束并重试碰撞。编号不是登录秘密。
+- 昵称 2–24 字，支持 Unicode 文字、数字、空格、下划线、短横线、间隔点；拒绝零宽、控制和方向隐藏字符。NFKC 统一全角形式，昵称比较忽略大小写及空格；数据库唯一索引保证同时提交时也不可重名。
+- 领取与每次改名后，服务器计时满 7×24 小时才可再次改名。只限制当前昵称唯一，旧昵称释放后可能被他人使用；8 位编号用于持续辨认身份。
+- 历史留言保留当时昵称；不把昵称相同的旧留言归属给新饼干。无作者关联的历史记录显示旧版访客。
+- 恢复码为 32 字节随机值，展示为 8 组十六进制字符。领取／重置时只显示一次，可下载文本备份；D1 仅存哈希，不保存明文，也不写日志。后台无法读取原恢复码。
+- 恢复码登录需同时提供公开编号并通过 Turnstile。同一码可在新设备登录，直到主动重置；登录不自动换码，避免网络中断丢失新码。会话与恢复码是独立随机凭据。
+- 登录凭据放 API 域名的 Secure、HttpOnly、SameSite=Lax、host-only Cookie，有效期 30 天。D1 仅存会话哈希；每次使用校验有效期、状态与凭据版本。
+- 重置恢复码时其他设备和旧码失效，当前设备保留登录（即使响应中断也可再重置），必须保存新码。
+- 所有投稿仍先审核。作者与昵称由服务器读取，不接受前端伪造作者编号。停用饼干会使全部登录失效，已有公开留言仍按原审核状态展示。
 
-- `entries` 仅有投稿时填写的 nickname，尚无作者身份外键。
-- `assets/js/community.js` 的请求使用 `credentials: omit`，目前没有会话状态。
-- `auth.mjs` 验证 Cloudflare Access 管理员 JWT，只用于后台。访客邮箱认证另设模块，不能把访客加入管理员 Access 白名单。
-- `_data/community.yml` 的 API 地址仍为 workers.dev，和正式博客 westcreeper.com 不同站点。
-- 新增个人身份区可放在留言板和游戏评论表单上方：领取／找回饼干、当前昵称与编号、修改昵称、退出此设备、退出所有设备。
+## 领取与登录频率
 
-## 域名与 Cookie
+- 同一来源 IP：10 分钟内最多成功领取 1 个，滚动 24 小时最多 3 个。
+- 全站：滚动 24 小时最多成功领取 100 个。
+- 注册／登录合计：同一 IP 每 15 分钟最多尝试 10 次；另有现有边缘限流。
+- 同一身份每小时最多登录 10 次，改名尝试每小时最多 10 次，重置恢复码每小时最多 5 次。
+- 同一身份每分钟最多投稿 10 次，叠加现有来源限流。
+- 成功领取额度在同一个 D1 batch 的条件 INSERT 中验证，跨 Cloudflare 节点共享额度；不单独依赖各节点的尽力限流。
+- 不保存明文 IP：使用 Worker Secret `IDENTITY_PEPPER` 做 HMAC，领取记录 2 天后由定时任务清理；已过期限流计数与会话也清理。
+- 共享网络会共享额度。换网络、代理和 IPv6 地址变化仍可能绕过按 IP 的限制，不保证一人一号，也不使用设备指纹。
 
-建议在现有 Worker 上增加 `community.westcreeper.com` 自定义域名。博客静态内容仍留在 GitHub Pages，SWF 仍留在 R2。
+## 后台接入
 
-将登录会话放在 API 域名的 host-only Cookie：`__Host-wc_session`，Secure、HttpOnly、Path=/、SameSite=Lax，不设置 Domain。密钥由加密安全随机源生成至少 32 字节，D1 仅保存其哈希。公开编号与密钥完全独立。建议会话初版有效期 30 天，过期重新邮件验证；实际保存时间仍受浏览器清理、用户退出影响。
+同一个 Access 审核台增加“饼干管理”和“邮件收件箱”。饼干列表可搜昵称／编号、按正常／停用状态筛选，显示领取时间、可改名时间、留言数量、有效登录数量，每页 20 条。点击查看留言会带编号筛选；停用、解除停用和注销全部设备需填写处理依据，并记录管理员审计。
 
-westcreeper.com 与 community.westcreeper.com 在 HTTPS 下同站但不同源，需要前端 credentials: include、服务端精确允许 Origin 及 Access-Control-Allow-Credentials。写操作校验 Origin 并要求 JSON；不能仅依赖 SameSite 防止同站其他子域发起请求。workers.dev 与 github.io 不作为正式登录宿主；从 GitHub 域名访问时提示到正式域名完成身份操作，不扩大 Cookie 范围。
+不在普通留言编辑功能中修改有作者身份的昵称快照。后台不展示会话哈希或恢复码哈希。
 
-新增自定义域名时，需要为其后台路径同步配置 Access，并保持 Worker 自身的 JWT 校验。不能将整个社区域名保护成管理员登录页。
+## 恢复码丢失的求助
 
-## 数据与接口建议
+公开联系邮箱：contact@westcreeper.com。请用户提供编号和可核验线索，不要发送恢复码、密码或证件。
 
-- identities：内部 ID、公开饼干编号、当前昵称、邮箱查找标识、验证时间、账户状态、创建时间。
-- sessions：密钥哈希、作者 ID、到期时间、撤销状态；每设备独立，可以一次撤销全部会话。
-- email_challenges：挑战 ID、邮箱查找标识、验证码 HMAC、有效期、错误尝试次数、消费状态。建议 10 分钟有效，最多尝试 5 次，重发冷却 60 秒；以上是待实现的初始参数。
-- entries 新增可空 author_id，保留原有 nickname 作为投稿时快照。服务器从有效会话写入作者 ID 和昵称，不接受客户端指定作者、验证标记或管理员角色。
-- `POST /api/auth/request-code`、`POST /api/auth/verify-code`、`GET /api/me`、个人昵称修改及退出接口。验证码只消费一次，成功创建会话与消费验证码应保证并发安全。
-- 邮箱可用带服务端密钥的 HMAC 作为查找标识；如需保存可恢复的完整邮箱，另行加密存储。明文不进入公开接口、前端资源或日志；普通审核卡片无需显示完整邮箱。仅普通 SHA-256 邮箱哈希不视为充分保护。
+若仍有登录设备，优先自行重置恢复码。如果所有凭据都丢失，邮件只能提交求助，不能证明身份；发件人地址、公开昵称、公开留言截图都不足以单独认领身份。当前后台可查看与记录处理结果，没有自动按邮件重置身份的接口。无法可靠核验时建议重新领取，不承诺必能找回。
 
-一个已验证邮箱对应一个身份；不擅自去掉邮箱中的点号或加号别名来合并身份。邮箱验证只能证明当时可收信，不能证明实名或保证一人一号。需要配合发送验证码、验证尝试与发言的限流；Turnstile 不能替代这些限制。
+## 邮件接收
 
-昵称修改需审核或保留已批准昵称直到新昵称获批，防止通过改名绕开人工审核。站长标识由后台身份关系单独授予，不靠昵称匹配。封禁按 author_id 判断并使会话失效，普通用户无法通过清理 Cookie 解除同一身份的封禁。
+Worker 实现 email() 接收器，仅接受 contact@westcreeper.com。Cloudflare 路由动作为 Send to a Worker → westcreeper-community。域名 MX 已在 2026-10-02 查询确认为 Cloudflare 的 route*.mx.cloudflare.net，无须替换。
 
-## 邮件发送选择
+使用锁定版本 postal-mime 4.0.2 解析 MIME；邮件最大 512 KiB，正文最多 30,000 字符，附件只计数不保存。HTML-only 邮件以源码文字显示，不执行 HTML、不加载外链图片。相同原始内容去重；全站每日窗口 200 封、同发件地址每小时 20 封，超额拒收并提示稍后重试。
 
-核实于 2026-10-02：
+后台支持发件人／主题／正文搜索，未读／已读／已处理状态，内部备注和永久删除。邮件内容不进入公开接口，不发送自动回复；工作人员可用自己的现有邮箱另行回复。记录的发件地址不能视作身份认证。
 
-| 方案 | 官方资料所列条件 | 适用情况 |
-| --- | --- | --- |
-| Resend | 免费档每月 3,000 封、每天 100 封；需注册并验证发信域名 | 尚未购买 Workers Paid，优先控制费用 |
-| Cloudflare Email Sending（Beta） | 向任意收件人发送需 Workers Paid；每月包含 3,000 封，超出 $0.35 / 1,000 封 | 已有 Workers Paid，或希望集中管理 |
+## 部署和验证
 
-Cloudflare Email Routing 免费发送到的是账户中预先验证的目标地址，不应拿它当作给任意新访客发送验证码的通道。是否已具备 Paid / Email Sending 使用条件仍需检查账户，不能仅凭已创建 Worker、D1、R2 推断。
+1. `npm ci` 安装锁定依赖；运行 `node --test worker.test.mjs frontend.test.mjs identity.test.mjs`。
+2. 应用 D1 新迁移。用安全随机值配置 Worker Secret `IDENTITY_PEPPER`，不写仓库。
+3. 部署 Worker，设置 `CONTACT_EMAIL=contact@westcreeper.com`；先保持 `IDENTITY_ENABLED=false`。
+4. Cloudflare Email Routing 添加／修改精确的 contact 规则，目标选择该 Worker。不要额外开 Catch-all。具体操作见 [邮件路由配置](EMAIL_ROUTING_SETUP.md)。
+5. 为 Worker 添加 community.westcreeper.com 自定义域名；为新域名的后台路径补充同一 Access 应用保护（Worker 本身继续验证 JWT）。前端 API 地址改为该域名，保留精确 Origin 校验及带凭据 CORS。
+6. 发布博客新前端后，确认自定义域名、Cookie、真实 Turnstile 和后台登录正常，再设置 `IDENTITY_ENABLED=true`。公开阅读仍不要求登录。
+7. 运行时依赖位于 tools 下，不发布到 GitHub Pages；旧评论投稿在开关关闭时保持原行为。
 
-建议使用专门发信子域名，按邮件服务要求配置 DNS 验证并实际测试 QQ、163、Gmail 等目标邮箱的送达；不承诺一定进入收件箱。只在领取、找回或会话过期时发信，不为每次评论发送。给验证码发送设置每邮箱、每 IP 和全站预算上限，以及统一的账户存在性响应和明确的额度耗尽提示。验证码不写入日志。
+自动测试覆盖昵称规范化冲突、7 天边界、额度、验证码、恢复登录、凭据重置与撤销、身份伪造、后台无凭据泄漏、收件 MIME／去重／地址限制、公开邮件隔离；浏览器使用模拟接口验证手机领取、保存恢复码、登录、昵称锁定和后台标签页。真实 Cookie、Email Routing 收信仍需配置后验收，测试不自动向任何邮箱发信。
 
-## 现有数据与发布顺序
+## 官方资料
 
-1. 先确定发信服务并配置社区子域名；不自动购买付费方案。
-2. 加入增量数据库迁移与身份接口、Cookie 和昵称界面；维持现有审核功能。
-3. 历史留言 author_id 为空，标注“旧版访客”；不能仅凭相同昵称绑定到新身份。原有评论和回复关系保持不变。
-4. 后台增加按饼干编号查看留言、身份封禁与会话撤销，不直接开放公开的全站作者历史搜索。
-5. 验证之后再切换为邮箱验证投稿。降级或邮件服务不可用时不可自动放开身份校验；给出稍后重试提示，保留本地草稿。
-
-验证范围：验证码错误／过期／重放／并发消费、发送限额、会话过期与撤销、凭据伪造、Origin、跨设备找回、旧留言归属、已封禁身份、审核状态、iPhone Safari 和无痕窗口、邮件送达。自动化使用邮件模拟器，真实验证码发送需用户发起或明确授权。
-
-预计新增负载来自打开讨论区时一次身份查询、投稿时会话校验、验证码请求与发送。无轮询，不随动画帧或游戏运行发请求；不能保证零负载或永不超额，费用取决于真实访问与发信量。
-
-## 官方参考
-
-- [Cloudflare Email Service 价格与任意收件人限制](https://developers.cloudflare.com/email-service/platform/pricing/)
-- [Cloudflare 邮件发送及域名配置](https://developers.cloudflare.com/email-service/get-started/send-emails/)
-- [Cloudflare Workers 自定义域名](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)
-- [Resend 当前价格](https://resend.com/pricing)
-- [Resend 发信域名验证](https://resend.com/docs/dashboard/domains/introduction)
-- [MDN：第三方 Cookie 与浏览器限制](https://developer.mozilla.org/en-US/docs/Web/Privacy/Guides/Third-party_cookies)
-- [MDN：HTTP Cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies)
+- [Cloudflare D1 batch 原子操作](https://developers.cloudflare.com/d1/worker-api/d1-database/)
+- [Cloudflare 节点限流边界](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/)
+- [Email Routing 接入](https://developers.cloudflare.com/email-service/get-started/route-emails/)
+- [Email Worker 接收 API](https://developers.cloudflare.com/email-service/api/route-emails/email-handler/)
+- [OWASP 凭据找回设计](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html)

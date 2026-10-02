@@ -1,0 +1,418 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { DatabaseSync } from "node:sqlite";
+import { readFileSync } from "node:fs";
+import worker from "./worker.mjs";
+import { identityAdmin, cleanupIdentities } from "./identity.mjs";
+import { inboxAdmin } from "./inbox.mjs";
+let db, env;
+const sql = (query, args = []) => ({
+  bind(...values) {
+    return sql(query, values);
+  },
+  async first() {
+    return db.prepare(query).get(...args) || null;
+  },
+  async all() {
+    return { results: db.prepare(query).all(...args) };
+  },
+  async run() {
+    const r = db.prepare(query).run(...args);
+    return {
+      meta: {
+        changes: Number(r.changes),
+        last_row_id: Number(r.lastInsertRowid),
+      },
+    };
+  },
+});
+const realFetch = globalThis.fetch;
+globalThis.fetch = async (url, options) => {
+  assert.ok(String(url).includes("/siteverify"));
+  return Response.json({
+    success: JSON.parse(options.body).response === "valid",
+    hostname: "westcreeper.com",
+    action: "community",
+  });
+};
+test.beforeEach(() => {
+  db = new DatabaseSync(":memory:");
+  db.exec("PRAGMA foreign_keys=ON");
+  for (const name of [
+    "0001_initial.sql",
+    "0002_management.sql",
+    "0003_identities.sql",
+    "0004_inbox.sql",
+  ])
+    db.exec(
+      readFileSync(new URL("migrations/" + name, import.meta.url), "utf8"),
+    );
+  env = {
+    DB: {
+      prepare: sql,
+      async batch(items) {
+        db.exec("BEGIN");
+        try {
+          const out = [];
+          for (const s of items) out.push(await s.run());
+          db.exec("COMMIT");
+          return out;
+        } catch (e) {
+          db.exec("ROLLBACK");
+          throw e;
+        }
+      },
+    },
+    IDENTITY_ENABLED: "true",
+    IDENTITY_ORIGIN: "https://community.example.test",
+    IDENTITY_PEPPER: "test-only-strong-random-key",
+    ALLOWED_ORIGINS: "https://westcreeper.com",
+    TURNSTILE_HOSTNAMES: "westcreeper.com",
+    TURNSTILE_SECRET: "test-secret",
+    SUBMISSIONS_ENABLED: "true",
+    CONTACT_EMAIL: "contact@westcreeper.com",
+    POST_LIMITER: {
+      async limit() {
+        return { success: true };
+      },
+    },
+  };
+});
+test.afterEach(() => db.close());
+test.after(() => (globalThis.fetch = realFetch));
+async function call(path, data, options = {}) {
+  const r = await worker.fetch(
+    new Request("https://community.example.test" + path, {
+      method: data ? "POST" : "GET",
+      headers: {
+        Origin: options.origin || "https://westcreeper.com",
+        "CF-Connecting-IP": options.ip || "192.0.2.1",
+        ...(data ? { "Content-Type": "application/json" } : {}),
+        ...(options.cookie ? { Cookie: options.cookie } : {}),
+      },
+      body: data ? JSON.stringify(data) : undefined,
+    }),
+    env,
+  );
+  return {
+    status: r.status,
+    data: await r.json(),
+    cookie: r.headers.get("Set-Cookie")?.split(";")[0],
+    headers: r.headers,
+  };
+}
+const register = (nickname = "像素旅人", ip = "192.0.2.1") =>
+  call(
+    "/api/identity/register",
+    { nickname, token: "valid", saved_ack: true },
+    { ip },
+  );
+const login = (r, ip = "192.0.2.9") =>
+  call(
+    "/api/identity/login",
+    {
+      public_id: r.data.identity.public_id,
+      recovery_code: r.data.recovery_code,
+      token: "valid",
+    },
+    { ip },
+  );
+async function manage(r, data) {
+  const url = new URL(
+    "https://community.example.test/api/admin/identities/" +
+      r.data.identity.public_id,
+  );
+  const request = new Request(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  return identityAdmin(request, env, url, "owner@example.test");
+}
+test("registration issues a private cookie and a separate recovery code; posting derives the author server-side", async () => {
+  const r = await register();
+  assert.equal(r.status, 201);
+  assert.match(r.data.identity.public_id, /^[1-9]\d{7}$/);
+  assert.match(r.data.recovery_code, /^(?:[a-f0-9]{8}-){7}[a-f0-9]{8}$/);
+  for (const flag of ["HttpOnly", "Secure", "SameSite=Lax", "Path=/"])
+    assert.ok(r.headers.get("Set-Cookie").includes(flag));
+  assert.equal(
+    (await call("/api/identity/me", null, { cookie: r.cookie })).data.identity
+      .nickname,
+    "像素旅人",
+  );
+  const raw = db.prepare("SELECT * FROM identities").get();
+  assert.notEqual(raw.recovery_hash, r.data.recovery_code.replaceAll("-", ""));
+  assert.equal(
+    (
+      await call(
+        "/api/identity/register",
+        { nickname: "另一个人", token: "valid", saved_ack: true },
+        { cookie: r.cookie },
+      )
+    ).status,
+    409,
+  );
+  const entry = {
+    scope: "board",
+    category: "chat",
+    title: "测试身份",
+    body: "正常留言内容",
+    nickname: "伪造站长",
+    author_id: 999,
+    token: "valid",
+  };
+  assert.equal((await call("/api/entries", entry)).status, 401);
+  assert.equal(
+    (await call("/api/entries", entry, { cookie: r.cookie })).status,
+    202,
+  );
+  const saved = db.prepare("SELECT * FROM entries").get();
+  assert.equal(saved.nickname, "像素旅人");
+  assert.equal(saved.author_id, raw.id);
+  assert.equal(saved.status, "pending");
+  db.prepare("UPDATE entries SET status='approved'").run();
+  const listed = (await call("/api/entries?scope=all")).data.items[0];
+  assert.equal(listed.author_code, r.data.identity.public_id);
+  assert.ok(!JSON.stringify(listed).includes("recovery"));
+  for (const route of ["/api/admin/identities", "/api/admin/inbox"])
+    assert.equal((await call(route)).status, 403);
+  assert.equal(
+    (
+      await call(
+        "/api/identity/login",
+        {
+          public_id: r.data.identity.public_id,
+          recovery_code: r.data.recovery_code,
+          token: "valid",
+        },
+        { origin: "https://evil.test" },
+      )
+    ).status,
+    403,
+  );
+});
+test("nickname uniqueness normalizes full-width, case and whitespace; rename cooldown is exactly seven days", async () => {
+  const r = await register("Ｐｌａｙｅｒ A");
+  assert.equal(r.status, 201);
+  assert.equal((await register("playera", "192.0.2.2")).status, 409);
+  assert.equal((await register("名字\u200b隐藏", "192.0.2.3")).status, 400);
+  assert.equal(
+    (
+      await call(
+        "/api/identity/rename",
+        { nickname: "新昵称" },
+        { cookie: r.cookie },
+      )
+    ).status,
+    409,
+  );
+  db.prepare("UPDATE identities SET nickname_changed_at=?").run(
+    Math.floor(Date.now() / 1000) - 604800,
+  );
+  assert.equal(
+    (
+      await call(
+        "/api/identity/rename",
+        { nickname: "新昵称" },
+        { cookie: r.cookie },
+      )
+    ).status,
+    200,
+  );
+  assert.equal(
+    (
+      await call(
+        "/api/identity/rename",
+        { nickname: "再次修改" },
+        { cookie: r.cookie },
+      )
+    ).status,
+    409,
+  );
+  assert.equal((await register("新 昵称", "192.0.2.4")).status, 409);
+});
+test("claim cooldown, rolling network/global quota and captcha reject excess registrations", async () => {
+  assert.equal((await register()).status, 201);
+  assert.equal((await register("第二个")).status, 429);
+  for (let i = 2; i <= 3; i++) {
+    db.prepare("UPDATE identity_claims SET created_at=created_at-601").run();
+    assert.equal((await register("领取" + i)).status, 201);
+  }
+  db.prepare("UPDATE identity_claims SET created_at=created_at-601").run();
+  assert.equal((await register("第四个")).status, 429);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM identities").get().n, 3);
+  const bad = await call(
+    "/api/identity/register",
+    { nickname: "无效验证", token: "bad", saved_ack: true },
+    { ip: "192.0.2.30" },
+  );
+  assert.equal(bad.status, 400);
+  assert.equal(
+    (
+      await call(
+        "/api/identity/register",
+        { nickname: "未确认保存", token: "valid", saved_ack: false },
+        { ip: "192.0.2.31" },
+      )
+    ).status,
+    400,
+  );
+  const t = Math.floor(Date.now() / 1000);
+  for (let i = 3; i < 100; i++) {
+    const a = db
+      .prepare(
+        "INSERT INTO identities(public_id,nickname,nickname_key,recovery_hash,created_at,nickname_changed_at) VALUES (?,?,?,?,?,?)",
+      )
+      .run(String(20000000 + i), "模拟" + i, "mock" + i, "hash", t, t);
+    db.prepare("INSERT INTO identity_claims VALUES (?,?,?)").run(
+      a.lastInsertRowid,
+      "mock",
+      t,
+    );
+  }
+  assert.equal((await register("全站超额", "192.0.2.99")).status, 429);
+});
+test("recovery restores the same identity; rotation revokes old code and other devices but survives response loss", async () => {
+  const r = await register(),
+    second = await login(r);
+  assert.equal(second.status, 200);
+  assert.equal(second.data.identity.public_id, r.data.identity.public_id);
+  const rotated = await call(
+    "/api/identity/rotate",
+    { confirm: true },
+    { cookie: r.cookie },
+  );
+  assert.equal(rotated.status, 200);
+  assert.equal(
+    (await call("/api/identity/me", null, { cookie: second.cookie })).data
+      .identity,
+    null,
+  );
+  assert.equal(
+    (await call("/api/identity/me", null, { cookie: r.cookie })).data.identity
+      .public_id,
+    r.data.identity.public_id,
+  );
+  assert.equal((await login(r)).status, 401);
+  assert.equal((await login(rotated)).status, 200);
+  assert.equal(
+    (await call("/api/identity/logout", {}, { cookie: r.cookie })).status,
+    200,
+  );
+  assert.equal(
+    (await call("/api/identity/me", null, { cookie: r.cookie })).data.identity,
+    null,
+  );
+});
+test("identity administration excludes secrets, bans invalidate sessions and login, cleanup removes expired credentials", async () => {
+  const r = await register();
+  const url = new URL(
+    "https://community.example.test/api/admin/identities?q=" +
+      encodeURIComponent("像素"),
+  );
+  const list = await (
+    await identityAdmin(new Request(url), env, url, "owner@example.test")
+  ).json();
+  assert.equal(list.items.length, 1);
+  assert.ok(!JSON.stringify(list).includes("hash"));
+  await manage(r, {
+    action: "ban",
+    expected_revision: 1,
+    reason: "测试违规处理依据",
+  });
+  assert.equal(
+    (await call("/api/identity/me", null, { cookie: r.cookie })).data.identity,
+    null,
+  );
+  assert.equal((await login(r)).status, 401);
+  assert.equal(
+    db.prepare("SELECT action FROM identity_log").get().action,
+    "ban",
+  );
+  await assert.rejects(
+    () =>
+      manage(r, {
+        action: "unban",
+        expected_revision: 1,
+        reason: "旧版本不能覆盖",
+      }),
+    /更新/,
+  );
+  await cleanupIdentities(env);
+  assert.equal(
+    db.prepare("SELECT COUNT(*) AS n FROM identity_sessions").get().n,
+    0,
+  );
+});
+test("login brute-force attempts are limited even across requests with invalid codes", async () => {
+  for (let i = 0; i < 10; i++)
+    assert.equal(
+      (
+        await call("/api/identity/login", {
+          public_id: "12345678",
+          recovery_code: "a".repeat(64),
+          token: "valid",
+        })
+      ).status,
+      401,
+    );
+  assert.equal(
+    (
+      await call("/api/identity/login", {
+        public_id: "12345678",
+        recovery_code: "a".repeat(64),
+        token: "valid",
+      })
+    ).status,
+    429,
+  );
+});
+test("inbox accepts only the contact address, parses MIME as inert text, deduplicates, and keeps mail private", async () => {
+  const raw =
+    "From: Visitor <visitor@example.test>\r\nTo: contact@westcreeper.com\r\nSubject: =?UTF-8?B?6aW85bmy5om+5Zue?=\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n<script>evil()</script>\n饼干编号 12345678";
+  const message = (to = "contact@westcreeper.com") => ({
+    from: "visitor@example.test",
+    to,
+    rawSize: new TextEncoder().encode(raw).length,
+    raw: new Blob([raw]).stream(),
+    setReject(reason) {
+      this.rejected = reason;
+    },
+  });
+  const wrong = message("other@westcreeper.com");
+  await worker.email(wrong, env);
+  assert.ok(wrong.rejected);
+  const valid = message();
+  await worker.email(valid, env);
+  await worker.email(message(), env);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM inbox").get().n, 1);
+  const url = new URL("https://community.example.test/api/admin/inbox");
+  const data = await (
+    await inboxAdmin(new Request(url), env, url, "owner@example.test")
+  ).json();
+  assert.equal(data.items[0].subject, "饼干找回");
+  assert.match(data.items[0].body, /<script>/);
+  assert.equal((await call("/api/inbox")).status, 404);
+  assert.equal((await call("/api/admin/inbox")).status, 403);
+  const itemUrl = new URL(url + "/1");
+  await inboxAdmin(
+    new Request(itemUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        state: "done",
+        note: "已核验线索",
+        expected_revision: 1,
+      }),
+    }),
+    env,
+    itemUrl,
+    "owner@example.test",
+  );
+  assert.equal(db.prepare("SELECT state FROM inbox").get().state, "done");
+  const large = message();
+  large.rawSize = 600000;
+  await worker.email(large, env);
+  assert.ok(large.rejected);
+});

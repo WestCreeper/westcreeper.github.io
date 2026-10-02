@@ -1,41 +1,22 @@
+import { receiveMail, inboxAdmin } from "./inbox.mjs";
+import {
+  identityApi,
+  identityAdmin,
+  visitor,
+  limit,
+  cleanupIdentities,
+} from "./identity.mjs";
+import { verifyChallenge } from "./challenge.mjs";
+import { HttpError, fail, csv, json, number, text, body } from "./http.mjs";
 import gameIds from "./game-ids.json" with { type: "json" };
 import { authenticate } from "./auth.mjs";
 const games = new Set(gameIds);
 const categories = ["feedback", "find", "chat"];
 const statuses = ["pending", "approved", "rejected", "hidden"];
 const fields =
-  "e.id,e.scope,e.parent_id,e.category,e.title,e.nickname,e.body,e.progress,e.created_at";
+  "e.id,e.scope,e.parent_id,e.category,e.title,e.nickname,e.body,e.progress,e.created_at,(SELECT public_id FROM identities WHERE id=e.author_id) AS author_code";
 const visibleParent =
   "(e.parent_id IS NULL OR EXISTS (SELECT 1 FROM entries p WHERE p.id=e.parent_id AND p.status='approved' AND p.deleted_at IS NULL))";
-class HttpError extends Error {
-  constructor(status, message) {
-    super(message);
-    this.status = status;
-  }
-}
-const fail = (status, message) => {
-  throw new HttpError(status, message);
-};
-const csv = (v) =>
-  (v || "")
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-const json = (data, status = 200) =>
-  new Response(JSON.stringify(data), {
-    status,
-    headers: { "Content-Type": "application/json; charset=utf-8" },
-  });
-function number(value, fallback = null) {
-  if (value === null || value === undefined || value === "") return fallback;
-  if (
-    !/^\d+$/.test(String(value)) ||
-    !Number.isSafeInteger(Number(value)) ||
-    Number(value) < 1
-  )
-    fail(400, "分页或留言编号无效。");
-  return Number(value);
-}
 function scope(value) {
   if (
     value === "board" ||
@@ -45,51 +26,6 @@ function scope(value) {
   )
     return value;
   fail(400, "未找到对应的游戏档案。");
-}
-function text(value, min, max, label) {
-  if (typeof value !== "string") fail(400, `请填写${label}。`);
-  const s = value.trim();
-  if (
-    s.length < min ||
-    s.length > max ||
-    /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/.test(s)
-  )
-    fail(400, `${label}需为 ${min}–${max} 个字符。`);
-  return s;
-}
-async function body(request) {
-  if (
-    !(request.headers.get("content-type") || "").startsWith("application/json")
-  )
-    fail(415, "请使用 JSON 提交。");
-  if (!request.body) fail(400, "提交内容为空。");
-  const reader = request.body.getReader();
-  let size = 0;
-  const chunks = [];
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    size += value.length;
-    if (size > 16384) {
-      await reader.cancel();
-      fail(413, "提交内容过长。");
-    }
-    chunks.push(value);
-  }
-  const bytes = new Uint8Array(size);
-  let offset = 0;
-  for (const chunk of chunks) {
-    bytes.set(chunk, offset);
-    offset += chunk.length;
-  }
-  try {
-    const value = JSON.parse(new TextDecoder().decode(bytes));
-    if (!value || typeof value !== "object" || Array.isArray(value))
-      throw new Error();
-    return value;
-  } catch {
-    fail(400, "提交格式无效。");
-  }
 }
 function page(rows) {
   const more = rows.length > 20;
@@ -107,6 +43,8 @@ async function parent(db, id, targetScope) {
   return p;
 }
 async function publicApi(request, env, url) {
+  if (url.pathname.startsWith("/api/identity/"))
+    return identityApi(request, env, url);
   if (url.pathname !== "/api/entries") fail(404, "页面不存在。");
   if (request.method === "GET") {
     const requestedScope = url.searchParams.get("scope");
@@ -167,8 +105,14 @@ async function publicApi(request, env, url) {
   const data = await body(request);
   const s = scope(data.scope),
     parentId = number(data.parent_id);
-  const nickname = text(data.nickname, 1, 32, "昵称");
-  // Nicknames are display text only; Access JWTs determine moderator identity.
+  const identity =
+    env.IDENTITY_ENABLED === "true" ? await visitor(request, env, true) : null;
+  if (identity && url.origin !== env.IDENTITY_ORIGIN)
+    fail(403, "请从正式社区地址投稿。");
+  if (identity) await limit(env, "post:" + identity.id, 10, 60);
+  const nickname = identity
+    ? identity.nickname
+    : text(data.nickname, 1, 32, "昵称");
   const message = text(data.body, 2, 2000, "内容");
   const p = parentId ? await parent(env.DB, parentId, s) : null;
   const category = p ? p.category : s === "board" ? data.category : "game";
@@ -179,33 +123,11 @@ async function publicApi(request, env, url) {
     fail(400, "请选择讨论分类。");
   const title =
     s === "board" && !parentId ? text(data.title, 2, 80, "标题") : "";
-  const token = text(data.token, 1, 2048, "人机验证");
-  let verified;
-  try {
-    const response = await fetch(
-      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ secret: env.TURNSTILE_SECRET, response: token }),
-        signal: AbortSignal.timeout(8000),
-      },
-    );
-    if (!response.ok) fail(503, "验证服务暂不可用，请稍后重试。");
-    verified = await response.json();
-  } catch {
-    fail(503, "验证服务暂不可用，请稍后重试。");
-  }
-  if (
-    !verified.success ||
-    verified.action !== "community" ||
-    !csv(env.TURNSTILE_HOSTNAMES).includes(verified.hostname)
-  )
-    fail(400, "人机验证已失效，请重新验证。");
+  await verifyChallenge(data.token, env);
   // Client-supplied moderation fields are deliberately ignored. The SQL default is pending.
   const result = await env.DB.prepare(
-    `INSERT INTO entries(scope,parent_id,category,title,nickname,body)
-    SELECT ?,?,?,?,?,? WHERE ? IS NULL OR EXISTS (SELECT 1 FROM entries WHERE id=? AND scope=? AND parent_id IS NULL AND status='approved' AND deleted_at IS NULL)`,
+    `INSERT INTO entries(scope,parent_id,category,title,nickname,body,author_id)
+    SELECT ?,?,?,?,?,?,? WHERE (? IS NULL OR EXISTS (SELECT 1 FROM entries WHERE id=? AND scope=? AND parent_id IS NULL AND status='approved' AND deleted_at IS NULL)) AND (? IS NULL OR EXISTS (SELECT 1 FROM identities WHERE id=? AND state='active' AND credential_version=?))`,
   )
     .bind(
       s,
@@ -214,9 +136,13 @@ async function publicApi(request, env, url) {
       title,
       nickname,
       message,
+      identity?.id || null,
       parentId,
       parentId,
       s,
+      identity?.id || null,
+      identity?.id || null,
+      identity?.credential_version || null,
     )
     .run();
   if (!result.meta.changes) fail(409, "这条讨论已被收起，请刷新页面。");
@@ -226,6 +152,10 @@ async function publicApi(request, env, url) {
   );
 }
 async function adminApi(request, env, url, email) {
+  if (url.pathname.startsWith("/api/admin/inbox"))
+    return inboxAdmin(request, env, url, email);
+  if (url.pathname.startsWith("/api/admin/identities"))
+    return identityAdmin(request, env, url, email);
   if (url.pathname === "/api/admin/entries" && request.method === "GET") {
     const status = url.searchParams.get("status") || "pending";
     if (status !== "all" && !statuses.includes(status))
@@ -268,6 +198,12 @@ async function adminApi(request, env, url, email) {
       clauses.push("e.progress=?");
       args.push(progress);
     }
+    const author = url.searchParams.get("author");
+    if (author) {
+      if (!/^\d{8}$/.test(author)) fail(400, "饼干编号需为 8 位数字。");
+      clauses.push("e.author_id=(SELECT id FROM identities WHERE public_id=?)");
+      args.push(author);
+    }
     const query = text(url.searchParams.get("q") || "", 0, 100, "搜索关键词");
     if (query) {
       clauses.push(
@@ -276,7 +212,7 @@ async function adminApi(request, env, url, email) {
       args.push(query, query, query);
     }
     const { results } = await env.DB.prepare(
-      `SELECT e.*,p.title AS parent_title,p.body AS parent_body,p.status AS parent_status FROM entries e LEFT JOIN entries p ON p.id=e.parent_id WHERE ${clauses.join(" AND ")} ORDER BY e.id DESC LIMIT 21`,
+      `SELECT e.*,(SELECT public_id FROM identities WHERE id=e.author_id) AS author_code,p.title AS parent_title,p.body AS parent_body,p.status AS parent_status FROM entries e LEFT JOIN entries p ON p.id=e.parent_id WHERE ${clauses.join(" AND ")} ORDER BY e.id DESC LIMIT 21`,
     )
       .bind(...args)
       .all();
@@ -300,6 +236,11 @@ async function adminApi(request, env, url, email) {
       let changed;
       if (data.action === "edit") {
         const nickname = text(data.nickname, 1, 32, "昵称");
+        if (existing.author_id && nickname !== existing.nickname)
+          fail(
+            400,
+            "饼干留言的昵称快照不能在此冒改，请通过饼干管理处理违规身份。",
+          );
         const message = text(data.body, 2, 2000, "内容");
         const title =
           existing.scope === "board" && !existing.parent_id
@@ -396,6 +337,12 @@ async function adminApi(request, env, url, email) {
   fail(404, "页面不存在。");
 }
 export default {
+  async email(message, env) {
+    await receiveMail(message, env);
+  },
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(cleanupIdentities(env));
+  },
   async fetch(request, env) {
     const url = new URL(request.url);
     const admin =
@@ -417,7 +364,11 @@ export default {
         else {
           if (request.method !== "GET") fail(405, "不支持此操作。");
           const path = url.pathname.replace(/^\/admin\/?/, "") || "index.html";
-          if (!["index.html", "admin.js", "admin.css"].includes(path))
+          if (
+            !["index.html", "admin.js", "management.js", "admin.css"].includes(
+              path,
+            )
+          )
             fail(404, "页面不存在。");
           // Ask for the canonical asset URL. /index.html redirects to / and
           // would otherwise send the browser outside the protected /admin path.
@@ -455,6 +406,7 @@ export default {
       response.headers.set("Vary", "Origin");
       if (allowed) {
         response.headers.set("Access-Control-Allow-Origin", origin);
+        response.headers.set("Access-Control-Allow-Credentials", "true");
         response.headers.set(
           "Access-Control-Allow-Methods",
           "GET,POST,OPTIONS",

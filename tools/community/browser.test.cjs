@@ -48,11 +48,47 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         remove: () => {},
       };
     });
+    let identityEnabled = false,
+      profile = null;
+    const recoveryCode = "abcd1234-".repeat(7) + "abcd1234";
     await page.route(
-      "https://westcreeper-community.xiaoshuochyo.workers.dev/api/entries**",
+      "https://westcreeper-community.xiaoshuochyo.workers.dev/api/**",
       async (route) => {
         const req = route.request(),
           url = new URL(req.url());
+        if (url.pathname === "/api/identity/me")
+          return route.fulfill({
+            json: { enabled: identityEnabled, identity: profile },
+          });
+        if (url.pathname.startsWith("/api/identity/")) {
+          const mode = url.pathname.split("/").pop(),
+            data = req.postDataJSON();
+          if (mode === "register" || mode === "login") {
+            if (mode === "login") {
+              assert.equal(data.public_id, "12345678");
+              assert.equal(data.recovery_code, recoveryCode);
+            }
+            profile = {
+              public_id: "12345678",
+              nickname: "浏览器玩家",
+              state: "active",
+              rename_after: Math.floor(Date.now() / 1000) + 604800,
+            };
+          }
+          if (mode === "logout") profile = null;
+          if (mode === "rename")
+            return route.fulfill({
+              status: 409,
+              json: { error: "领取或上次改名后需满 7 天才能更改昵称。" },
+            });
+          return route.fulfill({
+            json: {
+              identity: profile,
+              message: "操作完成",
+              ...(mode === "register" ? { recovery_code: recoveryCode } : {}),
+            },
+          });
+        }
         publicRequests.push({
           url,
           data: req.method() === "POST" ? req.postDataJSON() : null,
@@ -102,7 +138,9 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
       "game:dadnme",
     );
     await page.getByRole("button", { name: "回复", exact: true }).click();
-    await page.locator("input[name=nickname]").fill("西部苦力怕");
+    await page
+      .locator("[data-community-form] input[name=nickname]")
+      .fill("西部苦力怕");
     await page.locator("textarea[name=body]").fill("感谢分享连招心得");
     await page.getByRole("button", { name: "送交审核" }).click();
     await page.waitForFunction(() =>
@@ -159,11 +197,113 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
           );
       }
     }
+
+    identityEnabled = true;
+    await page.goto(origin + "/guestbook/");
+    await page.locator("[data-cookie-panel]").waitFor();
+    await page.getByRole("button", { name: "发起讨论", exact: true }).click();
+    assert.ok(!(await page.locator("[data-community-form]").isVisible()));
+    await page.getByRole("button", { name: "领取饼干", exact: true }).click();
+    await page
+      .locator("[data-cookie-form] input[name=nickname]")
+      .fill("浏览器玩家");
+    await page.locator("[data-cookie-form] input[type=checkbox]").check();
+    await page.locator("[data-cookie-form] button[type=submit]").click();
+    await page.locator("[data-cookie-backup]").waitFor();
+    assert.equal(
+      await page.locator("[data-cookie-backup-code]").inputValue(),
+      recoveryCode,
+    );
+    await page.setViewportSize({ width: 390, height: 900 });
+    assert.ok(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth + 1,
+      ),
+    );
+    await page.screenshot({
+      path: path.join(os.tmpdir(), "westcreeper-cookie-mobile.png"),
+      fullPage: true,
+    });
+    page.once("dialog", (d) => d.accept());
+    await page.getByRole("button", { name: "我已保存", exact: true }).click();
+    await page.getByRole("button", { name: "发起讨论", exact: true }).click();
+    assert.equal(
+      await page
+        .locator("[data-community-form] input[name=nickname]")
+        .inputValue(),
+      "浏览器玩家",
+    );
+    assert.ok(
+      await page
+        .locator("[data-community-form] input[name=nickname]")
+        .evaluate((e) => e.readOnly),
+    );
+    await page.locator("[data-community-cancel]").click();
+    await page.getByRole("button", { name: "修改昵称", exact: true }).click();
+    await page
+      .locator("[data-cookie-form] input[name=nickname]")
+      .fill("新昵称");
+    await page.locator("[data-cookie-form] button[type=submit]").click();
+    await page.waitForFunction(() =>
+      document
+        .querySelector("[data-cookie-status]")
+        .textContent.includes("7 天"),
+    );
+    await page.locator("[data-cookie-cancel]").click();
+    await page.getByRole("button", { name: "退出", exact: true }).click();
+    await page.getByRole("button", { name: "恢复码登录", exact: true }).click();
+    await page
+      .locator("[data-cookie-form] input[name=public_id]")
+      .fill("12345678");
+    await page
+      .locator("[data-cookie-form] input[name=recovery_code]")
+      .fill(recoveryCode);
+    await page.locator("[data-cookie-form] button[type=submit]").click();
+    await page.waitForFunction(() =>
+      document
+        .querySelector("[data-cookie-summary]")
+        .textContent.includes("浏览器玩家"),
+    );
     let rows = [{ ...board, status: "approved", revision: 1, parent_id: null }];
     const adminRequests = [];
     await page.route("http://community.test/**", async (route) => {
       const req = route.request(),
         url = new URL(req.url());
+      if (url.pathname.startsWith("/api/admin/identities"))
+        return route.fulfill({
+          json: {
+            items: [
+              {
+                id: 1,
+                ...profile,
+                revision: 1,
+                created_at: 1700000000,
+                nickname_changed_at: 1700000000,
+                entries: 2,
+                sessions: 1,
+              },
+            ],
+            next: null,
+          },
+        });
+      if (url.pathname.startsWith("/api/admin/inbox"))
+        return route.fulfill({
+          json: {
+            items: [
+              {
+                id: 1,
+                sender: "visitor@example.test",
+                recipient: "contact@westcreeper.com",
+                subject: "饼干找回求助",
+                body: "<script>evil()</script> 希望找回饼干",
+                received_at: 1700000000,
+                revision: 1,
+                state: "unread",
+              },
+            ],
+            next: null,
+          },
+        });
       if (url.pathname.startsWith("/api/admin/entries")) {
         if (req.method() === "GET")
           return route.fulfill({
@@ -183,11 +323,13 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
           }));
         return route.fulfill({ json: { message: "已保存。" } });
       }
-      const name = url.pathname.endsWith(".js")
-        ? "admin.js"
-        : url.pathname.endsWith(".css")
-          ? "admin.css"
-          : "index.html";
+      const name = url.pathname.endsWith("/management.js")
+        ? "management.js"
+        : url.pathname.endsWith(".js")
+          ? "admin.js"
+          : url.pathname.endsWith(".css")
+            ? "admin.css"
+            : "index.html";
       return route.fulfill({
         body: readFileSync(path.join(__dirname, "admin", name)),
         contentType: name.endsWith(".js")
@@ -231,6 +373,21 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     );
     assert.equal(adminRequests.at(-1).expected_revision, 2);
     assert.equal(adminRequests.at(-1).action, "delete");
+    await page.getByRole("button", { name: "饼干管理", exact: true }).click();
+    await page.locator("#cookies-list article").waitFor();
+    assert.match(await page.locator("#cookies-list").innerText(), /12345678/);
+    await page.getByRole("button", { name: "邮件收件箱", exact: true }).click();
+    await page.locator("#inbox-list article").waitFor();
+    await page.locator("#inbox-list summary").click();
+    assert.match(
+      await page.locator("#inbox-list .body").innerText(),
+      /<script>/,
+    );
+    assert.equal(await page.locator("#inbox-list script").count(), 0);
+    await page.screenshot({
+      path: path.join(os.tmpdir(), "westcreeper-inbox-mobile.png"),
+      fullPage: true,
+    });
     assert.deepEqual(errors, []);
     console.log(
       JSON.stringify(

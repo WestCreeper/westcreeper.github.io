@@ -2,3 +2,5 @@
 .dev.vars
 .env*
 wrangler.jsonc
+
+!package-lock.json
