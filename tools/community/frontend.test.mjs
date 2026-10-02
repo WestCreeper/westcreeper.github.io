@@ -43,6 +43,8 @@ function fixture({
   enabled = "true",
   api = "https://community.example.test",
   replyCount = 0,
+  feed = "",
+  itemScope = "board",
 } = {}) {
   const nodes = {};
   for (const name of [
@@ -75,7 +77,7 @@ function fixture({
   ];
   form.elements.category.value = "find";
   const root = new Element();
-  root.dataset = { enabled, api, siteKey: "public-key", scope: "board" };
+  root.dataset = { enabled, api, siteKey: "public-key", scope: "board", feed };
   root.querySelector = (s) => nodes[s.slice("[data-community-".length, -1)];
   const calls = [],
     created = [];
@@ -118,6 +120,7 @@ function fixture({
       items: [
         {
           id: 1,
+          scope: itemScope,
           nickname: "<script>visitor</script>",
           body: "<img src=x onerror=alert(1)>",
           category: "find",
@@ -222,4 +225,42 @@ test("failed submissions retain text; reply fields exclude new-topic validation"
   assert.match(f.nodes["form-status"].textContent, /文字已保留/);
   assert.equal(JSON.parse(f.calls.at(-1).options.body).parent_id, 1);
   assert.equal(f.form.elements.title.disabled, true);
+});
+
+test("unified board auto-loads and replies retain the original game scope", async () => {
+  const f = fixture({ feed: "all", itemScope: "game:dadnme", replyCount: 1 });
+  await settle();
+  assert.equal(new URL(f.calls[0].url).searchParams.get("scope"), "all");
+  f.nodes.category.value = "game";
+  await f.nodes.category.fire("change");
+  await settle();
+  assert.equal(
+    new URL(f.calls.at(-1).url).searchParams.get("category"),
+    "game",
+  );
+  const details = f.created.find((e) => e.tagName === "details");
+  details.open = true;
+  await details.fire("toggle");
+  await settle();
+  assert.equal(
+    new URL(f.calls.at(-1).url).searchParams.get("scope"),
+    "game:dadnme",
+  );
+  const reply = f.created.find(
+    (e) => e.tagName === "button" && e.textContent === "回复",
+  );
+  await reply.fire("click");
+  await settle();
+  f.form.elements.nickname.value = "玩家";
+  f.form.elements.body.value = "这是游戏回复";
+  await f.form.fire("submit");
+  const payload = JSON.parse(f.calls.at(-1).options.body);
+  assert.equal(payload.scope, "game:dadnme");
+  assert.equal(payload.parent_id, 1);
+  await f.nodes.write.fire("click");
+  await settle();
+  f.form.elements.body.value = "新的寻找游戏";
+  f.form.elements.title.value = "寻找游戏";
+  await f.form.fire("submit");
+  assert.equal(JSON.parse(f.calls.at(-1).options.body).scope, "board");
 });

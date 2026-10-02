@@ -107,9 +107,9 @@ bundle exec jekyll build
 - 讨论版与游戏评论采用 Cloudflare 审核服务；未开启时保留 GitHub 历史留言。配置见下方说明。
 - 已有文章正文及外部图片地址保留，外部图片可用性仍取决于原托管站点。
 
-## 讨论版与游戏评论
+## 留言板与游戏评论
 
-第一版已加入昵称投稿、游戏独立评论、意见反馈／寻找游戏／闲聊分类及审核后台。新服务默认关闭，待 Cloudflare Worker、D1、Turnstile 与 Access 配置并验收后，修改 `_data/community.yml` 开启。完整部署、费用与回退说明见 [tools/community/README.md](tools/community/README.md)。不要在该 YAML 或博客前端填写私钥。
+当前已接入并开启 Cloudflare Worker、D1、Turnstile 与 Access。顶部“留言板”汇总游戏评论、寻找游戏、问题建议与闲聊，主帖和回复均先审核后公开。后台支持组合筛选、编辑和删除；删除主帖会一并移除其回复并保留私有审计记录。更新服务前先应用 D1 迁移，再部署 Worker；博客导航与留言页修改仍需推送 GitHub Pages。完整部署、费用与回退说明见 [tools/community/README.md](tools/community/README.md)。不要在该 YAML 或博客前端填写私钥。
 
 ## GitHub 历史留言维护
 

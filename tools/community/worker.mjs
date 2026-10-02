@@ -6,7 +6,7 @@ const statuses = ["pending", "approved", "rejected", "hidden"];
 const fields =
   "e.id,e.scope,e.parent_id,e.category,e.title,e.nickname,e.body,e.progress,e.created_at";
 const visibleParent =
-  "(e.parent_id IS NULL OR EXISTS (SELECT 1 FROM entries p WHERE p.id=e.parent_id AND p.status='approved'))";
+  "(e.parent_id IS NULL OR EXISTS (SELECT 1 FROM entries p WHERE p.id=e.parent_id AND p.status='approved' AND p.deleted_at IS NULL))";
 class HttpError extends Error {
   constructor(status, message) {
     super(message);
@@ -99,7 +99,7 @@ function page(rows) {
 async function parent(db, id, targetScope) {
   const p = await db
     .prepare(
-      "SELECT * FROM entries WHERE id=? AND scope=? AND parent_id IS NULL AND status='approved'",
+      "SELECT * FROM entries WHERE id=? AND scope=? AND parent_id IS NULL AND status='approved' AND deleted_at IS NULL",
     )
     .bind(id, targetScope)
     .first();
@@ -109,32 +109,43 @@ async function parent(db, id, targetScope) {
 async function publicApi(request, env, url) {
   if (url.pathname !== "/api/entries") fail(404, "页面不存在。");
   if (request.method === "GET") {
-    const s = scope(url.searchParams.get("scope"));
+    const requestedScope = url.searchParams.get("scope");
+    const s = ["all", "games"].includes(requestedScope)
+      ? requestedScope
+      : scope(requestedScope);
     const parentId = number(url.searchParams.get("parent"));
     const before = number(
       url.searchParams.get("before"),
       Number.MAX_SAFE_INTEGER,
     );
     const category = url.searchParams.get("category") || "";
-    if (category && !categories.includes(category)) fail(400, "分类无效。");
+    if (category && ![...categories, "game"].includes(category))
+      fail(400, "分类无效。");
+    if (parentId && ["all", "games"].includes(s))
+      fail(400, "请指定回复所属的讨论区。");
     if (parentId) await parent(env.DB, parentId, s);
     const clauses = [
-      "e.scope=?",
       "e.status='approved'",
+      "e.deleted_at IS NULL",
       "e.id<?",
       visibleParent,
     ];
-    const args = [s, before];
+    const args = [before];
+    if (s === "games") clauses.push("e.category='game'");
+    else if (s !== "all") {
+      clauses.push("e.scope=?");
+      args.push(s);
+    }
     if (parentId) {
       clauses.push("e.parent_id=?");
       args.push(parentId);
     } else clauses.push("e.parent_id IS NULL");
-    if (category && s === "board" && !parentId) {
+    if (category && !parentId) {
       clauses.push("e.category=?");
       args.push(category);
     }
     const { results } = await env.DB.prepare(
-      `SELECT ${fields},(SELECT COUNT(*) FROM entries r WHERE r.parent_id=e.id AND r.status='approved') AS replies FROM entries e WHERE ${clauses.join(" AND ")} ORDER BY e.id DESC LIMIT 21`,
+      `SELECT ${fields},(SELECT COUNT(*) FROM entries r WHERE r.parent_id=e.id AND r.status='approved' AND r.deleted_at IS NULL) AS replies FROM entries e WHERE ${clauses.join(" AND ")} ORDER BY e.id DESC LIMIT 21`,
     )
       .bind(...args)
       .all();
@@ -157,8 +168,7 @@ async function publicApi(request, env, url) {
   const s = scope(data.scope),
     parentId = number(data.parent_id);
   const nickname = text(data.nickname, 1, 32, "昵称");
-  if (/站长|管理员|westcreeper|西部苦力怕/i.test(nickname))
-    fail(400, "请使用自己的昵称，站长称呼为保留名称。");
+  // Nicknames are display text only; Access JWTs determine moderator identity.
   const message = text(data.body, 2, 2000, "内容");
   const p = parentId ? await parent(env.DB, parentId, s) : null;
   const category = p ? p.category : s === "board" ? data.category : "game";
@@ -195,7 +205,7 @@ async function publicApi(request, env, url) {
   // Client-supplied moderation fields are deliberately ignored. The SQL default is pending.
   const result = await env.DB.prepare(
     `INSERT INTO entries(scope,parent_id,category,title,nickname,body)
-    SELECT ?,?,?,?,?,? WHERE ? IS NULL OR EXISTS (SELECT 1 FROM entries WHERE id=? AND scope=? AND parent_id IS NULL AND status='approved')`,
+    SELECT ?,?,?,?,?,? WHERE ? IS NULL OR EXISTS (SELECT 1 FROM entries WHERE id=? AND scope=? AND parent_id IS NULL AND status='approved' AND deleted_at IS NULL)`,
   )
     .bind(
       s,
@@ -218,15 +228,57 @@ async function publicApi(request, env, url) {
 async function adminApi(request, env, url, email) {
   if (url.pathname === "/api/admin/entries" && request.method === "GET") {
     const status = url.searchParams.get("status") || "pending";
-    if (!statuses.includes(status)) fail(400, "审核状态无效。");
+    if (status !== "all" && !statuses.includes(status))
+      fail(400, "审核状态无效。");
     const before = number(
       url.searchParams.get("before"),
       Number.MAX_SAFE_INTEGER,
     );
+    const clauses = [
+        "e.deleted_at IS NULL",
+        "e.id<?",
+        "(e.parent_id IS NULL OR p.deleted_at IS NULL)",
+      ],
+      args = [before];
+    if (status !== "all") {
+      clauses.push("e.status=?");
+      args.push(status);
+    }
+    const category = url.searchParams.get("category");
+    if (category) {
+      if (![...categories, "game"].includes(category)) fail(400, "分类无效。");
+      clauses.push("e.category=?");
+      args.push(category);
+    }
+    const targetScope = url.searchParams.get("scope");
+    if (targetScope) {
+      clauses.push("e.scope=?");
+      args.push(scope(targetScope));
+    }
+    const kind = url.searchParams.get("kind");
+    if (kind && !["topic", "reply"].includes(kind)) fail(400, "留言类型无效。");
+    if (kind)
+      clauses.push(
+        kind === "topic" ? "e.parent_id IS NULL" : "e.parent_id IS NOT NULL",
+      );
+    const progress = url.searchParams.get("progress");
+    if (progress) {
+      if (!["open", "working", "done"].includes(progress))
+        fail(400, "处理进度无效。");
+      clauses.push("e.progress=?");
+      args.push(progress);
+    }
+    const query = text(url.searchParams.get("q") || "", 0, 100, "搜索关键词");
+    if (query) {
+      clauses.push(
+        "(instr(lower(e.nickname),lower(?))>0 OR instr(lower(e.title),lower(?))>0 OR instr(lower(e.body),lower(?))>0)",
+      );
+      args.push(query, query, query);
+    }
     const { results } = await env.DB.prepare(
-      `SELECT e.*,p.title AS parent_title,p.body AS parent_body,p.status AS parent_status FROM entries e LEFT JOIN entries p ON p.id=e.parent_id WHERE e.status=? AND e.id<? ORDER BY e.id DESC LIMIT 21`,
+      `SELECT e.*,p.title AS parent_title,p.body AS parent_body,p.status AS parent_status FROM entries e LEFT JOIN entries p ON p.id=e.parent_id WHERE ${clauses.join(" AND ")} ORDER BY e.id DESC LIMIT 21`,
     )
-      .bind(status, before)
+      .bind(...args)
       .all();
     return json({ ...page(results), moderator: email });
   }
@@ -234,6 +286,74 @@ async function adminApi(request, env, url, email) {
   if (match && request.method === "POST") {
     const id = number(match[1]);
     const data = await body(request);
+    const revision = number(data.expected_revision);
+    if (!revision) fail(400, "请刷新后台后再操作。");
+    const existing = await env.DB.prepare(
+      "SELECT * FROM entries WHERE id=? AND deleted_at IS NULL AND (parent_id IS NULL OR EXISTS (SELECT 1 FROM entries p WHERE p.id=entries.parent_id AND p.deleted_at IS NULL))",
+    )
+      .bind(id)
+      .first();
+    if (!existing || existing.revision !== revision)
+      fail(409, "内容已更新或删除，请刷新后重试。");
+    const reason = text(data.reason || "", 0, 300, "审核备注");
+    if (data.action === "edit" || data.action === "delete") {
+      let changed;
+      if (data.action === "edit") {
+        const nickname = text(data.nickname, 1, 32, "昵称");
+        const message = text(data.body, 2, 2000, "内容");
+        const title =
+          existing.scope === "board" && !existing.parent_id
+            ? text(data.title, 2, 80, "标题")
+            : "";
+        const category =
+          existing.scope === "board" && !existing.parent_id
+            ? data.category
+            : existing.category;
+        if (
+          ![...categories, "game"].includes(category) ||
+          (existing.scope === "board" && category === "game")
+        )
+          fail(400, "分类无效。");
+        const after = { nickname, body: message, title, category };
+        changed = await env.DB.batch([
+          env.DB.prepare(
+            "UPDATE entries SET nickname=?,body=?,title=?,category=?,revision=revision+1 WHERE id=? AND revision=? AND deleted_at IS NULL AND (parent_id IS NULL OR EXISTS (SELECT 1 FROM entries p WHERE p.id=entries.parent_id AND p.deleted_at IS NULL))",
+          ).bind(nickname, message, title, category, id, revision),
+          env.DB.prepare(
+            "INSERT INTO content_log(entry_id,moderator,action,before_json,after_json,reason) SELECT ?,?,'edit',?,?,? WHERE changes()=1",
+          ).bind(
+            id,
+            email,
+            JSON.stringify(existing),
+            JSON.stringify(after),
+            reason,
+          ),
+          env.DB.prepare(
+            "UPDATE entries SET category=?,revision=revision+1 WHERE parent_id=? AND category!=? AND changes()=1",
+          ).bind(category, id, category),
+        ]);
+      } else {
+        // Retain a tombstone and private audit history; deleted threads cannot be restored via moderation.
+        changed = await env.DB.batch([
+          env.DB.prepare(
+            "UPDATE entries SET deleted_at=strftime('%Y-%m-%dT%H:%M:%fZ','now'),revision=revision+1 WHERE id=? AND revision=? AND deleted_at IS NULL",
+          ).bind(id, revision),
+          env.DB.prepare(
+            "INSERT INTO content_log(entry_id,moderator,action,before_json,after_json,reason) SELECT ?,?,'delete',?,'{}',? WHERE changes()=1",
+          ).bind(id, email, JSON.stringify(existing), reason),
+          env.DB.prepare(
+            "UPDATE entries SET deleted_at=strftime('%Y-%m-%dT%H:%M:%fZ','now'),revision=revision+1 WHERE parent_id=? AND deleted_at IS NULL AND changes()=1",
+          ).bind(id),
+        ]);
+      }
+      if (!changed[0].meta.changes) fail(409, "内容已更新，请刷新后重试。");
+      return json({
+        message:
+          data.action === "delete" ? "已删除留言及其回复。" : "已保存编辑。",
+        revision: revision + 1,
+      });
+    }
+    if (data.action && data.action !== "moderate") fail(400, "操作无效。");
     if (
       !statuses.includes(data.status) ||
       !["open", "working", "done"].includes(data.progress) ||
@@ -241,18 +361,19 @@ async function adminApi(request, env, url, email) {
       !["open", "working", "done"].includes(data.expected_progress)
     )
       fail(400, "审核状态无效。");
-    const reason = text(data.reason || "", 0, 300, "审核备注");
     // Batch keeps the decision and audit trail atomic. Optimistic concurrency avoids stale edits.
     const changed = await env.DB.batch([
       env.DB.prepare(
-        `UPDATE entries SET status=?,progress=? WHERE id=? AND status=? AND progress=?
-        AND (? != 'approved' OR parent_id IS NULL OR EXISTS (SELECT 1 FROM entries p WHERE p.id=entries.parent_id AND p.status='approved'))`,
+        `UPDATE entries SET status=?,progress=?,revision=revision+1 WHERE id=? AND status=? AND progress=? AND revision=? AND deleted_at IS NULL
+        AND (parent_id IS NULL OR EXISTS (SELECT 1 FROM entries p WHERE p.id=entries.parent_id AND p.deleted_at IS NULL))
+        AND (? != 'approved' OR parent_id IS NULL OR EXISTS (SELECT 1 FROM entries p WHERE p.id=entries.parent_id AND p.status='approved' AND p.deleted_at IS NULL))`,
       ).bind(
         data.status,
         data.progress,
         id,
         data.expected_status,
         data.expected_progress,
+        revision,
         data.status,
       ),
       env.DB.prepare(

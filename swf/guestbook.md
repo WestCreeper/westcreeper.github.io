@@ -1,13 +1,13 @@
 ---
 layout: studio
-title: 讨论版
+title: 留言板
 permalink: /guestbook/
 description: 提一个建议，寻找一部记忆中的游戏，聊聊属于你的 Flash 回忆。
 ---
 <div class="container collection-page guestbook-page">
-  <header class="page-intro"><div class="eyebrow">EVERY GAME HAS A STORY</div><h1>讨论版</h1><p>提一个建议，找一部记忆中的游戏，或聊聊属于你的 Flash 回忆。</p></header>
-  {% include studio/community.html scope='board' title='来自大家的声音' description='意见反馈、寻找游戏与闲聊交流。填写昵称即可发言，主帖和回复均在审核通过后展示。' %}
-  <aside class="guestbook-welcome"><h2>以前的留言，还在这里</h2><p>旧留言与回复保留在 GitHub。新讨论服务开放前，也可以通过这个入口联系我。GitHub 上的内容直接公开，不经过本站的发布前审核。</p><a class="button" href="https://github.com/{{ site.repository | escape }}/issues" target="_blank" rel="noopener noreferrer">查看 GitHub 历史留言 {% include studio/icon.html name='external' %}</a></aside>
+  <header class="page-intro"><div class="eyebrow">EVERY GAME HAS A STORY</div><h1>留言板</h1><p>提一个建议，找一部记忆中的游戏，或聊聊属于你的 Flash 回忆。</p></header>
+  {% include studio/community.html scope='board' feed='all' title='来自大家的声音' description='汇集游戏评论、寻找游戏、问题建议与闲聊交流。选择分类查看，展开留言参与回复。填写昵称即可发言，主帖和回复均在审核通过后展示。' %}
+  <aside class="guestbook-welcome"><h2>以前的留言，还在这里</h2><p>旧留言与回复保留在 GitHub。新的留言与回复请使用上方表单。GitHub 上的内容直接公开，不经过本站的发布前审核。</p><a class="button" href="https://github.com/{{ site.repository | escape }}/issues" target="_blank" rel="noopener noreferrer">查看 GitHub 历史留言 {% include studio/icon.html name='external' %}</a></aside>
   {% unless site.data.community.enabled %}
   <section data-guestbook data-repository="{{ site.repository | escape }}" aria-label="GitHub 历史留言">
     <template data-guestbook-link-icon>{% include studio/icon.html name='external' %}</template>

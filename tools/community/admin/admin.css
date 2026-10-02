@@ -113,3 +113,53 @@ footer {
     --soft: #2c3a2b;
   }
 }
+.search {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+.search label {
+  flex: 1 1 180px;
+}
+textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 140px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 12px;
+}
+.editor {
+  border-top: 2px solid var(--line);
+  margin-top: 20px;
+  padding-top: 8px;
+}
+.editor button {
+  margin-right: 10px;
+}
+.danger {
+  color: #ba5147;
+}
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+@media (max-width: 540px) {
+  article {
+    padding: 16px;
+  }
+  nav label {
+    flex: 1 1 130px;
+  }
+  nav select {
+    width: 100%;
+  }
+}

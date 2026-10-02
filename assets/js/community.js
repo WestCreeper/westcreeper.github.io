@@ -64,6 +64,14 @@
     }
     const base = apiURL.origin + apiURL.pathname.replace(/\/$/, "");
     const scope = root.dataset.scope;
+    const feed = root.dataset.feed === "all" ? "all" : scope;
+    const gameLinks = new Map(
+      [...root.querySelectorAll("[data-game-id]")].map((link) => [
+        "game:" + link.dataset.gameId,
+        { title: link.textContent, url: link.getAttribute("href") },
+      ]),
+    );
+    let replyScope = scope;
     let cursor = null,
       reading = false,
       submitting = false,
@@ -115,16 +123,25 @@
         meta.append(
           el(
             "span",
-            { feedback: "意见反馈", find: "寻找游戏", chat: "闲聊交流" }[
-              item.category
-            ],
+            {
+              game: "游戏评论区",
+              feedback: "问题建议",
+              find: "寻找游戏",
+              chat: "闲聊交流",
+            }[item.category],
             "community-badge",
           ),
         );
-        if (item.category !== "chat")
+        if (["find", "feedback"].includes(item.category))
           meta.append(el("span", progressLabel(item), "community-badge"));
       }
       article.append(meta);
+      const game = gameLinks.get(item.scope);
+      if (game && !isReply) {
+        const link = el("a", "来自游戏：" + game.title, "community-game-link");
+        link.href = game.url;
+        article.append(link);
+      }
       if (item.title) article.append(el("h3", item.title));
       article.append(el("p", item.body, "community-card-body"));
       if (!isReply) {
@@ -149,7 +166,7 @@
             state.textContent = "读取回复中…";
             try {
               const data = await api({
-                scope,
+                scope: item.scope || scope,
                 parent: item.id,
                 ...(nextCursor ? { before: nextCursor } : {}),
               });
@@ -187,7 +204,7 @@
       status.textContent = "正在读取已公开的讨论…";
       try {
         const data = await api({
-          scope,
+          scope: feed,
           ...(filter?.value ? { category: filter.value } : {}),
           ...(!reset && cursor ? { before: cursor } : {}),
         });
@@ -252,6 +269,7 @@
       if (submitting) return;
       receipt = false;
       parentId = item?.id || null;
+      replyScope = item?.scope || scope;
       form.hidden = false;
       find("[data-community-form-title]").textContent = item
         ? `回复：${item.title || item.nickname}`
@@ -288,7 +306,7 @@
         return;
       }
       const payload = {
-        scope,
+        scope: replyScope,
         parent_id: parentId,
         nickname: form.elements.nickname.value,
         body: form.elements.body.value,
@@ -329,5 +347,6 @@
     writeButton.addEventListener("click", () => openForm());
     find("[data-community-cancel]").addEventListener("click", closeForm);
     form.elements.category?.addEventListener("change", hint);
+    if (feed === "all") load();
   }
 })();

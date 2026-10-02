@@ -131,3 +131,9 @@
     padding-left: 8px;
   }
 }
+.community-game-link {
+  display: inline-block;
+  margin: 10px 0;
+  color: var(--green);
+  font-size: 13px;
+}

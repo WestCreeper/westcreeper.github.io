@@ -4,8 +4,15 @@ import { DatabaseSync } from "node:sqlite";
 import { readFileSync } from "node:fs";
 import worker from "./worker.mjs";
 const sqlite = new DatabaseSync(":memory:");
+sqlite.exec("PRAGMA foreign_keys=ON");
 sqlite.exec(
   readFileSync(new URL("migrations/0001_initial.sql", import.meta.url), "utf8"),
+);
+sqlite.exec(
+  readFileSync(
+    new URL("migrations/0002_management.sql", import.meta.url),
+    "utf8",
+  ),
 );
 const statement = (sql, args = []) => ({
   bind(...params) {
@@ -156,6 +163,9 @@ async function moderate(
   return call(`/api/admin/entries/${id}`, {
     admin: true,
     data: {
+      expected_revision:
+        sqlite.prepare("SELECT revision FROM entries WHERE id=?").get(id)
+          ?.revision || 1,
       status,
       progress,
       expected_status,
@@ -304,7 +314,7 @@ test("Turnstile, origin, limits, lengths and disabled configuration fail closed"
     503,
   );
   assert.equal(
-    (await call("/api/entries", { data: { ...draft, nickname: "站长" } }))
+    (await call("/api/entries", { data: { ...draft, nickname: "   " } }))
       .status,
     400,
   );
@@ -421,6 +431,237 @@ test("pagination has no overlap; moderation conflicts do not create audit record
     before,
   );
 });
+test("owner-like nicknames submit as ordinary pending comments without gaining privileges", async () => {
+  for (const nickname of ["西部苦力怕", "WestCreeper", "站长", "管理员"]) {
+    const response = await call("/api/entries", {
+      data: { ...draft, nickname, status: "approved", role: "admin" },
+    });
+    assert.equal(response.status, 202, nickname);
+    const id = latest();
+    const row = sqlite
+      .prepare("SELECT nickname,status FROM entries WHERE id=?")
+      .get(id);
+    assert.equal(row.nickname, nickname);
+    assert.equal(row.status, "pending");
+    const publicEntries = (await call("/api/entries?scope=board")).value.items;
+    assert.ok(!publicEntries.some((entry) => entry.id === id));
+  }
+  assert.equal((await call("/api/admin/entries")).status, 403);
+  const rejected = await call("/api/entries", {
+    data: { ...draft, nickname: "西部苦力怕", token: "bad" },
+  });
+  assert.equal(rejected.status, 400);
+  assert.match(rejected.value.error, /人机验证/);
+});
+
+test("unified feed filters games and board categories without leaking pending or hidden content", async () => {
+  const all = (await call("/api/entries?scope=all")).value;
+  assert.equal(all.items.length, 20);
+  const next = (await call(`/api/entries?scope=all&before=${all.next}`)).value;
+  assert.equal(
+    new Set([...all.items, ...next.items].map((i) => i.id)).size,
+    all.items.length + next.items.length,
+  );
+  const game = (await call("/api/entries?scope=all&category=game")).value.items;
+  assert.ok(game.length);
+  assert.ok(game.every((i) => i.scope.startsWith("game:")));
+  assert.deepEqual((await call("/api/entries?scope=games")).value.items, game);
+  assert.equal(
+    (await call("/api/entries?scope=all&category=find")).value.items.length,
+    0,
+  );
+  assert.equal((await call("/api/entries?scope=all&parent=1")).status, 400);
+  assert.equal(
+    (await call("/api/entries", { data: { ...draft, scope: "all" } })).status,
+    400,
+  );
+});
+test("admin edits are validated, audited, conflict-safe and preserve approval status", async () => {
+  await call("/api/entries", { data: draft });
+  const id = latest();
+  await moderate(id, "approved");
+  await call("/api/entries", { data: { ...draft, parent_id: id } });
+  const reply = latest();
+  const edit = {
+    action: "edit",
+    expected_revision: 2,
+    nickname: "修订玩家",
+    title: "修正标题",
+    body: "<script>文本不会作为 HTML 执行</script>",
+    category: "feedback",
+    reason: "修正分类",
+  };
+  assert.equal(
+    (await call(`/api/admin/entries/${id}`, { data: edit })).status,
+    403,
+  );
+  assert.equal(
+    (
+      await call(`/api/admin/entries/${id}`, {
+        admin: true,
+        data: { ...edit, body: "x" },
+      })
+    ).status,
+    400,
+  );
+  assert.equal(
+    (await call(`/api/admin/entries/${id}`, { admin: true, data: edit }))
+      .status,
+    200,
+  );
+  const row = sqlite.prepare("SELECT * FROM entries WHERE id=?").get(id);
+  assert.equal(row.revision, 3);
+  assert.equal(row.status, "approved");
+  assert.equal(row.body, edit.body);
+  assert.equal(
+    sqlite
+      .prepare("SELECT category,revision FROM entries WHERE id=?")
+      .get(reply).category,
+    "feedback",
+  );
+  const logs = sqlite
+    .prepare("SELECT * FROM content_log WHERE entry_id=?")
+    .all(id);
+  assert.equal(logs.length, 1);
+  assert.equal(JSON.parse(logs[0].before_json).nickname, draft.nickname);
+  assert.equal(
+    (await call(`/api/admin/entries/${id}`, { admin: true, data: edit }))
+      .status,
+    409,
+  );
+  assert.equal(
+    sqlite
+      .prepare("SELECT COUNT(*) AS n FROM content_log WHERE entry_id=?")
+      .get(id).n,
+    1,
+  );
+  const stale = await call(`/api/admin/entries/${id}`, {
+    admin: true,
+    data: {
+      expected_revision: 2,
+      status: "hidden",
+      progress: "open",
+      expected_status: "approved",
+      expected_progress: "open",
+    },
+  });
+  assert.equal(stale.status, 409);
+  const filtered = await call(
+    "/api/admin/entries?status=all&category=feedback&kind=topic&progress=open&q=修订玩家&scope=board",
+    { admin: true },
+  );
+  assert.deepEqual(
+    filtered.value.items.map((i) => i.id),
+    [id],
+  );
+  assert.equal(
+    (
+      await call("/api/admin/entries?status=all&kind=reply&category=feedback", {
+        admin: true,
+      })
+    ).value.items[0].id,
+    reply,
+  );
+  assert.equal(
+    (await call("/api/admin/entries?status=all&q=%25", { admin: true })).value
+      .items.length,
+    0,
+  );
+  for (const query of [
+    "category=invalid",
+    "kind=invalid",
+    "scope=game:invalid",
+    "progress=invalid",
+  ])
+    assert.equal(
+      (await call("/api/admin/entries?" + query, { admin: true })).status,
+      400,
+    );
+});
+test("deleted threads and replies disappear everywhere and cannot be revived by stale edits", async () => {
+  await call("/api/entries", { data: draft });
+  const id = latest();
+  await moderate(id, "approved");
+  await call("/api/entries", { data: { ...draft, parent_id: id } });
+  const reply = latest();
+  await moderate(reply, "approved");
+  const deleteReply = { action: "delete", expected_revision: 2 };
+  assert.equal(
+    (
+      await call(`/api/admin/entries/${reply}`, {
+        admin: true,
+        data: deleteReply,
+      })
+    ).status,
+    200,
+  );
+  assert.equal(
+    (await call(`/api/entries?scope=board&parent=${id}`)).value.items.length,
+    0,
+  );
+  assert.equal(
+    (await call("/api/entries?scope=all")).value.items.find((i) => i.id === id)
+      .replies,
+    0,
+  );
+  await call("/api/entries", { data: { ...draft, parent_id: id } });
+  const child = latest();
+  await moderate(child, "approved");
+  assert.equal(
+    (
+      await call(`/api/admin/entries/${id}`, {
+        admin: true,
+        data: { action: "delete", expected_revision: 2 },
+      })
+    ).status,
+    200,
+  );
+  for (const feed of ["board", "all"])
+    assert.ok(
+      !(await call("/api/entries?scope=" + feed)).value.items.some(
+        (i) => i.id === id,
+      ),
+    );
+  assert.equal(
+    (await call(`/api/entries?scope=board&parent=${id}`)).status,
+    404,
+  );
+  assert.equal(
+    (await call("/api/entries", { data: { ...draft, parent_id: id } })).status,
+    404,
+  );
+  assert.ok(
+    !(
+      await call("/api/admin/entries?status=all", { admin: true })
+    ).value.items.some((i) => [id, child, reply].includes(i.id)),
+  );
+  assert.equal(
+    (await moderate(child, "approved", "open", "approved")).status,
+    409,
+  );
+  assert.equal(
+    (
+      await call(`/api/admin/entries/${id}`, {
+        admin: true,
+        data: { action: "edit", expected_revision: 3, ...draft },
+      })
+    ).status,
+    409,
+  );
+  assert.ok(
+    sqlite.prepare("SELECT deleted_at FROM entries WHERE id=?").get(child)
+      .deleted_at,
+  );
+  assert.equal(
+    sqlite
+      .prepare(
+        "SELECT COUNT(*) AS n FROM content_log WHERE entry_id=? AND action='delete'",
+      )
+      .get(id).n,
+    1,
+  );
+});
+
 test.after(() => {
   globalThis.fetch = originalFetch;
   sqlite.close();
