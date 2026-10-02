@@ -22,7 +22,9 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
       id: 9,
       scope: "game:dadnme",
       category: "game",
-      nickname: "玩家甲",
+      nickname: "西部苦力怕",
+      author_code: "00000000",
+      author_avatar: "moss",
       body: "这个游戏的连招很有意思！",
       title: "",
       progress: "open",
@@ -34,6 +36,7 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
       id: 10,
       scope: "board",
       category: "find",
+      author_code: "12345678",
       title: "寻找童年的闯关游戏",
       body: "主角会搬箱子，想找回这部游戏。",
       replies: 0,
@@ -54,6 +57,8 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         nickname: "浏览器玩家",
         state: "active",
         rename_after: Math.floor(Date.now() / 1000) + 604800,
+        revision: 1,
+        avatar: "moss",
       };
     const recoveryCode = "abcd1234-".repeat(7) + "abcd1234";
     await page.route(
@@ -78,8 +83,16 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
               nickname: "浏览器玩家",
               state: "active",
               rename_after: Math.floor(Date.now() / 1000) + 604800,
+              revision: 1,
+              avatar: "moss",
             };
           }
+          if (mode === "avatar")
+            profile = {
+              ...profile,
+              avatar: data.avatar,
+              revision: (profile.revision || 1) + 1,
+            };
           if (mode === "logout") profile = null;
           if (mode === "rename")
             return route.fulfill({
@@ -109,6 +122,8 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
                 ...game,
                 id: 11,
                 parent_id: 9,
+                author_code: "87654321",
+                author_avatar: "fox",
                 body: "可以试试组合按键。",
                 replies: 0,
               },
@@ -138,6 +153,9 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     );
     await page.locator(".community-card summary").click();
     await page.locator(".community-replies article").waitFor();
+    assert.ok(await page.locator(".community-owner-name").isVisible());
+    assert.ok(await page.locator(".community-id-op").isVisible());
+    assert.ok(await page.locator(".community-id-reply").isVisible());
     assert.equal(
       publicRequests.at(-1).url.searchParams.get("scope"),
       "game:dadnme",
@@ -248,6 +266,18 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         .evaluate((e) => e.readOnly),
     );
     await page.locator("[data-community-cancel]").click();
+    await page.locator("[data-cookie-avatars] summary").click();
+    await page.locator("[data-cookie-avatar=fox]").click();
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector("[data-cookie-avatar=fox]")
+          .getAttribute("aria-pressed") === "true",
+    );
+    await page.screenshot({
+      path: path.join(os.tmpdir(), "westcreeper-avatars-mobile.png"),
+      fullPage: true,
+    });
     await page.getByRole("button", { name: "修改昵称", exact: true }).click();
     await page
       .locator("[data-cookie-form] input[name=nickname]")

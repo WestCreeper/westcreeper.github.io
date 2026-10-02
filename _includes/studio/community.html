@@ -3,6 +3,7 @@
   <p class="community-lead">{{ include.description }}</p>
   <section class="cookie-panel" data-cookie-panel hidden aria-label="我的饼干">
     <h3>我的饼干</h3><p data-cookie-summary role="status"></p>
+    <details data-cookie-avatars hidden><summary>选择我的头像</summary><p class="community-notice">八款像素头像，点击即可保存。不会改变昵称的 7 天冷却。</p><div class="cookie-avatar-grid" aria-label="默认头像">{% for avatar in site.data.community_avatars %}<button type="button" class="cookie-avatar-option" data-cookie-avatar="{{ avatar.id }}" aria-pressed="false"><img src="{{ '/assets/images/avatars/' | append: avatar.id | append: '.svg' | relative_url }}" width="48" height="48" alt="" loading="lazy"><span>{{ avatar.name }}</span></button>{% endfor %}</div></details>
     <div class="community-toolbar"><button class="button" type="button" data-cookie-open="register">领取饼干</button><button class="button" type="button" data-cookie-open="login">恢复码登录</button><button class="button" type="button" data-cookie-open="rename" hidden>修改昵称</button><button class="button" type="button" data-cookie-rotate hidden>重置恢复码</button><button class="button" type="button" data-cookie-logout hidden>退出</button></div>
     <form data-cookie-form hidden>
       <h4 data-cookie-title></h4>
@@ -44,6 +45,6 @@
   </form>
   <noscript><p>启用 JavaScript 后可查看留言和回复，并提交讨论。</p></noscript>
 </section>
-<link rel="stylesheet" href="{{ '/assets/css/community.css' | relative_url }}">
-<script src="{{ '/assets/js/identity.js' | relative_url }}?v=20261002-cookie" defer></script>
-<script src="{{ '/assets/js/community.js' | relative_url }}?v=20261002-cookie" defer></script>
+<link rel="stylesheet" href="{{ '/assets/css/community.css' | relative_url }}?v=20261002-avatars">
+<script src="{{ '/assets/js/identity.js' | relative_url }}?v=20261002-avatars" defer></script>
+<script src="{{ '/assets/js/community.js' | relative_url }}?v=20261002-avatars" defer></script>

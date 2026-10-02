@@ -196,7 +196,11 @@ test("reading is user-triggered and remote markup is rendered as text", async ()
     f.created.some((e) => e.textContent === "<img src=x onerror=alert(1)>"),
   );
   assert.ok(
-    !f.created.some((e) => e.tagName === "img" || e.tagName === "script"),
+    !f.created.some(
+      (e) =>
+        e.tagName === "script" ||
+        (e.tagName === "img" && e.src?.includes("onerror")),
+    ),
   );
   assert.equal(f.calls[0].options.credentials, "include");
 });

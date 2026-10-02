@@ -43,6 +43,7 @@ test.beforeEach(() => {
     "0002_management.sql",
     "0003_identities.sql",
     "0004_inbox.sql",
+    "0005_avatars.sql",
   ])
     db.exec(
       readFileSync(new URL("migrations/" + name, import.meta.url), "utf8"),
@@ -452,4 +453,100 @@ test("all new posts require a cookie; disabling identity never restores nickname
   assert.equal(feed.status, 200);
   assert.equal(feed.data.items[0].author_code, null);
   assert.equal(feed.data.items[0].nickname, "历史访客");
+});
+
+test("avatars are authenticated, allowlisted, revision-safe and independent of nickname cooldown", async () => {
+  const r = await register();
+  assert.equal(r.data.identity.avatar, "moss");
+  assert.equal(r.data.identity.is_owner, false);
+  assert.equal(
+    (
+      await call("/api/identity/avatar", {
+        avatar: "fox",
+        expected_revision: 1,
+      })
+    ).status,
+    401,
+  );
+  assert.equal(
+    (
+      await call(
+        "/api/identity/avatar",
+        { avatar: "https://evil.test/tracker.svg", expected_revision: 1 },
+        { cookie: r.cookie },
+      )
+    ).status,
+    400,
+  );
+  const changed = await call(
+    "/api/identity/avatar",
+    { avatar: "fox", expected_revision: 1 },
+    { cookie: r.cookie },
+  );
+  assert.equal(changed.status, 200);
+  assert.equal(changed.data.identity.avatar, "fox");
+  assert.equal(
+    changed.data.identity.rename_after,
+    r.data.identity.rename_after,
+  );
+  assert.equal(
+    (
+      await call(
+        "/api/identity/avatar",
+        { avatar: "robot", expected_revision: 1 },
+        { cookie: r.cookie },
+      )
+    ).status,
+    409,
+  );
+  assert.equal(
+    (await call("/api/identity/me", null, { cookie: r.cookie })).data.identity
+      .avatar,
+    "fox",
+  );
+  await call(
+    "/api/entries",
+    {
+      scope: "board",
+      category: "chat",
+      title: "头像测试",
+      body: "查看我的头像",
+      token: "valid",
+      author_code: "00000000",
+      author_avatar: "robot",
+    },
+    { cookie: r.cookie },
+  );
+  db.exec("UPDATE entries SET status='approved'");
+  const entry = (await call("/api/entries?scope=all")).data.items[0];
+  assert.equal(entry.author_avatar, "fox");
+  assert.notEqual(entry.author_code, "00000000");
+});
+test("owner name is reserved and special eight-zero ID uses normal recovery authentication", async () => {
+  assert.equal((await register("西部苦力怕")).status, 409);
+  const r = await register("普通访客", "192.0.2.2");
+  db.exec("UPDATE identities SET nickname_changed_at=0");
+  assert.equal(
+    (
+      await call(
+        "/api/identity/rename",
+        { nickname: "西部苦力怕" },
+        { cookie: r.cookie },
+      )
+    ).status,
+    409,
+  );
+  const { digest } = await import("./identity.mjs");
+  const code = "b".repeat(64);
+  db.prepare(
+    "INSERT INTO identities(public_id,nickname,nickname_key,recovery_hash,created_at,nickname_changed_at) VALUES ('00000000','西部苦力怕','西部苦力怕',?,0,0)",
+  ).run(await digest("recovery", code));
+  const signed = await call("/api/identity/login", {
+    public_id: "00000000",
+    recovery_code: code,
+    token: "valid",
+  });
+  assert.equal(signed.status, 200);
+  assert.equal(signed.data.identity.is_owner, true);
+  assert.equal(signed.data.identity.public_id, "00000000");
 });

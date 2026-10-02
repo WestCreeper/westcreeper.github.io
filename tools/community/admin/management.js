@@ -122,6 +122,12 @@
           el("h3", item.nickname + " · #" + item.public_id),
           el(
             "p",
+            "头像：" +
+              (item.avatar || "moss") +
+              (item.public_id === "00000000" ? " · 站长专属身份" : ""),
+          ),
+          el(
+            "p",
             `${item.state === "active" ? "正常" : "已停用"} · ${item.entries} 条留言 · ${item.sessions} 个有效登录`,
           ),
           el(

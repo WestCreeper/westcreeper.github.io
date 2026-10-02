@@ -116,11 +116,38 @@
           : { open: "待处理", working: "处理中", done: "已解决" }
       )[item.progress];
     }
-    function card(item, isReply = false) {
+    const avatarSources = new Map(
+      [...root.querySelectorAll("[data-cookie-avatar]")].map((b) => [
+        b.dataset.cookieAvatar,
+        b.querySelector("img").getAttribute("src"),
+      ]),
+    );
+    root.addEventListener("community-avatar-changed", (event) => {
+      const src = avatarSources.get(event.detail.avatar);
+      if (!src) return;
+      root.querySelectorAll("[data-author-avatar]").forEach((img) => {
+        if (img.dataset.authorAvatar === event.detail.public_id) img.src = src;
+      });
+    });
+    function card(item, isReply = false, topicAuthor = null) {
       const article = el("article", null, "community-card");
       const meta = el("div", null, "community-card-meta");
+      const avatar = el("img", null, "community-avatar");
+      avatar.src =
+        avatarSources.get(item.author_avatar) ||
+        avatarSources.get("moss") ||
+        "";
+      avatar.alt = "";
+      avatar.width = 40;
+      avatar.height = 40;
+      avatar.setAttribute("data-author-avatar", item.author_code || "");
+      if (avatar.src) meta.append(avatar);
       meta.append(
-        el("strong", item.nickname),
+        el(
+          "strong",
+          item.nickname,
+          item.author_code === "00000000" ? "community-owner-name" : "",
+        ),
         el(
           "time",
           new Date(item.created_at).toLocaleString("zh-CN"),
@@ -146,8 +173,15 @@
       meta.append(
         el(
           "span",
-          item.author_code ? "饼干 #" + item.author_code : "旧版访客",
-          "community-badge",
+          item.author_code
+            ? `${!isReply || item.author_code === topicAuthor ? "楼主" : "回复者"} · #${item.author_code}`
+            : "旧版访客",
+          "community-badge " +
+            (item.author_code
+              ? !isReply || item.author_code === topicAuthor
+                ? "community-id-op"
+                : "community-id-reply"
+              : ""),
         ),
       );
       article.append(meta);
@@ -185,7 +219,9 @@
                 parent: item.id,
                 ...(nextCursor ? { before: nextCursor } : {}),
               });
-              data.items.forEach((i) => list.append(card(i, true)));
+              data.items.forEach((i) =>
+                list.append(card(i, true, item.author_code)),
+              );
               nextCursor = data.next;
               loaded = true;
               next.hidden = !nextCursor;

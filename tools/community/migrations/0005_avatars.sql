@@ -1,0 +1,1 @@
+ALTER TABLE identities ADD COLUMN avatar TEXT NOT NULL DEFAULT 'moss';

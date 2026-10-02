@@ -166,3 +166,120 @@
 .cookie-panel p {
   overflow-wrap: anywhere;
 }
+
+/* Original re-ocd-inspired avatars: square tiles, inset borders, restrained palettes. */
+.community-avatar {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+  border-radius: 4px;
+}
+.cookie-avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+.cookie-avatar-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 6px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease;
+}
+.cookie-avatar-option img {
+  image-rendering: pixelated;
+}
+.cookie-avatar-option:hover {
+  transform: translateY(-3px);
+}
+.cookie-avatar-option[aria-pressed="true"] {
+  border-color: var(--green);
+  box-shadow: 3px 3px 0 var(--green);
+  background: var(--green-light);
+}
+.cookie-avatar-option:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 3px;
+}
+[data-cookie-avatars] > summary {
+  cursor: pointer;
+  padding: 12px 0;
+  color: var(--green);
+}
+.community-id-op {
+  color: #674119;
+  background: #f2dfb2;
+  border-color: #ad8245;
+}
+.community-id-reply {
+  color: #245b64;
+  background: #d3e9e7;
+  border-color: #6b9c9b;
+}
+.community-owner-name {
+  color: #8d587d;
+  font-weight: 800;
+}
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .community-owner-name {
+    background: linear-gradient(
+      100deg,
+      #916128,
+      #a75565,
+      #715aa2,
+      #357c85,
+      #577f38,
+      #916128
+    );
+    background-size: 220% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: community-owner-hue 9s linear infinite;
+  }
+}
+@keyframes community-owner-hue {
+  to {
+    background-position: 220% 0;
+  }
+}
+[data-theme="dark"] .community-owner-name {
+  background-image: linear-gradient(
+    100deg,
+    #e3bf70,
+    #e9a7bc,
+    #bba5e1,
+    #8ad1d4,
+    #b9d789,
+    #e3bf70
+  );
+}
+@media (prefers-reduced-motion: reduce) {
+  .community-owner-name {
+    animation: none;
+  }
+  .cookie-avatar-option {
+    transition: none;
+  }
+  .cookie-avatar-option:hover {
+    transform: none;
+  }
+}
+@media (forced-colors: active) {
+  .community-owner-name {
+    color: CanvasText;
+    background: none;
+  }
+}

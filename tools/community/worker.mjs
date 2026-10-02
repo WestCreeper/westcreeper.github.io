@@ -14,7 +14,7 @@ const games = new Set(gameIds);
 const categories = ["feedback", "find", "chat"];
 const statuses = ["pending", "approved", "rejected", "hidden"];
 const fields =
-  "e.id,e.scope,e.parent_id,e.category,e.title,e.nickname,e.body,e.progress,e.created_at,(SELECT public_id FROM identities WHERE id=e.author_id) AS author_code";
+  "e.id,e.scope,e.parent_id,e.category,e.title,e.nickname,e.body,e.progress,e.created_at,(SELECT public_id FROM identities WHERE id=e.author_id) AS author_code,(SELECT avatar FROM identities WHERE id=e.author_id) AS author_avatar";
 const visibleParent =
   "(e.parent_id IS NULL OR EXISTS (SELECT 1 FROM entries p WHERE p.id=e.parent_id AND p.status='approved' AND p.deleted_at IS NULL))";
 function scope(value) {

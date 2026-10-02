@@ -1,5 +1,11 @@
 import { fail, json, text, body, number } from "./http.mjs";
 import { verifyChallenge } from "./challenge.mjs";
+import avatarCatalog from "../../_data/community_avatars.json" with { type: "json" };
+const avatars = new Set(avatarCatalog.map((a) => a.id));
+function availableName(name, owner = false) {
+  if (!owner && name.key === "西部苦力怕")
+    fail(409, "这是站长的专属昵称，请选择其他昵称。");
+}
 const DAY = 86400,
   COOKIE = "__Host-wc_session";
 const now = () => Math.floor(Date.now() / 1000);
@@ -44,6 +50,8 @@ function readCookie(request) {
 function publicIdentity(row) {
   return {
     public_id: row.public_id,
+    avatar: avatars.has(row.avatar) ? row.avatar : "moss",
+    is_owner: row.public_id === "00000000",
     nickname: row.nickname,
     state: row.state,
     created_at: row.created_at,
@@ -161,6 +169,7 @@ export async function identityApi(request, env, url) {
       code = secret(),
       hash = await digest("recovery", code),
       t = now();
+    availableName(name);
     // One transactional INSERT checks rolling claim quotas. D1 serializes the batch.
     for (let attempt = 0; attempt < 5; attempt++) {
       const n = crypto.getRandomValues(new Uint32Array(1))[0];
@@ -245,10 +254,30 @@ export async function identityApi(request, env, url) {
     return r;
   }
   const row = await visitor(request, env, true);
+  if (path === "/api/identity/avatar") {
+    if (!avatars.has(data.avatar)) fail(400, "请选择列表中的头像。");
+    await limit(env, "avatar:" + row.id, 20, 3600);
+    const revision = number(data.expected_revision);
+    const r = await env.DB.prepare(
+      "UPDATE identities SET avatar=?,revision=revision+1 WHERE id=? AND revision=? AND state='active'",
+    )
+      .bind(data.avatar, row.id, revision)
+      .run();
+    if (!r.meta.changes) fail(409, "身份已更新，请刷新后再选择头像。");
+    return json({
+      message: "头像已更新，历史留言也会显示新头像。",
+      identity: publicIdentity({
+        ...row,
+        avatar: data.avatar,
+        revision: row.revision + 1,
+      }),
+    });
+  }
   if (path === "/api/identity/rename") {
     await limit(env, "rename:" + row.id, 10, 3600);
     const name = nickname(data.nickname),
       t = now();
+    availableName(name, row.public_id === "00000000");
     if (row.nickname_changed_at + 7 * DAY > t)
       fail(409, "领取或上次改名后需满 7 天才能更改昵称。");
     if (name.key === row.nickname_key) fail(400, "新昵称与当前昵称相同。");
@@ -321,7 +350,7 @@ export async function identityAdmin(request, env, url, email) {
       state = url.searchParams.get("state") || "";
     if (state && !["active", "banned"].includes(state)) fail(400, "状态无效。");
     const { results } = await env.DB.prepare(
-      `SELECT i.id,i.public_id,i.nickname,i.state,i.created_at,i.nickname_changed_at,i.revision,
+      `SELECT i.id,i.public_id,i.nickname,i.avatar,i.state,i.created_at,i.nickname_changed_at,i.revision,
     (SELECT COUNT(*) FROM entries e WHERE e.author_id=i.id AND e.deleted_at IS NULL) AS entries,
     (SELECT COUNT(*) FROM identity_sessions s WHERE s.identity_id=i.id AND s.expires_at>? AND s.credential_version=i.credential_version) AS sessions
     FROM identities i WHERE i.id<? AND (?='' OR i.state=?) AND (?='' OR instr(i.public_id,?)>0 OR instr(lower(i.nickname),lower(?))>0) ORDER BY i.id DESC LIMIT 21`,

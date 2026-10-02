@@ -40,6 +40,24 @@
           (button.dataset.cookieOpen === "rename" ? !profile : !!profile);
       $("[data-cookie-rotate]").hidden = !profile || profile.state !== "active";
       $("[data-cookie-logout]").hidden = !profile;
+      if (profile?.public_id === "00000000") {
+        const name = document.createElement("strong");
+        name.className = "community-owner-name";
+        name.textContent = profile.nickname;
+        summary.replaceChildren(
+          name,
+          document.createTextNode(
+            ` · 饼干 #${profile.public_id} · 可改名时间：${new Date(profile.rename_after * 1000).toLocaleString("zh-CN")}`,
+          ),
+        );
+      }
+      $("[data-cookie-avatars]").hidden =
+        !profile || profile.state !== "active";
+      for (const b of panel.querySelectorAll("[data-cookie-avatar]"))
+        b.setAttribute(
+          "aria-pressed",
+          String(b.dataset.cookieAvatar === (profile?.avatar || "moss")),
+        );
       onChange(enabled ? profile : null);
     }
     async function refresh() {
@@ -131,6 +149,33 @@
     }
     for (const b of panel.querySelectorAll("[data-cookie-open]"))
       b.addEventListener("click", () => open(b.dataset.cookieOpen));
+    for (const b of panel.querySelectorAll("[data-cookie-avatar]"))
+      b.addEventListener("click", async () => {
+        if (busy || !profile) return;
+        busy = true;
+        const buttons = [...panel.querySelectorAll("[data-cookie-avatar]")];
+        buttons.forEach((e) => (e.disabled = true));
+        try {
+          const data = await api("avatar", {
+            avatar: b.dataset.cookieAvatar,
+            expected_revision: profile.revision,
+          });
+          profile = data.identity;
+          render();
+          status.textContent = data.message;
+          root.dispatchEvent(
+            new CustomEvent("community-avatar-changed", {
+              detail: { public_id: profile.public_id, avatar: profile.avatar },
+            }),
+          );
+        } catch (e) {
+          status.textContent = e.message;
+          await refresh();
+        } finally {
+          busy = false;
+          buttons.forEach((e) => (e.disabled = false));
+        }
+      });
     $("[data-cookie-cancel]").addEventListener("click", () => {
       if (!busy) {
         form.hidden = true;
