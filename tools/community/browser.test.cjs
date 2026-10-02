@@ -40,6 +40,7 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
       title: "寻找童年的闯关游戏",
       body: "主角会搬箱子，想找回这部游戏。",
       replies: 0,
+      reactions: [{ key: "love", count: 2, mine: false }],
     };
     await page.addInitScript(() => {
       window.turnstile = {
@@ -149,6 +150,13 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     );
     await page.goto(origin + "/guestbook/");
     await page.locator(".community-card").nth(1).waitFor();
+    assert.equal(await page.locator("[data-reaction]:visible").count(), 1);
+    assert.equal(
+      await page
+        .locator("[data-reaction=love]:visible .reaction-count")
+        .innerText(),
+      "2",
+    );
     assert.equal(publicRequests[0].url.searchParams.get("scope"), "all");
     assert.equal(
       await page.locator('.main-nav a[aria-current="page"]').innerText(),
@@ -166,6 +174,16 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     );
     await page.locator(".community-card summary").click();
     await page.locator(".community-replies article").waitFor();
+    assert.equal(
+      await page.locator(".community-replies [data-reaction]:visible").count(),
+      0,
+    );
+    assert.equal(
+      await page
+        .locator(".community-replies [data-reaction-add]:visible")
+        .count(),
+      1,
+    );
     assert.ok(await page.locator(".community-owner-name").isVisible());
     assert.ok(await page.locator(".community-id-op").isVisible());
     assert.ok(await page.locator(".community-id-reply").isVisible());
@@ -193,7 +211,31 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     const like = page.locator(
       "[data-community-entries] > article > .community-reactions [data-reaction=like]",
     );
-    await like.click();
+    const reactionBar = page.locator(
+      "[data-community-entries] > article > .community-reactions",
+    );
+    const addReaction = reactionBar.locator("[data-reaction-add]");
+    assert.equal(
+      await reactionBar.locator("[data-reaction]:visible").count(),
+      0,
+    );
+    assert.equal(await reactionBar.locator("button:visible").count(), 1);
+    await addReaction.click();
+    assert.equal(
+      await reactionBar.locator("[data-reaction-option]:visible").count(),
+      6,
+    );
+    await page.keyboard.press("Escape");
+    assert.equal(await addReaction.getAttribute("aria-expanded"), "false");
+    assert.ok(await addReaction.evaluate((b) => b === document.activeElement));
+    await addReaction.click();
+    await page.locator("textarea[name=body]").click();
+    assert.equal(
+      await reactionBar.locator("[data-reaction-option]:visible").count(),
+      0,
+    );
+    await addReaction.click();
+    await reactionBar.locator("[data-reaction-option=like]").click();
     await page.waitForFunction(
       () =>
         document
@@ -203,6 +245,14 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
           .getAttribute("aria-pressed") === "true",
     );
     assert.equal(reactionChoice, "like");
+    assert.equal(
+      await reactionBar.locator("[data-reaction]:visible").count(),
+      1,
+    );
+    assert.equal(
+      await reactionBar.locator("[data-reaction-option]:visible").count(),
+      0,
+    );
     await like.click();
     await page.waitForFunction(
       () =>
@@ -213,12 +263,18 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
           .getAttribute("aria-pressed") === "false",
     );
     assert.equal(reactionChoice, null);
+    assert.equal(
+      await reactionBar.locator("[data-reaction]:visible").count(),
+      0,
+    );
+    assert.ok(await addReaction.evaluate((b) => b === document.activeElement));
     await page
       .locator(".reaction-particle")
       .first()
       .waitFor({ state: "detached" });
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await like.click();
+    await addReaction.click();
+    await reactionBar.locator("[data-reaction-option=like]").click();
     await page.waitForFunction(
       () =>
         document
@@ -228,6 +284,17 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
           .getAttribute("aria-pressed") === "true",
     );
     assert.equal(await page.locator(".reaction-particle").count(), 0);
+    await addReaction.click();
+    await reactionBar.locator("[data-reaction-option=fire]").click();
+    await reactionBar
+      .locator("[data-reaction=fire]")
+      .waitFor({ state: "visible" });
+    assert.equal(reactionChoice, "fire");
+    assert.equal(await like.isVisible(), false);
+    assert.equal(
+      await reactionBar.locator("[data-reaction]:visible").count(),
+      1,
+    );
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.getByRole("button", { name: "取消", exact: true }).click();
     const screenshot = path.join(
@@ -237,12 +304,19 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     await page.screenshot({ path: screenshot, fullPage: true });
     for (const width of [390, 820, 1024, 1440]) {
       await page.setViewportSize({ width, height: 900 });
+      await addReaction.click();
       assert.ok(
         await page.evaluate(
           () => document.documentElement.scrollWidth <= innerWidth + 1,
         ),
         `overflow at ${width}`,
       );
+      if (width === 390) {
+        await reactionBar.screenshot({
+          path: path.join(os.tmpdir(), "westcreeper-reaction-picker.png"),
+        });
+      }
+      await page.keyboard.press("Escape");
       if (width === 390) {
         await page.locator("[data-menu-toggle]").click();
         assert.ok(
