@@ -588,6 +588,20 @@ test("reactions require login and approved content, are idempotent, replaceable 
     .data.items[0];
   assert.deepEqual(feed.reactions, [{ key: "like", count: 2, mine: true }]);
   assert.equal(feed.reactions_owner, a.data.identity.public_id);
+  const members = (await call(path + "?reaction=like")).data;
+  assert.equal(members.items.length, 2);
+  assert.equal(members.next, null);
+  assert.deepEqual(Object.keys(members.items[0]).sort(), [
+    "nickname",
+    "public_id",
+    "reaction",
+  ]);
+  assert.ok(
+    members.items.some((p) => p.public_id === a.data.identity.public_id),
+  );
+  assert.deepEqual((await call(path + "?reaction=fire")).data.items, []);
+  assert.equal((await call(path + "?reaction=bad")).status, 400);
+  assert.equal((await call(path + "?after=-1")).status, 400);
   await call(path, { reaction: "love" }, { cookie: a.cookie });
   assert.equal(
     db.prepare("SELECT COUNT(*) AS n FROM entry_reactions").get().n,
@@ -610,6 +624,7 @@ test("reactions require login and approved content, are idempotent, replaceable 
     403,
   );
   db.exec("UPDATE entries SET status='hidden'");
+  assert.equal((await call(path)).status, 404);
   assert.equal(
     (await call(path, { reaction: "like" }, { cookie: a.cookie })).status,
     404,
@@ -632,6 +647,7 @@ test("reply reactions obey parent visibility and banned identities cannot react"
     200,
   );
   db.exec("UPDATE entries SET status='hidden' WHERE id=1");
+  assert.equal((await call("/api/entries/2/reactions")).status, 404);
   assert.equal(
     (
       await call(
@@ -657,6 +673,7 @@ test("reply reactions obey parent visibility and banned identities cannot react"
   );
   const feed = (await call("/api/entries?scope=board&parent=1")).data;
   assert.deepEqual(feed.items[0].reactions, []);
+  assert.deepEqual((await call("/api/entries/2/reactions")).data.items, []);
   db.exec("UPDATE identities SET state='active'");
   for (let i = 0; i < 30; i++)
     await call(
@@ -674,6 +691,36 @@ test("reply reactions obey parent visibility and banned identities cannot react"
     ).status,
     429,
   );
+});
+test("reaction audience pagination includes zero ID, excludes banned and deleted content, and exposes only public fields", async () => {
+  db.exec(
+    "INSERT INTO entries(scope,category,nickname,body,status) VALUES ('board','chat','访客','正文','approved')",
+  );
+  const insert = db.prepare(
+    "INSERT INTO identities(public_id,nickname,nickname_key,recovery_hash,created_at,nickname_changed_at) VALUES (?,?,?,'private-hash',1,1)",
+  );
+  for (let i = 0; i < 23; i++) {
+    const r = insert.run(String(i).padStart(8, "0"), `用户${i}`, `user${i}`);
+    db.prepare(
+      "INSERT INTO entry_reactions(entry_id,identity_id,reaction,updated_at) VALUES (1,?,'like',1)",
+    ).run(r.lastInsertRowid);
+  }
+  db.exec("UPDATE identities SET state='banned' WHERE public_id='00000022'");
+  const first = (await call("/api/entries/1/reactions?reaction=like")).data;
+  assert.equal(first.items.length, 20);
+  assert.equal(first.items[0].public_id, "00000000");
+  const second = (
+    await call("/api/entries/1/reactions?reaction=like&after=" + first.next)
+  ).data;
+  assert.equal(second.items.length, 2);
+  assert.equal(second.next, null);
+  assert.equal(
+    new Set([...first.items, ...second.items].map((p) => p.public_id)).size,
+    22,
+  );
+  assert.ok(!JSON.stringify(first).includes("private-hash"));
+  db.exec("UPDATE entries SET deleted_at='2026-10-03'");
+  assert.equal((await call("/api/entries/1/reactions")).status, 404);
 });
 test("admin recovery reset requires verification and revision; invalidates codes/sessions without logging secrets", async () => {
   const r = await register();

@@ -21,6 +21,34 @@ export async function addReactions(env, items, viewer) {
   }));
 }
 export async function react(request, env, url) {
+  if (request.method === "GET") {
+    const id = number(url.pathname.split("/")[3]);
+    const reaction = url.searchParams.get("reaction") || "";
+    const after = url.searchParams.get("after") || "";
+    if (
+      (reaction && !allowed.has(reaction)) ||
+      (after && !/^\d{8}$/.test(after))
+    )
+      fail(400, "回应筛选或分页无效。");
+    if (
+      !(await env.DB.prepare(
+        `SELECT e.id FROM entries e WHERE e.id=? AND ${visible}`,
+      )
+        .bind(id)
+        .first())
+    )
+      fail(404, "这条留言尚未公开或已被收起。");
+    const { results } = await env.DB.prepare(
+      `SELECT i.public_id,i.nickname,r.reaction FROM entry_reactions r JOIN identities i ON i.id=r.identity_id AND i.state='active' JOIN entries e ON e.id=r.entry_id WHERE e.id=? AND ${visible} AND i.public_id>? ${reaction ? "AND r.reaction=?" : ""} ORDER BY i.public_id LIMIT 21`,
+    )
+      .bind(id, after, ...(reaction ? [reaction] : []))
+      .all();
+    const items = results.slice(0, 20);
+    return json({
+      items,
+      next: results.length > 20 ? items.at(-1).public_id : null,
+    });
+  }
   if (request.method !== "POST") fail(405, "不支持此操作。");
   if (env.IDENTITY_ENABLED !== "true" || env.SUBMISSIONS_ENABLED !== "true")
     fail(503, "暂时停止接收新回应。");

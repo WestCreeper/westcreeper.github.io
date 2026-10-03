@@ -62,6 +62,7 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         avatar: "moss",
       };
     let reactionChoice = null;
+    let audienceReads = 0;
     const recoveryCode = "abcd1234-".repeat(7) + "abcd1234";
     await page.route(
       "https://community.westcreeper.com/api/**",
@@ -69,6 +70,26 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         const req = route.request(),
           url = new URL(req.url());
         if (/\/reactions$/.test(url.pathname)) {
+          if (req.method() === "GET") {
+            audienceReads++;
+            return route.fulfill({
+              json: {
+                items: [
+                  {
+                    public_id: "00000000",
+                    nickname: "西部苦力怕",
+                    reaction: url.searchParams.get("reaction") || "fire",
+                  },
+                  {
+                    public_id: "12345678",
+                    nickname: "<img src=x onerror=alert(1)>",
+                    reaction: "fire",
+                  },
+                ],
+                next: null,
+              },
+            });
+          }
           reactionChoice = req.postDataJSON().reaction;
           return route.fulfill({
             json: {
@@ -296,6 +317,49 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
       1,
     );
     await page.emulateMedia({ reducedMotion: "no-preference" });
+    const fire = reactionBar.locator("[data-reaction=fire]");
+    await page.mouse.move(0, 0);
+    const readsBeforeHover = audienceReads;
+    await fire.hover();
+    await reactionBar.locator(".reaction-audience-list li").first().waitFor();
+    assert.equal(audienceReads, readsBeforeHover + 1);
+    assert.ok(
+      (await reactionBar.locator(".reaction-audience").innerText()).includes(
+        "#00000000",
+      ),
+    );
+    assert.equal(
+      await reactionBar.locator(".reaction-audience img").count(),
+      0,
+    );
+    assert.ok(
+      (await reactionBar.locator(".reaction-audience").innerText()).includes(
+        "<img src=x onerror=alert(1)>",
+      ),
+    );
+    await reactionBar.locator(".reaction-audience").hover();
+    assert.ok(await reactionBar.locator(".reaction-audience").isVisible());
+    await page.keyboard.press("Escape");
+    await page.mouse.move(0, 0);
+    await fire.hover();
+    await reactionBar.locator(".reaction-audience-list li").first().waitFor();
+    assert.equal(
+      audienceReads,
+      readsBeforeHover + 1,
+      "repeated hover uses short cache",
+    );
+    await page.keyboard.press("Escape");
+    await addReaction.click();
+    await reactionBar
+      .getByRole("button", { name: "查看回应者", exact: true })
+      .click();
+    await reactionBar.locator(".reaction-audience-list li").first().waitFor();
+    assert.ok(
+      await reactionBar
+        .locator(".reaction-audience-close")
+        .evaluate((b) => b === document.activeElement),
+    );
+    await page.keyboard.press("Escape");
     await page.getByRole("button", { name: "取消", exact: true }).click();
     const screenshot = path.join(
       os.tmpdir(),
@@ -315,6 +379,23 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         await reactionBar.screenshot({
           path: path.join(os.tmpdir(), "westcreeper-reaction-picker.png"),
         });
+        await reactionBar
+          .getByRole("button", { name: "查看回应者", exact: true })
+          .click();
+        await reactionBar
+          .locator(".reaction-audience-list li")
+          .first()
+          .waitFor();
+        assert.ok(
+          await page.evaluate(
+            () => document.documentElement.scrollWidth <= innerWidth + 1,
+          ),
+        );
+        await reactionBar
+          .locator(".reaction-audience")
+          .screenshot({
+            path: path.join(os.tmpdir(), "westcreeper-reaction-audience.png"),
+          });
       }
       await page.keyboard.press("Escape");
       if (width === 390) {
