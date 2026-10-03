@@ -28,6 +28,35 @@
 .main-nav .icon {
   color: var(--green);
 }
+.cookie-unread {
+  background: #a94936;
+  color: #fff5df;
+  font: 700 10px/1.5 var(--font-body, sans-serif);
+  min-width: 16px;
+  padding: 0 3px;
+  text-align: center;
+  border-radius: 4px;
+}
+.cookie-unread[hidden] {
+  display: none;
+}
+.menu-toggle {
+  position: relative;
+}
+.cookie-unread-dot {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  width: 7px;
+  height: 7px;
+  min-width: 0;
+  padding: 0;
+}
+.cookie-center h1 > .icon-cookie {
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+}
 .footer-links a .icon,
 .library-tabs button > .icon,
 [data-favorite] > .icon,

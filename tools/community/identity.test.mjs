@@ -103,6 +103,14 @@ test.beforeEach(() =>
       "COMMIT;",
   ),
 );
+test.beforeEach(() =>
+  db.exec(
+    readFileSync(
+      new URL("migrations/0008_notifications.sql", import.meta.url),
+      "utf8",
+    ),
+  ),
+);
 test.afterEach(() => db.close());
 test.after(() => (globalThis.fetch = realFetch));
 async function call(path, data, options = {}) {

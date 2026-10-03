@@ -73,6 +73,7 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         revision: 1,
         avatar: "moss",
       };
+    let notificationRead = false;
     let reactionChoice = null;
     let audienceReads = 0;
     const recoveryCode = "abcd1234-".repeat(7) + "abcd1234";
@@ -110,6 +111,44 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
               reactions: reactionChoice
                 ? [{ key: reactionChoice, count: 1, mine: true }]
                 : [],
+            },
+          });
+        }
+        if (url.pathname.startsWith("/api/identity/notifications")) {
+          if (!profile)
+            return route.fulfill({ status: 401, json: { error: "请先登录" } });
+          if (req.method() === "POST") {
+            assert.equal(req.postDataJSON().owner, profile.public_id);
+            notificationRead = true;
+            return route.fulfill({ json: { owner: profile.public_id } });
+          }
+          return route.fulfill({
+            json: {
+              owner: profile.public_id,
+              unread: notificationRead ? 0 : 1,
+              through: 5,
+              next: null,
+              items:
+                url.searchParams.get("filter") === "unread" && notificationRead
+                  ? []
+                  : [
+                      {
+                        id: 5,
+                        kind: "reply",
+                        outcome: "approved",
+                        created_at: "2026-10-03T09:00:00Z",
+                        read_at: notificationRead
+                          ? "2026-10-03T10:00:00Z"
+                          : null,
+                        entry_id: 11,
+                        parent_id: 10,
+                        scope: "board",
+                        nickname: "回复玩家",
+                        excerpt:
+                          "<img src=x onerror=alert(1)>很高兴找到这部游戏",
+                        is_public: 1,
+                      },
+                    ],
             },
           });
         }
@@ -515,6 +554,51 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         "待审核",
       ),
     );
+    await page.locator("[data-notification-list] article").waitFor();
+    assert.equal(
+      await page.locator("[data-notification-badge]").textContent(),
+      "1",
+    );
+    assert.equal(await page.locator("[data-notification-list] img").count(), 0);
+    assert.ok(
+      (
+        await page.locator("[data-notification-list] a").getAttribute("href")
+      ).includes("discussion=10#comments"),
+    );
+    assert.ok(
+      (await page.locator("h1 .icon-cookie use").getAttribute("href")).endsWith(
+        "#cookie",
+      ),
+    );
+    await page.locator("[data-notification-filter]").selectOption("unread");
+    await page.locator("[data-notification-list] article").waitFor();
+    await page.screenshot({
+      path: path.join(os.tmpdir(), "westcreeper-notifications-mobile.png"),
+      fullPage: true,
+    });
+    await page.getByRole("button", { name: "标为已读", exact: true }).click();
+    await page.waitForFunction(
+      () =>
+        document.querySelector("[data-notification-list]").children.length ===
+        0,
+    );
+    assert.ok(await page.locator("[data-notification-badge]").isHidden());
+    await page.locator("[data-notification-filter]").selectOption("all");
+    await page.locator("[data-notification-list] article").waitFor();
+    assert.ok(
+      (await page.locator("[data-notification-list]").innerText()).includes(
+        "已读",
+      ),
+    );
+    notificationRead = false;
+    await page.locator("[data-notification-refresh]").click();
+    await page.waitForFunction(
+      () => !document.querySelector("[data-notification-read-all]").disabled,
+    );
+    await page.locator("[data-notification-read-all]").click();
+    await page.waitForFunction(
+      () => document.querySelector("[data-notification-badge]").hidden,
+    );
     await page.locator("[data-cookie-view]").selectOption("participated");
     await page.waitForFunction(
       () => document.querySelector("[data-cookie-state-label]").hidden,
@@ -560,6 +644,13 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     );
     await page.locator("[data-cookie-cancel]").click();
     await page.getByRole("button", { name: "退出", exact: true }).click();
+    await page.waitForFunction(
+      () => document.querySelector("[data-notifications]").hidden,
+    );
+    assert.equal(
+      await page.locator("[data-notification-list] article").count(),
+      0,
+    );
     await page.waitForFunction(
       () =>
         document.querySelector("[data-cookie-entries]").children.length === 0,

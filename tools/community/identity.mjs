@@ -1,6 +1,7 @@
 import { fail, json, text, body, number } from "./http.mjs";
 import { verifyChallenge } from "./challenge.mjs";
 import { identityEntries } from "./activity.mjs";
+import { notificationsApi } from "./notifications.mjs";
 import avatarCatalog from "../../_data/community_avatars.json" with { type: "json" };
 const avatars = new Set(avatarCatalog.map((a) => a.id));
 function availableName(name, owner = false) {
@@ -132,6 +133,16 @@ export async function identityApi(request, env, url) {
   if (url.origin !== env.IDENTITY_ORIGIN)
     fail(403, "请从博客的正式社区地址使用饼干。");
   const path = url.pathname;
+  if (
+    path === "/api/identity/notifications" ||
+    path.startsWith("/api/identity/notifications/")
+  )
+    return notificationsApi(
+      request,
+      env,
+      url,
+      await visitor(request, env, true),
+    );
   if (path === "/api/identity/me" && request.method === "GET") {
     const row = await visitor(request, env);
     return json({ enabled: true, identity: row ? publicIdentity(row) : null });

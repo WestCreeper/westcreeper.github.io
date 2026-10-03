@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" shape-rendering="crispEdges">
+<symbol id="cookie" viewBox="0 0 16 16">
+  <path fill="#70503b" d="M5 1h6v2h2v2h2v6h-2v2h-2v2H5v-2H3v-2H1V5h2V3h2z"/>
+  <path fill="#bf905a" d="M5 3h6v2h2v6h-2v2H5v-2H3V5h2z"/>
+  <path fill="#e6c485" d="M5 3h6v2h2v3h-2V6H5v5H3V5h2z"/>
+  <path fill="#624330" d="M6 5h2v2H6zm4 3h2v2h-2zm-5 2h2v2H5z"/>
+  <path fill="#f4dfa8" d="M9 11h1v1H9zM4 7h1v1H4z"/>
+</symbol>
 <!-- Original 16px glyphs: stepped silhouettes, inset panels and earth-tone accents. -->
 <symbol id="search" viewBox="0 0 16 16"><path d="M3 1h6v2h2v6H9v2H3V9H1V3h2zm1 2v1H3v4h1v1h4V8h1V4H8V3zm6 7h2v2h2v2h1v1h-3v-2h-2z"/><path fill="var(--icon-accent)" d="M4 4h3v1H5v2H4z"/></symbol>
 <symbol id="moon" viewBox="0 0 16 16"><path d="M6 1h4v2H8v5h2v2h5v3h-2v2H5v-2H3v-2H1V5h2V3h3z"/><path fill="var(--icon-panel)" d="M4 5h2v5h2v2h4v1H6v-2H4z"/><path fill="var(--icon-accent)" d="M12 2h2v2h-2zM10 5h1v1h-1z"/></symbol>

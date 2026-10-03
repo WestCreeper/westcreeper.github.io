@@ -529,3 +529,30 @@
     grid-template-columns: repeat(3, 44px);
   }
 }
+.cookie-notifications {
+  margin-top: 36px;
+  scroll-margin-top: 100px;
+}
+.cookie-notification[data-unread="true"] {
+  border-inline-start: 4px solid var(--green);
+}
+.cookie-notification-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cookie-notification {
+    animation: cookie-notice-in 0.22s ease-out;
+  }
+  @keyframes cookie-notice-in {
+    from {
+      opacity: 0.4;
+      transform: translateY(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

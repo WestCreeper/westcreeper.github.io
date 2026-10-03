@@ -32,6 +32,12 @@ sqlite.exec(
     ) +
     "COMMIT;",
 );
+sqlite.exec(
+  readFileSync(
+    new URL("migrations/0008_notifications.sql", import.meta.url),
+    "utf8",
+  ),
+);
 const statement = (sql, args = []) => ({
   bind(...params) {
     return statement(sql, params);
@@ -828,4 +834,193 @@ test("published articles have isolated moderated threads, board filters, replies
     (await call("/api/entries?scope=all&category=article")).value.items.length,
     0,
   );
+});
+
+test("notification events are atomic, private, deduplicated and bounded by a read snapshot", async () => {
+  const secondId = Number(
+    sqlite
+      .prepare(
+        "INSERT INTO identities(public_id,nickname,nickname_key,recovery_hash,created_at,nickname_changed_at) VALUES ('87654321','通知玩家','notice-player','notice-test',0,0)",
+      )
+      .run().lastInsertRowid,
+  );
+  const secondToken = "b".repeat(64),
+    secondCookie = "__Host-wc_session=" + secondToken;
+  sqlite
+    .prepare(
+      "INSERT INTO identity_sessions(token_hash,identity_id,credential_version,expires_at,created_at) VALUES (?,?,1,?,0)",
+    )
+    .run(
+      await digest("session", secondToken),
+      secondId,
+      Math.floor(Date.now() / 1000) + 3600,
+    );
+  const seed = (author, parent = null) =>
+    Number(
+      sqlite
+        .prepare(
+          "INSERT INTO entries(scope,category,nickname,body,author_id,parent_id) VALUES ('board','chat','通知玩家','不应提前公开的测试内容',?,?)",
+        )
+        .run(author, parent).lastInsertRowid,
+    );
+  const topic = seed(1);
+  assert.equal((await moderate(topic, "approved")).status, 200);
+  const reply = seed(secondId, topic);
+  assert.equal(
+    sqlite
+      .prepare("SELECT COUNT(*) n FROM notifications WHERE entry_id=?")
+      .get(reply).n,
+    0,
+  );
+  const revision = sqlite
+    .prepare("SELECT revision FROM entries WHERE id=?")
+    .get(reply).revision;
+  assert.equal((await moderate(reply, "approved")).status, 200);
+  const count = () =>
+    sqlite
+      .prepare("SELECT COUNT(*) n FROM notifications WHERE entry_id=?")
+      .get(reply).n;
+  assert.equal(count(), 2);
+  assert.equal(
+    (
+      await call("/api/admin/entries/" + reply, {
+        admin: true,
+        data: {
+          status: "approved",
+          progress: "open",
+          expected_status: "pending",
+          expected_progress: "open",
+          expected_revision: revision,
+        },
+      })
+    ).status,
+    409,
+  );
+  assert.equal(count(), 2);
+  assert.equal(
+    (await moderate(reply, "approved", "working", "approved")).status,
+    200,
+  );
+  assert.equal(count(), 2, "progress-only changes do not notify");
+  const ownReply = seed(1, topic);
+  await moderate(ownReply, "approved");
+  assert.equal(
+    sqlite
+      .prepare(
+        "SELECT COUNT(*) n FROM notifications WHERE entry_id=? AND kind='reply'",
+      )
+      .get(ownReply).n,
+    0,
+    "no self reply notification",
+  );
+  const api = "/api/identity/notifications";
+  assert.equal((await call(api, { cookie: "" })).status, 401);
+  assert.equal(
+    (
+      await call(api + "/read", {
+        cookie: "",
+        data: { id: 1, owner: "12345678" },
+      })
+    ).status,
+    401,
+  );
+  let result = await call(api);
+  assert.equal(result.headers.get("Cache-Control"), "no-store");
+  assert.equal(result.value.owner, "12345678");
+  const alert = result.value.items.find((n) => n.entry_id === reply);
+  assert.equal(alert.kind, "reply");
+  for (const item of result.value.items) {
+    for (const key of [
+      "moderator",
+      "reason",
+      "recipient_id",
+      "event_key",
+      "recovery_hash",
+    ])
+      assert.equal(key in item, false);
+  }
+  const authorAlert = (
+    await call(api, { cookie: secondCookie })
+  ).value.items.find((n) => n.entry_id === reply);
+  assert.equal(authorAlert.kind, "review");
+  assert.equal(
+    (
+      await call(api + "/read", {
+        cookie: secondCookie,
+        data: { id: alert.id, owner: "87654321" },
+      })
+    ).status,
+    200,
+  );
+  assert.equal(
+    sqlite.prepare("SELECT read_at FROM notifications WHERE id=?").get(alert.id)
+      .read_at,
+    null,
+    "cannot mark another identity notification",
+  );
+  assert.equal(
+    (await call(api + "/read", { data: { id: alert.id, owner: "87654321" } }))
+      .status,
+    409,
+    "stale account cannot mark read",
+  );
+  await moderate(reply, "hidden", "working", "approved", "working");
+  assert.ok(!(await call(api)).value.items.some((n) => n.entry_id === reply));
+  await moderate(reply, "approved", "working", "hidden", "working");
+  assert.equal(
+    sqlite
+      .prepare(
+        "SELECT COUNT(*) n FROM notifications WHERE entry_id=? AND kind='reply'",
+      )
+      .get(reply).n,
+    1,
+  );
+  await moderate(topic, "hidden", "open", "approved");
+  assert.ok(
+    !(await call(api)).value.items.some(
+      (n) => n.kind === "reply" && n.entry_id === reply,
+    ),
+  );
+  await moderate(topic, "approved", "open", "hidden");
+  const snapshot = (await call(api + "/unread")).value.through;
+  const later = seed(1);
+  await moderate(later, "rejected");
+  await call(api + "/read", { data: { through: snapshot, owner: "12345678" } });
+  result = await call(api + "?filter=unread");
+  assert.deepEqual(
+    result.value.items.map((n) => n.entry_id),
+    [later],
+  );
+  assert.equal(result.value.unread, 1, "new notifications survive mark all");
+  assert.equal(
+    (
+      await call(api + "/read", {
+        data: { id: alert.id, through: snapshot, owner: "12345678" },
+      })
+    ).status,
+    400,
+  );
+  for (let i = 0; i < 22; i++) {
+    const id = seed(secondId);
+    await moderate(id, "rejected");
+  }
+  const first = (await call(api, { cookie: secondCookie })).value;
+  const next = (
+    await call(api + "?before=" + first.next, { cookie: secondCookie })
+  ).value;
+  assert.equal(first.items.length, 20);
+  assert.ok(next.items.every((n) => n.id < first.next));
+  sqlite
+    .prepare("UPDATE entries SET deleted_at='2026-10-03' WHERE id=?")
+    .run(topic);
+  assert.ok(
+    !(await call(api)).value.items.some(
+      (n) => n.entry_id === topic || n.parent_id === topic,
+    ),
+    "deleted root and its replies vanish",
+  );
+  sqlite
+    .prepare("UPDATE identities SET state='banned' WHERE id=?")
+    .run(secondId);
+  assert.equal((await call(api, { cookie: secondCookie })).status, 403);
 });
