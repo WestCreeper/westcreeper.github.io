@@ -70,6 +70,13 @@
         { title: link.textContent, url: link.getAttribute("href") },
       ]),
     );
+    for (const link of root.querySelectorAll("[data-article-id]")) {
+      gameLinks.set("article:" + link.dataset.articleId, {
+        title: link.textContent,
+        url: link.getAttribute("href"),
+        article: true,
+      });
+    }
     let replyScope = scope;
     let cursor = null,
       reading = false,
@@ -167,6 +174,7 @@
             "span",
             {
               game: "游戏评论区",
+              article: "文章评论区",
               feedback: "问题建议",
               find: "寻找游戏",
               chat: "闲聊交流",
@@ -194,7 +202,11 @@
       article.append(meta);
       const game = gameLinks.get(item.scope);
       if (game && !isReply) {
-        const link = el("a", "来自游戏：" + game.title, "community-game-link");
+        const link = el(
+          "a",
+          (game.article ? "来自文章：" : "来自游戏：") + game.title,
+          "community-game-link",
+        );
         link.href = game.url;
         article.append(link);
       }
@@ -332,6 +344,7 @@
       }
       if (!(await identity.ensure())) return;
       receipt = false;
+      formStatus.textContent = "";
       parentId = item?.id || null;
       replyScope = item?.scope || scope;
       form.hidden = false;
@@ -339,7 +352,9 @@
         ? `回复：${item.title || item.nickname}`
         : scope === "board"
           ? "发起一段新讨论"
-          : "写下你的游玩心得";
+          : scope.startsWith("article:")
+            ? "写下你的阅读感受"
+            : "写下你的游玩心得";
       const topic = find("[data-community-topic-fields]");
       if (topic) {
         topic.hidden = !!parentId;

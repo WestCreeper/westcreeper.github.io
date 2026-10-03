@@ -1,4 +1,5 @@
 import { addReactions, react } from "./reactions.mjs";
+import { articleScope, publishedArticles } from "./articles.mjs";
 import { receiveMail, inboxAdmin } from "./inbox.mjs";
 import {
   identityApi,
@@ -18,15 +19,16 @@ const fields =
   "e.id,e.scope,e.parent_id,e.category,e.title,e.nickname,e.body,e.progress,e.created_at,(SELECT public_id FROM identities WHERE id=e.author_id) AS author_code,(SELECT avatar FROM identities WHERE id=e.author_id) AS author_avatar";
 const visibleParent =
   "(e.parent_id IS NULL OR EXISTS (SELECT 1 FROM entries p WHERE p.id=e.parent_id AND p.status='approved' AND p.deleted_at IS NULL))";
-function scope(value) {
+async function scope(value, env) {
   if (
     value === "board" ||
     (typeof value === "string" &&
       value.startsWith("game:") &&
-      games.has(value.slice(5)))
+      games.has(value.slice(5))) ||
+    (await articleScope(value, env))
   )
     return value;
-  fail(400, "未找到对应的游戏档案。");
+  fail(400, "未找到对应的游戏档案或已发布文章。");
 }
 function page(rows) {
   const more = rows.length > 20;
@@ -53,14 +55,14 @@ async function publicApi(request, env, url) {
     const requestedScope = url.searchParams.get("scope");
     const s = ["all", "games"].includes(requestedScope)
       ? requestedScope
-      : scope(requestedScope);
+      : await scope(requestedScope, env);
     const parentId = number(url.searchParams.get("parent"));
     const before = number(
       url.searchParams.get("before"),
       Number.MAX_SAFE_INTEGER,
     );
     const category = url.searchParams.get("category") || "";
-    if (category && ![...categories, "game"].includes(category))
+    if (category && ![...categories, "game", "article"].includes(category))
       fail(400, "分类无效。");
     if (parentId && ["all", "games"].includes(s))
       fail(400, "请指定回复所属的讨论区。");
@@ -118,16 +120,22 @@ async function publicApi(request, env, url) {
   });
   if (!limited.success) fail(429, "提交过于频繁，请稍等一分钟再试。");
   const data = await body(request);
-  const s = scope(data.scope),
+  const s = await scope(data.scope, env),
     parentId = number(data.parent_id);
   await limit(env, "post:" + identity.id, 10, 60);
   const nickname = identity.nickname;
   const message = text(data.body, 2, 2000, "内容");
   const p = parentId ? await parent(env.DB, parentId, s) : null;
-  const category = p ? p.category : s === "board" ? data.category : "game";
+  const category = p
+    ? p.category
+    : s === "board"
+      ? data.category
+      : s.startsWith("article:")
+        ? "article"
+        : "game";
   if (
-    ![...categories, "game"].includes(category) ||
-    (s === "board" && category === "game")
+    ![...categories, "game", "article"].includes(category) ||
+    (s === "board" && !categories.includes(category))
   )
     fail(400, "请选择讨论分类。");
   const title =
@@ -184,14 +192,15 @@ async function adminApi(request, env, url, email) {
     }
     const category = url.searchParams.get("category");
     if (category) {
-      if (![...categories, "game"].includes(category)) fail(400, "分类无效。");
+      if (![...categories, "game", "article"].includes(category))
+        fail(400, "分类无效。");
       clauses.push("e.category=?");
       args.push(category);
     }
     const targetScope = url.searchParams.get("scope");
     if (targetScope) {
       clauses.push("e.scope=?");
-      args.push(scope(targetScope));
+      args.push(await scope(targetScope, env));
     }
     const kind = url.searchParams.get("kind");
     if (kind && !["topic", "reply"].includes(kind)) fail(400, "留言类型无效。");
@@ -224,7 +233,15 @@ async function adminApi(request, env, url, email) {
     )
       .bind(...args)
       .all();
-    return json({ ...page(results), moderator: email });
+    const out = page(results);
+    if (out.items.some((item) => item.category === "article")) {
+      const articles = await publishedArticles(env).catch(() => new Map());
+      out.items = out.items.map((item) => ({
+        ...item,
+        source: articles.get(item.scope.slice(8)) || null,
+      }));
+    }
+    return json({ ...out, moderator: email });
   }
   const match = url.pathname.match(/^\/api\/admin\/entries\/(\d+)$/);
   if (match && request.method === "POST") {
@@ -259,8 +276,8 @@ async function adminApi(request, env, url, email) {
             ? data.category
             : existing.category;
         if (
-          ![...categories, "game"].includes(category) ||
-          (existing.scope === "board" && category === "game")
+          ![...categories, "game", "article"].includes(category) ||
+          (existing.scope === "board" && !categories.includes(category))
         )
           fail(400, "分类无效。");
         const after = { nickname, body: message, title, category };

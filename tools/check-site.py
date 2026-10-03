@@ -2,6 +2,7 @@
 import argparse
 import json
 from html.parser import HTMLParser
+from html import escape
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
@@ -63,6 +64,17 @@ for path in pages:
             errors.append(f'{path.relative_to(root)}: broken local link {url}')
 
 index = json.loads((root / 'search.json').read_text(encoding='utf-8'))
+articles = json.loads((root / 'community-articles.json').read_text(encoding='utf-8'))
+assert len({post['id'] for post in articles}) == len(articles), 'Duplicate article comment IDs.'
+for post in articles:
+    route = unquote(urlsplit(post['url']).path)
+    if args.baseurl:
+        assert route.startswith(args.baseurl + '/'), post['url']
+        route = route[len(args.baseurl):]
+    html = (root / route.lstrip('/')).read_text(encoding='utf-8')
+    assert 'data-scope="' + escape('article:' + post['id'], quote=True) + '"' in html, post['url']
+    assert '/assets/js/reactions.js' in html, post['url']
+assert len(articles) == sum(entry['type'] == '文章' for entry in index), 'Missing article comments.'
 games = json.loads((root / 'games.json').read_text(encoding='utf-8'))
 assert len({game['id'] for game in games}) == len(games), 'Duplicate game IDs.'
 for game in games:

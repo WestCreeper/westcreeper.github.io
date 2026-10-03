@@ -24,6 +24,14 @@ for (const name of [
   sqlite.exec(
     readFileSync(new URL("migrations/" + name, import.meta.url), "utf8"),
   );
+sqlite.exec(
+  "BEGIN;" +
+    readFileSync(
+      new URL("migrations/0007_article_comments.sql", import.meta.url),
+      "utf8",
+    ) +
+    "COMMIT;",
+);
 const statement = (sql, args = []) => ({
   bind(...params) {
     return statement(sql, params);
@@ -112,6 +120,19 @@ async function jwt(override = {}, key = pair.privateKey) {
 const adminToken = await jwt();
 const originalFetch = globalThis.fetch;
 globalThis.fetch = async (url, options) => {
+  if (String(url) === "https://westcreeper.com/community-articles.json")
+    return Response.json([
+      {
+        id: "/2021/02/26/test-article",
+        title: "测试文章",
+        url: "/2021/02/26/test-article.html",
+      },
+      {
+        id: "/2023/12/29/second",
+        title: "第二篇",
+        url: "/2023/12/29/second.html",
+      },
+    ]);
   if (String(url).endsWith("/cdn-cgi/access/certs"))
     return Response.json({ keys: [jwk] });
   if (String(url).includes("/siteverify")) {
@@ -696,4 +717,115 @@ test("deleted threads and replies disappear everywhere and cannot be revived by 
 test.after(() => {
   globalThis.fetch = originalFetch;
   sqlite.close();
+});
+
+test("published articles have isolated moderated threads, board filters, replies and reactions", async () => {
+  const article = "article:/2021/02/26/test-article";
+  const other = "article:/2023/12/29/second";
+  assert.equal(
+    (
+      await call("/api/entries", {
+        data: { ...draft, scope: article, category: "game" },
+      })
+    ).status,
+    202,
+  );
+  const id = latest();
+  assert.equal(
+    sqlite.prepare("SELECT category FROM entries WHERE id=?").get(id).category,
+    "article",
+  );
+  assert.equal(
+    (await call("/api/entries?scope=" + article)).value.items.length,
+    0,
+  );
+  assert.equal(
+    (
+      await call("/api/entries", {
+        data: { ...draft, scope: "article:invented" },
+      })
+    ).status,
+    400,
+  );
+  assert.equal(
+    (await call("/api/entries", { data: { ...draft, category: "article" } }))
+      .status,
+    400,
+  );
+  const queue = await call("/api/admin/entries?category=article", {
+    admin: true,
+  });
+  assert.equal(queue.value.items[0].id, id);
+  assert.equal(queue.value.items[0].source.title, "测试文章");
+  assert.equal((await moderate(id, "approved")).status, 200);
+  assert.equal(
+    (await call("/api/entries?scope=" + other)).value.items.length,
+    0,
+  );
+  assert.equal(
+    (await call("/api/entries?scope=all&category=article")).value.items[0].id,
+    id,
+  );
+  assert.equal(
+    (
+      await call("/api/entries", {
+        data: { ...draft, scope: other, parent_id: id },
+      })
+    ).status,
+    404,
+  );
+  assert.equal(
+    (
+      await call("/api/entries", {
+        data: { ...draft, scope: article, parent_id: id },
+      })
+    ).status,
+    202,
+  );
+  const reply = latest();
+  assert.equal((await moderate(reply, "approved")).status, 200);
+  assert.equal(
+    (await call("/api/entries?scope=" + article + "&parent=" + id)).value
+      .items[0].id,
+    reply,
+  );
+  assert.equal(
+    (
+      await call("/api/entries/" + reply + "/reactions", {
+        data: { reaction: "love" },
+      })
+    ).status,
+    200,
+  );
+  const revision = sqlite
+    .prepare("SELECT revision FROM entries WHERE id=?")
+    .get(id).revision;
+  assert.equal(
+    (
+      await call("/api/admin/entries/" + id, {
+        admin: true,
+        data: {
+          action: "edit",
+          expected_revision: revision,
+          nickname: draft.nickname,
+          body: "修正后的文章评论",
+          category: "game",
+        },
+      })
+    ).status,
+    200,
+  );
+  assert.equal(
+    sqlite.prepare("SELECT category FROM entries WHERE id=?").get(id).category,
+    "article",
+  );
+  assert.equal((await moderate(id, "hidden", "open", "approved")).status, 200);
+  assert.equal(
+    (await call("/api/entries/" + reply + "/reactions")).status,
+    404,
+  );
+  assert.equal(
+    (await call("/api/entries?scope=all&category=article")).value.items.length,
+    0,
+  );
 });

@@ -28,6 +28,19 @@ const sql = (query, args = []) => ({
 });
 const realFetch = globalThis.fetch;
 globalThis.fetch = async (url, options) => {
+  if (String(url) === "https://westcreeper.com/community-articles.json")
+    return Response.json([
+      {
+        id: "/2021/02/26/test-article",
+        title: "测试文章",
+        url: "/2021/02/26/test-article.html",
+      },
+      {
+        id: "/2023/12/29/second",
+        title: "第二篇",
+        url: "/2023/12/29/second.html",
+      },
+    ]);
   assert.ok(String(url).includes("/siteverify"));
   return Response.json({
     success: JSON.parse(options.body).response === "valid",
@@ -80,6 +93,16 @@ test.beforeEach(() => {
     },
   };
 });
+test.beforeEach(() =>
+  db.exec(
+    "BEGIN;" +
+      readFileSync(
+        new URL("migrations/0007_article_comments.sql", import.meta.url),
+        "utf8",
+      ) +
+      "COMMIT;",
+  ),
+);
 test.afterEach(() => db.close());
 test.after(() => (globalThis.fetch = realFetch));
 async function call(path, data, options = {}) {

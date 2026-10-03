@@ -9,4 +9,7 @@ layout: studio
   <div class="prose" data-article-body>{{ content }}</div>
   <p class="article-license">作者：{{ site.author.name }} · 文章按 <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh-hans">CC BY-NC 4.0</a> 许可分享，转载时请注明出处。文中游戏与图片的权利归原作者所有。</p>
   <nav class="article-navigation" aria-label="相邻文章">{% if page.previous %}<a href="{{ page.previous.url | relative_url }}"><small>← 上一篇</small>{{ page.previous.title }}</a>{% endif %}{% if page.next %}<a href="{{ page.next.url | relative_url }}"><small>下一篇 →</small>{{ page.next.title }}</a>{% endif %}</nav>
+  {% assign article_id = page.comment_id | default: page.id %}
+  {% assign article_scope = article_id | prepend: 'article:' %}
+  {% include studio/community.html scope=article_scope title='文章评论' description='分享你的阅读感受，或补充相关资料。评论和回复审核通过后公开。' %}
 </article>

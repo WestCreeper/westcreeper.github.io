@@ -3,7 +3,7 @@
   <p class="community-lead">{{ include.description }}</p>
   <section class="cookie-panel" data-cookie-panel hidden aria-label="我的饼干">
     <h3>我的饼干</h3><img class="community-avatar" data-cookie-current-avatar src="{{ '/assets/images/avatars/moss.svg' | relative_url }}" width="40" height="40" alt="当前头像"><p data-cookie-summary role="status"></p>
-    <details data-cookie-avatars><summary>选择我的头像</summary><p class="community-notice">登录后可选择头像，留言板、游戏评论和回复共用。改头像不影响昵称冷却。</p><div class="cookie-avatar-grid" aria-label="默认头像">{% for avatar in site.data.community_avatars %}<button type="button" class="cookie-avatar-option" data-cookie-avatar="{{ avatar.id }}" disabled aria-pressed="false"><img src="{{ '/assets/images/avatars/' | append: avatar.id | append: '.svg' | relative_url }}" width="48" height="48" alt="" loading="lazy"><span>{{ avatar.name }}</span></button>{% endfor %}</div></details>
+    <details data-cookie-avatars><summary>选择我的头像</summary><p class="community-notice">登录后可选择头像，留言板、文章、游戏评论和回复共用。改头像不影响昵称冷却。</p><div class="cookie-avatar-grid" aria-label="默认头像">{% for avatar in site.data.community_avatars %}<button type="button" class="cookie-avatar-option" data-cookie-avatar="{{ avatar.id }}" disabled aria-pressed="false"><img src="{{ '/assets/images/avatars/' | append: avatar.id | append: '.svg' | relative_url }}" width="48" height="48" alt="" loading="lazy"><span>{{ avatar.name }}</span></button>{% endfor %}</div></details>
     <div class="community-toolbar"><button class="button" type="button" data-cookie-open="register">领取饼干</button><button class="button" type="button" data-cookie-open="login">恢复码登录</button><button class="button" type="button" data-cookie-open="rename" hidden>修改昵称</button><button class="button" type="button" data-cookie-rotate hidden>重置恢复码</button><button class="button" type="button" data-cookie-logout hidden>退出</button></div>
     <form data-cookie-form hidden>
       <h4 data-cookie-title></h4>
@@ -18,12 +18,13 @@
     <p class="community-notice">昵称与 8 位编号会随留言公开。恢复码丢失但此设备仍登录时，可重置恢复码；否则请写信至 <a href="mailto:contact@westcreeper.com">contact@westcreeper.com</a>，提供饼干编号与可核验线索。我们会人工核验，无法确认归属时不能保证找回。请使用纯文本邮件，不附恢复码或附件。</p>
   </section>
   <div class="community-toolbar">
-    {% if include.scope == 'board' %}<label>讨论分类 <select data-community-category><option value="">全部留言</option><option value="game">游戏评论区</option><option value="feedback">问题建议</option><option value="find">寻找游戏</option><option value="chat">闲聊交流</option></select></label>{% endif %}
+    {% if include.scope == 'board' %}<label>讨论分类 <select data-community-category><option value="">全部留言</option><option value="game">游戏评论区</option><option value="article">文章评论区</option><option value="feedback">问题建议</option><option value="find">寻找游戏</option><option value="chat">闲聊交流</option></select></label>{% endif %}
     <button class="button" type="button" data-community-load>查看{% if include.scope == 'board' %}讨论{% else %}评论{% endif %}</button>
     <button class="button button-primary" type="button" data-community-write hidden>{% if include.scope == 'board' %}发起讨论{% else %}写评论{% endif %}</button>
   </div>
   {% if include.feed == 'all' %}
   <div hidden data-community-games>{% for game in site.data.games %}<a data-game-id="{{ game.id | escape }}" href="{{ '/swf/games/' | append: game.id | append: '/' | relative_url }}">{{ game.title | escape }}</a>{% endfor %}</div>
+  <div hidden data-community-articles>{% for post in site.posts %}{% assign article_id = post.comment_id | default: post.id %}<a data-article-id="{{ article_id | escape }}" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>{% endfor %}</div>
   {% endif %}
   <p data-community-status role="status" aria-live="polite"></p>
   <div data-community-entries></div>
@@ -36,7 +37,7 @@
     {% if include.scope == 'board' %}
     <div data-community-topic-fields><label>话题<select name="category"><option value="feedback">问题建议</option><option value="find">寻找游戏</option><option value="chat">闲聊交流</option></select></label><label>标题<input name="title" minlength="2" maxlength="80" required placeholder="一句话说说你想聊的内容"></label></div>
     {% endif %}
-    <label>内容<textarea name="body" minlength="2" maxlength="2000" rows="5" required placeholder="分享游玩心得，或说明遇到的问题…"></textarea></label>
+    <label>内容<textarea name="body" minlength="2" maxlength="2000" rows="5" required placeholder="分享你的想法，或说明遇到的问题…"></textarea></label>
     <p data-community-hint class="community-notice"></p>
     <div data-community-challenge></div>
     <div class="community-toolbar"><button class="button button-primary" type="submit">送交审核</button><button class="button" type="button" data-community-cancel>取消</button></div>

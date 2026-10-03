@@ -184,3 +184,9 @@ bundle exec jekyll build --destination ../westcreeper-workspace/site --disable-d
 ```
 
 文章、游戏、赞助数据、页面代码与回归测试仍属于仓库源码；预览产物和运行时不需要提交。根目录原有 `.gitignore` 规则继续防止默认命令产生的临时文件被加入版本控制。
+
+### 文章评论
+
+使用 `layout: article` 的文章自动带有独立评论区，使用现有饼干身份并先审核后公开。新文章随 GitHub Pages 发布后即可接入，文章清单有短暂缓存，通常在一两分钟内更新。留言板与审核台可按「文章评论区」筛选。
+
+评论关联文章文件对应的 ID，而非显示标题。修改标题不会丢失评论；如果需要重命名文章文件，先从 `community-articles.json` 找到原来的 `id`，写入该文章的 front matter：`comment_id: "原来的 id"`，并保持此值不变。不要为不同文章重复使用同一个 `comment_id`。

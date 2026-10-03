@@ -1,0 +1,8 @@
+---
+layout: null
+---
+[
+{% for post in site.posts %}{% assign article_id = post.comment_id | default: post.id %}
+  {"id":{{ article_id | jsonify }},"title":{{ post.title | jsonify }},"url":{{ post.url | relative_url | jsonify }}}{% unless forloop.last %},{% endunless %}
+{% endfor %}
+]

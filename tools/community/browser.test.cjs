@@ -18,6 +18,9 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     const errors = [];
     page.on("pageerror", (e) => errors.push(e.message));
     const publicRequests = [];
+    const articleInfo = (
+      await (await page.request.get(origin + "/community-articles.json")).json()
+    )[0];
     const game = {
       id: 9,
       scope: "game:dadnme",
@@ -42,13 +45,22 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
       replies: 0,
       reactions: [{ key: "love", count: 2, mine: false }],
     };
+    const articleComment = {
+      ...game,
+      id: 12,
+      scope: "article:" + articleInfo.id,
+      category: "article",
+      body: "这篇文章的资料很有帮助。",
+    };
     await page.addInitScript(() => {
+      let challengeCallback;
       window.turnstile = {
         render: (node, options) => {
+          challengeCallback = options.callback;
           options.callback("mock-test-token");
           return 1;
         },
-        reset: () => {},
+        reset: () => challengeCallback?.("mock-test-token"),
         remove: () => {},
       };
     });
@@ -154,18 +166,23 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         const items = url.searchParams.has("parent")
           ? [
               {
-                ...game,
+                ...(url.searchParams.get("scope")?.startsWith("article:")
+                  ? articleComment
+                  : game),
                 id: 11,
-                parent_id: 9,
+                parent_id: Number(url.searchParams.get("parent")),
                 author_code: "87654321",
                 author_avatar: "fox",
                 body: "可以试试组合按键。",
                 replies: 0,
               },
             ]
-          : url.searchParams.get("category") === "game"
-            ? [game]
-            : [board, game];
+          : url.searchParams.get("category") === "article" ||
+              url.searchParams.get("scope")?.startsWith("article:")
+            ? [articleComment]
+            : url.searchParams.get("category") === "game"
+              ? [game]
+              : [board, game];
         return route.fulfill({ json: { items, next: null } });
       },
     );
@@ -391,11 +408,9 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
             () => document.documentElement.scrollWidth <= innerWidth + 1,
           ),
         );
-        await reactionBar
-          .locator(".reaction-audience")
-          .screenshot({
-            path: path.join(os.tmpdir(), "westcreeper-reaction-audience.png"),
-          });
+        await reactionBar.locator(".reaction-audience").screenshot({
+          path: path.join(os.tmpdir(), "westcreeper-reaction-audience.png"),
+        });
       }
       await page.keyboard.press("Escape");
       if (width === 390) {
@@ -532,6 +547,61 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         .count(),
       6,
     );
+    await page.goto(origin + "/guestbook/");
+    await page.locator("[data-community-category]").selectOption("article");
+    const articleLink = page.getByRole("link", {
+      name: "来自文章：" + articleInfo.title,
+    });
+    await articleLink.waitFor();
+    assert.equal(await articleLink.getAttribute("href"), articleInfo.url);
+    await articleLink.click();
+    assert.equal(
+      await page.locator("[data-community]").getAttribute("data-scope"),
+      articleComment.scope,
+    );
+    assert.equal(
+      await page.locator("[data-article-body] [data-community]").count(),
+      0,
+    );
+    await page.locator("[data-community-load]").click();
+    await page.locator(".community-card").first().waitFor();
+    assert.equal(
+      publicRequests.at(-1).url.searchParams.get("scope"),
+      articleComment.scope,
+    );
+    assert.equal(
+      await page.locator(".community-card .community-avatar").count(),
+      1,
+    );
+    assert.equal(await page.locator("[data-reaction-add]").count(), 1);
+    await page.locator("[data-community-write]").click();
+    await page.locator("textarea[name=body]").fill("感谢整理这些资料。");
+    await page.getByRole("button", { name: "送交审核" }).click();
+    await page.waitForFunction(() =>
+      document
+        .querySelector("[data-community-form-status]")
+        .textContent.includes("已送交审核"),
+    );
+    assert.equal(publicRequests.at(-1).data.scope, articleComment.scope);
+    assert.equal(publicRequests.at(-1).data.category, undefined);
+    await page.getByRole("button", { name: "回复", exact: true }).click();
+    await page.locator("textarea[name=body]").fill("我也想补充一条资料。");
+    await page.getByRole("button", { name: "送交审核" }).click();
+    await page.waitForFunction(() =>
+      document
+        .querySelector("[data-community-form-status]")
+        .textContent.includes("已送交审核"),
+    );
+    assert.equal(publicRequests.at(-1).data.parent_id, 12);
+    assert.equal(publicRequests.at(-1).data.scope, articleComment.scope);
+    assert.ok(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth + 1,
+      ),
+    );
+    await page.locator("[data-community]").screenshot({
+      path: path.join(os.tmpdir(), "westcreeper-article-comments.png"),
+    });
     let rows = [{ ...board, status: "approved", revision: 1, parent_id: null }];
     const adminRequests = [];
     await page.route("http://community.test/**", async (route) => {

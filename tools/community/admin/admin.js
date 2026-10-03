@@ -6,6 +6,7 @@
   const filters = ["filter", "category", "kind", "progress", "query", "author"];
   const labels = {
     game: "游戏评论区",
+    article: "文章评论区",
     feedback: "问题建议",
     find: "寻找游戏",
     chat: "闲聊交流",
@@ -54,6 +55,13 @@
   function card(item) {
     const article = el("article");
     article.append(window.communityAvatar(item.author_avatar));
+    if (item.source?.url?.startsWith("https://westcreeper.com/")) {
+      const source = el("a", "来自文章：" + item.source.title);
+      source.href = item.source.url;
+      source.target = "_blank";
+      source.rel = "noopener noreferrer";
+      article.append(source);
+    }
     article.append(
       el(
         "p",
