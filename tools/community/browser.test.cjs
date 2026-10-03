@@ -120,6 +120,7 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         if (url.pathname === "/api/identity/entries")
           return route.fulfill({
             json: {
+              owner: profile?.public_id || null,
               items: profile
                 ? [
                     {
@@ -559,6 +560,11 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     );
     await page.locator("[data-cookie-cancel]").click();
     await page.getByRole("button", { name: "退出", exact: true }).click();
+    await page.waitForFunction(
+      () =>
+        document.querySelector("[data-cookie-entries]").children.length === 0,
+    );
+    assert.ok(!(await page.locator("[data-cookie-activity]").isVisible()));
     await page.getByRole("button", { name: "恢复码登录", exact: true }).click();
     await page
       .locator("[data-cookie-form] input[name=public_id]")
@@ -573,8 +579,40 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         .textContent.includes("浏览器玩家"),
     );
     await page.goto(origin + "/swf/games/dadnme/");
+    await page.goto(
+      origin + "/my-cookie/?return=" + encodeURIComponent("//evil.test/"),
+    );
+    await page.locator("[data-cookie-panel]").waitFor();
+    assert.equal(
+      await page.locator("[data-cookie-return]").getAttribute("href"),
+      "/guestbook/",
+    );
+    await page.goto(origin + "/swf/games/dadnme/");
     await page.locator("[data-cookie-session]").waitFor();
     assert.equal(await page.locator("[data-cookie-avatar]").count(), 0);
+    const savedProfile = profile;
+    profile = null;
+    await page.evaluate(() =>
+      window.dispatchEvent(
+        new StorageEvent("storage", { key: "wc-cookie-changed" }),
+      ),
+    );
+    await page.waitForFunction(() =>
+      document
+        .querySelector("[data-cookie-summary]")
+        .textContent.includes("尚未登录"),
+    );
+    profile = savedProfile;
+    await page.evaluate(() =>
+      window.dispatchEvent(
+        new StorageEvent("storage", { key: "wc-cookie-changed" }),
+      ),
+    );
+    await page.waitForFunction(() =>
+      document
+        .querySelector("[data-cookie-summary]")
+        .textContent.includes("已登录"),
+    );
     await page.locator("[data-community-load]").click();
     await page.locator(".community-card .community-avatar").first().waitFor();
     assert.ok(

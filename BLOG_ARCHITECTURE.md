@@ -13,7 +13,8 @@
 | `/sponsors/` | 赞助名单、留言与赞助方式 |
 | `/releases/` | 旧地址，自动跳转至赞助名单 |
 | `/resources/` | 工具与资源 |
-| `/guestbook/` | 统一留言板：游戏评论、寻游、问题建议与闲聊 |
+| `/guestbook/` | 统一留言板：文章评论、游戏评论、寻游、问题建议与闲聊 |
+| `/my-cookie/` | 饼干个人中心：身份设置、私人留言记录与参与的公开讨论 |
 | `/friends/` | 友情链接 |
 | `/about.html` | 关于我 |
 | `/search.json` | 全站静态搜索索引 |
@@ -52,3 +53,9 @@
 `Gemfile` 直接声明 Jekyll、Feed、Sitemap 和 Windows 时区数据，不再依赖原 TeXt 主题的 gemspec、npm、Docker 或 Travis 配置。未使用的旧布局别名与 Jemoji 插件已移除，直接输入的 Unicode 表情不受影响。
 
 部署工作流在上传站点前执行 `tools/check-site.py`，检查站内链接、资源路径和搜索索引。具体操作见 [PUBLISHING.md](PUBLISHING.md)。
+
+## 饼干个人中心
+
+`my-cookie.html` 使用 `studio/cookie-panel.html` 与 `identity.js` 集中处理领取、恢复码登录、头像、改名、恢复码重置及退出。`cookie-center.js` 分页读取自己的留言与参与讨论；未审核内容只能由对应饼干的有效会话读取。个人记录不写入本地存储，退出、切换身份和离开页面时清空。
+
+文章、游戏和留言板使用 `cookie-session.js` 只显示登录摘要和前往个人中心的链接；头像渲染仍由根元素上的头像清单提供，不再依赖内嵌头像设置。登录返回地址仅接受本站路径，保存新恢复码前阻止返回。`wc-cookie-changed` 仅广播变化时间，不保存凭据或个人记录。验证码加载由 `community-auth.js` 共用。

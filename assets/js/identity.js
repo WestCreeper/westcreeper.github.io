@@ -323,6 +323,7 @@
     });
     const ready = refresh();
     return {
+      refresh,
       getId: () => profile?.public_id || null,
       async ensure() {
         await ready;

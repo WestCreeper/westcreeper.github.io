@@ -795,42 +795,100 @@ test("admin recovery reset requires verification and revision; invalidates codes
 });
 
 test("personal activity is session-bound, paginated and never exposes another visitor's pending content", async () => {
-  const a = await register(), b = await register('其他访客','192.0.2.30');
-  const owner = db.prepare('SELECT id FROM identities WHERE public_id=?').get(a.data.identity.public_id).id;
-  const other = db.prepare('SELECT id FROM identities WHERE public_id=?').get(b.data.identity.public_id).id;
-  const insert = db.prepare("INSERT INTO entries(scope,category,author_id,nickname,body,status,parent_id) VALUES ('board','chat',?,'访客',?,?,?)");
-  for(let i=0;i<22;i++) insert.run(owner,'我的待审核'+i,'pending',null);
-  const secret = Number(insert.run(other,'别人不可公开的草稿','pending',null).lastInsertRowid);
-  const publicTopic = Number(insert.run(other,'公开讨论','approved',null).lastInsertRowid);
-  const ownReply = Number(insert.run(owner,'我的公开回复','approved',publicTopic).lastInsertRowid);
-  const pendingOnly = Number(insert.run(other,'另一条公开讨论','approved',null).lastInsertRowid);
-  insert.run(owner,'我的待审回复','pending',pendingOnly);
-  insert.run(other,'别人的待审回复','pending',publicTopic);
-  const url='/api/identity/entries';
-  assert.equal((await call(url)).status,401);
-  const first = await call(url+'?view=mine&public_id='+b.data.identity.public_id,null,{cookie:a.cookie});
-  assert.equal(first.status,200);
-  assert.equal(first.data.items.length,20);
-  assert.ok(first.data.items.every(e=>e.body.startsWith('我的')));
-  assert.ok(!JSON.stringify(first.data).includes('recovery_hash'));
-  const second=await call(url+'?before='+first.data.next,null,{cookie:a.cookie});
-  assert.equal(second.data.items.length,4);
-  assert.equal(new Set([...first.data.items,...second.data.items].map(e=>e.id)).size,24);
-  assert.equal(second.data.next,null);
-  const participated=(await call(url+'?view=participated',null,{cookie:a.cookie})).data;
-  assert.deepEqual(participated.items.map(e=>e.id),[publicTopic]);
-  assert.ok(!JSON.stringify(participated).includes('待审'));
-  assert.equal((await call(url+'?status=approved',null,{cookie:a.cookie})).data.items[0].id,ownReply);
-  assert.equal((await call('/api/entries?scope=all&entry='+secret)).data.items.length,0);
-  assert.equal((await call('/api/entries?scope=all&entry='+publicTopic)).data.items[0].id,publicTopic);
+  const a = await register(),
+    b = await register("其他访客", "192.0.2.30");
+  const owner = db
+    .prepare("SELECT id FROM identities WHERE public_id=?")
+    .get(a.data.identity.public_id).id;
+  const other = db
+    .prepare("SELECT id FROM identities WHERE public_id=?")
+    .get(b.data.identity.public_id).id;
+  const insert = db.prepare(
+    "INSERT INTO entries(scope,category,author_id,nickname,body,status,parent_id) VALUES ('board','chat',?,'访客',?,?,?)",
+  );
+  for (let i = 0; i < 22; i++)
+    insert.run(owner, "我的待审核" + i, "pending", null);
+  const secret = Number(
+    insert.run(other, "别人不可公开的草稿", "pending", null).lastInsertRowid,
+  );
+  const publicTopic = Number(
+    insert.run(other, "公开讨论", "approved", null).lastInsertRowid,
+  );
+  const ownReply = Number(
+    insert.run(owner, "我的公开回复", "approved", publicTopic).lastInsertRowid,
+  );
+  const pendingOnly = Number(
+    insert.run(other, "另一条公开讨论", "approved", null).lastInsertRowid,
+  );
+  insert.run(owner, "我的待审回复", "pending", pendingOnly);
+  insert.run(other, "别人的待审回复", "pending", publicTopic);
+  const url = "/api/identity/entries";
+  assert.equal((await call(url)).status, 401);
+  const first = await call(
+    url + "?view=mine&public_id=" + b.data.identity.public_id,
+    null,
+    { cookie: a.cookie },
+  );
+  assert.equal(first.status, 200);
+  assert.equal(first.headers.get("Cache-Control"), "no-store");
+  assert.equal(first.data.owner, a.data.identity.public_id);
+  assert.equal(first.data.items.length, 20);
+  assert.ok(first.data.items.every((e) => e.body.startsWith("我的")));
+  assert.ok(!JSON.stringify(first.data).includes("recovery_hash"));
+  const second = await call(url + "?before=" + first.data.next, null, {
+    cookie: a.cookie,
+  });
+  assert.equal(second.data.items.length, 4);
+  assert.equal(
+    new Set([...first.data.items, ...second.data.items].map((e) => e.id)).size,
+    24,
+  );
+  assert.equal(second.data.next, null);
+  const participated = (
+    await call(url + "?view=participated", null, { cookie: a.cookie })
+  ).data;
+  assert.deepEqual(
+    participated.items.map((e) => e.id),
+    [publicTopic],
+  );
+  assert.ok(!JSON.stringify(participated).includes("待审"));
+  assert.equal(
+    (await call(url + "?status=approved", null, { cookie: a.cookie })).data
+      .items[0].id,
+    ownReply,
+  );
+  assert.equal(
+    (await call("/api/entries?scope=all&entry=" + secret)).data.items.length,
+    0,
+  );
+  assert.equal(
+    (await call("/api/entries?scope=all&entry=" + publicTopic)).data.items[0]
+      .id,
+    publicTopic,
+  );
   db.prepare("UPDATE entries SET status='hidden' WHERE id=?").run(publicTopic);
-  assert.equal((await call(url+'?view=participated',null,{cookie:a.cookie})).data.items.length,0);
-  const hiddenReply=(await call(url+'?status=approved',null,{cookie:a.cookie})).data.items[0];
-  assert.equal(hiddenReply.is_public,0);
-  assert.equal(hiddenReply.body,'我的公开回复');
-  db.prepare("UPDATE entries SET deleted_at='2026-10-03' WHERE id=?").run(publicTopic);
-  assert.equal((await call(url+'?status=approved',null,{cookie:a.cookie})).data.items.length,0);
-  assert.equal((await call(url+'?view=bad',null,{cookie:a.cookie})).status,400);
+  assert.equal(
+    (await call(url + "?view=participated", null, { cookie: a.cookie })).data
+      .items.length,
+    0,
+  );
+  const hiddenReply = (
+    await call(url + "?status=approved", null, { cookie: a.cookie })
+  ).data.items[0];
+  assert.equal(hiddenReply.is_public, 0);
+  assert.equal(hiddenReply.body, "我的公开回复");
+  db.prepare("UPDATE entries SET deleted_at='2026-10-03' WHERE id=?").run(
+    publicTopic,
+  );
+  assert.equal(
+    (await call(url + "?status=approved", null, { cookie: a.cookie })).data
+      .items.length,
+    0,
+  );
+  assert.equal(
+    (await call(url + "?view=bad", null, { cookie: a.cookie })).status,
+    400,
+  );
   db.prepare("UPDATE identities SET state='banned' WHERE id=?").run(owner);
-  assert.equal((await call(url,null,{cookie:a.cookie})).status,403);
+  assert.equal((await call(url, null, { cookie: a.cookie })).status, 403);
 });

@@ -67,6 +67,7 @@
     find: "寻找游戏",
     chat: "闲聊交流",
   };
+  let identity;
   let userId = null,
     cursor = null,
     generation = 0,
@@ -149,6 +150,15 @@
       });
       const data = await response.json();
       if (ticket !== generation || owner !== userId) return;
+      if (
+        response.status === 401 ||
+        response.status === 403 ||
+        (response.ok && data.owner && data.owner !== owner)
+      ) {
+        clear();
+        await identity.refresh();
+        return;
+      }
       if (!response.ok) throw Error(data.error || "暂时无法读取记录");
       if (!Array.isArray(data.items))
         throw Error("饼干服务暂未开放，请刷新身份状态。");
@@ -189,7 +199,7 @@
   $("[data-cookie-reload]").addEventListener("click", () => load());
   more.addEventListener("click", () => load(false));
   window.addEventListener("pagehide", clear);
-  window.WCIdentity(
+  identity = window.WCIdentity(
     root,
     base,
     () => window.WCLoadTurnstile(),

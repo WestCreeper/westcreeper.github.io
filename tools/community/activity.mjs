@@ -34,5 +34,9 @@ export async function identityEntries(env, url, who) {
     .bind(...args)
     .all();
   const items = results.slice(0, 20);
-  return json({ items, next: results.length > 20 ? items.at(-1).id : null });
+  return json({
+    owner: who.public_id,
+    items,
+    next: results.length > 20 ? items.at(-1).id : null,
+  });
 }

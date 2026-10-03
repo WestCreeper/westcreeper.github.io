@@ -87,3 +87,5 @@ GitHub Actions 会在推送到 `master` 后自动构建、检查和部署。首�
 触控层只有摇杆与按钮接收点击，其他区域穿透到 Ruffle；隐藏、退出、窗口尺寸改变、失焦时释放按键，避免卡键。透明背景保留游戏画面可见性，未增加网络请求、定时轮询或额外动画。仅按住实体映射键时沿用原有键盘重复事件。
 
 样式在 `assets/css/player-touch.css`，交互复用 `assets/js/player-controls.js`。运行 `node tools/check-player-controls.cjs` 可检查斜向与动作键同时按下、隐藏释放、旧触点失效、旋转释放、退出恢复及完整键盘限制。点击穿透依据 [MDN pointer-events](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/pointer-events) 的父层禁用、控件单独启用规则。
+
+个人中心位于 `/my-cookie/`：统一管理头像、昵称、登录与恢复码，查看自己的留言审核状态和参与的公开讨论。文章、游戏与留言板上方仅保留登录状态及个人中心入口。

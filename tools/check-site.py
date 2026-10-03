@@ -43,6 +43,11 @@ for path in pages:
     if 'data-search-url=' not in html:
         continue
     checked += 1
+    if 'data-community data-avatar-base=' in html:
+        assert 'data-cookie-session' in html and 'data-cookie-center-link' in html, path
+        assert 'data-cookie-panel' not in html and 'data-cookie-avatar=' not in html, path
+    if 'data-cookie-center data-api=' in html:
+        assert 'data-cookie-panel' in html and 'data-cookie-entries' in html, path
     if any(not url.strip() for url in document.player_urls):
         errors.append(f'{path.relative_to(root)}: missing SWF URL; check game.swf, game.swf_key and storage.public_base_url')
     if '<title>' not in html or 'name="viewport"' not in html:

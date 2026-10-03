@@ -82,6 +82,7 @@
       }
       function leaveAudience() {
         clearTimeout(hoverTimer);
+        if (audience.hidden) return;
         leaveTimer = setTimeout(() => {
           if (!audience.contains(document.activeElement)) closePicker(false);
         }, 250);
@@ -240,7 +241,7 @@
         buttons.set(a.key, b);
         bar.append(b);
         b.addEventListener("pointerenter", (event) => {
-          if (event.pointerType === "touch") return;
+          if (event.pointerType === "touch" || !picker.hidden) return;
           clearTimeout(leaveTimer);
           clearTimeout(hoverTimer);
           hoverTimer = setTimeout(() => showAudience(a.key), 220);
