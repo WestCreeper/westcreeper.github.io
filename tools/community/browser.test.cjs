@@ -117,6 +117,32 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
           return route.fulfill({
             json: { enabled: identityEnabled, identity: profile },
           });
+        if (url.pathname === "/api/identity/entries")
+          return route.fulfill({
+            json: {
+              items: profile
+                ? [
+                    {
+                      id: 42,
+                      scope: "board",
+                      category: "chat",
+                      parent_id: null,
+                      title: "我的交流",
+                      body: "我的待审核留言",
+                      nickname: profile.nickname,
+                      status:
+                        url.searchParams.get("view") === "participated"
+                          ? "approved"
+                          : "pending",
+                      is_public:
+                        url.searchParams.get("view") === "participated" ? 1 : 0,
+                      created_at: "2026-10-03T08:00:00Z",
+                    },
+                  ]
+                : [],
+              next: null,
+            },
+          });
         if (url.pathname.startsWith("/api/identity/")) {
           const mode = url.pathname.split("/").pop(),
             data = req.postDataJSON();
@@ -449,9 +475,16 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
 
     profile = null;
     await page.goto(origin + "/guestbook/");
-    await page.locator("[data-cookie-panel]").waitFor();
+    await page.locator("[data-cookie-session]").waitFor();
+    assert.equal(
+      await page.locator("[data-cookie-avatar], [data-cookie-form]").count(),
+      0,
+    );
     await page.getByRole("button", { name: "发起讨论", exact: true }).click();
     assert.ok(!(await page.locator("[data-community-form]").isVisible()));
+    await page.locator("[data-cookie-center-link]").click();
+    assert.ok(page.url().includes("/my-cookie/?return="));
+    await page.locator("[data-cookie-panel]").waitFor();
     await page.getByRole("button", { name: "领取饼干", exact: true }).click();
     await page
       .locator("[data-cookie-form] input[name=nickname]")
@@ -475,6 +508,18 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
     });
     page.once("dialog", (d) => d.accept());
     await page.getByRole("button", { name: "我已保存", exact: true }).click();
+    await page.locator("[data-cookie-entries] article").waitFor();
+    assert.ok(
+      (await page.locator("[data-cookie-entries]").innerText()).includes(
+        "待审核",
+      ),
+    );
+    await page.locator("[data-cookie-view]").selectOption("participated");
+    await page.waitForFunction(
+      () => document.querySelector("[data-cookie-state-label]").hidden,
+    );
+    await page.locator("[data-cookie-return]").click();
+    assert.ok(page.url().includes("/guestbook/"));
     await page.getByRole("button", { name: "发起讨论", exact: true }).click();
     assert.equal(
       await page
@@ -488,6 +533,8 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         .evaluate((e) => e.readOnly),
     );
     await page.locator("[data-community-cancel]").click();
+    await page.locator("[data-cookie-center-link]").click();
+    await page.locator("[data-cookie-panel]").waitFor();
     await page.locator("[data-cookie-avatars] summary").click();
     await page.locator("[data-cookie-avatar=fox]").click();
     await page.waitForFunction(
@@ -526,9 +573,8 @@ const origin = process.env.BLOG_PREVIEW || "http://127.0.0.1:4000";
         .textContent.includes("浏览器玩家"),
     );
     await page.goto(origin + "/swf/games/dadnme/");
-    await page.locator("[data-cookie-avatars] summary").waitFor();
-    await page.locator("[data-cookie-avatars] summary").click();
-    assert.equal(await page.locator("[data-cookie-avatar]").count(), 8);
+    await page.locator("[data-cookie-session]").waitFor();
+    assert.equal(await page.locator("[data-cookie-avatar]").count(), 0);
     await page.locator("[data-community-load]").click();
     await page.locator(".community-card .community-avatar").first().waitFor();
     assert.ok(

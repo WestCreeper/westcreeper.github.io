@@ -1,24 +1,14 @@
-<section class="community section" data-community data-avatar-base="{{ '/assets/images/avatars/' | relative_url }}" data-avatars="{{ site.data.community_avatars | map: 'id' | jsonify | escape }}" data-reactions="{{ site.data.community_reactions | jsonify | escape }}" data-feed="{{ include.feed | escape }}" data-scope="{{ include.scope | escape }}" data-api="{{ site.data.community.api_url | escape }}" data-site-key="{{ site.data.community.turnstile_site_key | escape }}" data-enabled="{{ site.data.community.enabled }}" aria-label="{{ include.title | escape }}">
+<section id="comments" class="community section" data-community data-avatar-base="{{ '/assets/images/avatars/' | relative_url }}" data-avatars="{{ site.data.community_avatars | map: 'id' | jsonify | escape }}" data-reactions="{{ site.data.community_reactions | jsonify | escape }}" data-feed="{{ include.feed | escape }}" data-scope="{{ include.scope | escape }}" data-api="{{ site.data.community.api_url | escape }}" data-site-key="{{ site.data.community.turnstile_site_key | escape }}" data-enabled="{{ site.data.community.enabled }}" aria-label="{{ include.title | escape }}">
   <div class="section-heading"><div><div class="eyebrow">A LITTLE CONVERSATION</div><h2>{% include studio/icon.html name='message' %}{{ include.title }}</h2></div></div>
   <p class="community-lead">{{ include.description }}</p>
-  <section class="cookie-panel" data-cookie-panel hidden aria-label="我的饼干">
-    <h3>我的饼干</h3><img class="community-avatar" data-cookie-current-avatar src="{{ '/assets/images/avatars/moss.svg' | relative_url }}" width="40" height="40" alt="当前头像"><p data-cookie-summary role="status"></p>
-    <details data-cookie-avatars><summary>选择我的头像</summary><p class="community-notice">登录后可选择头像，留言板、文章、游戏评论和回复共用。改头像不影响昵称冷却。</p><div class="cookie-avatar-grid" aria-label="默认头像">{% for avatar in site.data.community_avatars %}<button type="button" class="cookie-avatar-option" data-cookie-avatar="{{ avatar.id }}" disabled aria-pressed="false"><img src="{{ '/assets/images/avatars/' | append: avatar.id | append: '.svg' | relative_url }}" width="48" height="48" alt="" loading="lazy"><span>{{ avatar.name }}</span></button>{% endfor %}</div></details>
-    <div class="community-toolbar"><button class="button" type="button" data-cookie-open="register">领取饼干</button><button class="button" type="button" data-cookie-open="login">恢复码登录</button><button class="button" type="button" data-cookie-open="rename" hidden>修改昵称</button><button class="button" type="button" data-cookie-rotate hidden>重置恢复码</button><button class="button" type="button" data-cookie-logout hidden>退出</button></div>
-    <form data-cookie-form hidden>
-      <h4 data-cookie-title></h4>
-      <label data-cookie-name-field>昵称<input name="nickname" maxlength="32" autocomplete="nickname" placeholder="2–24 字，昵称不可重复"></label>
-      <label data-cookie-id-field hidden>饼干编号<input name="public_id" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" autocomplete="username"></label>
-      <label data-cookie-code-field hidden>恢复码<input name="recovery_code" autocomplete="current-password" type="password" maxlength="100" spellcheck="false"></label>
-      <label class="cookie-ack" data-cookie-ack-field><input type="checkbox" name="saved_ack">我会保存编号和恢复码；领取及每次改名后 7 天内不能再改名。</label>
-      <div data-cookie-challenge></div><div class="community-toolbar"><button class="button button-primary" type="submit">确认</button><button class="button" type="button" data-cookie-cancel>取消</button></div>
-    </form>
-    <div data-cookie-backup hidden><strong>请立即保存，这是唯一一次显示此恢复码。</strong><p>编号：<span data-cookie-backup-id></span></p><label>恢复码<input data-cookie-backup-code readonly spellcheck="false"></label><div class="community-toolbar"><button class="button" type="button" data-cookie-download>下载备份</button><button class="button" type="button" data-cookie-saved>我已保存</button></div><p>恢复码相当于登录钥匙，请勿放入留言或发送给别人。</p></div>
-    <p data-cookie-status role="status" aria-live="polite"></p>
-    <p class="community-notice">昵称与 8 位编号会随留言公开。恢复码丢失但此设备仍登录时，可重置恢复码；否则请写信至 <a href="mailto:contact@westcreeper.com">contact@westcreeper.com</a>，提供饼干编号与可核验线索。我们会人工核验，无法确认归属时不能保证找回。请使用纯文本邮件，不附恢复码或附件。</p>
-  </section>
+  <div class="cookie-session" data-cookie-session data-center-url="{{ '/my-cookie/' | relative_url }}" aria-label="饼干登录状态">
+    <p data-cookie-summary role="status">正在读取登录状态…</p>
+    <a class="button" data-cookie-center-link href="{{ '/my-cookie/' | relative_url }}">前往我的饼干登录</a>
+    <p data-cookie-status class="community-notice" role="status"></p>
+  </div>
   <div class="community-toolbar">
     {% if include.scope == 'board' %}<label>讨论分类 <select data-community-category><option value="">全部留言</option><option value="game">游戏评论区</option><option value="article">文章评论区</option><option value="feedback">问题建议</option><option value="find">寻找游戏</option><option value="chat">闲聊交流</option></select></label>{% endif %}
+    <button class="button" type="button" data-community-all hidden>查看全部讨论</button>
     <button class="button" type="button" data-community-load>查看{% if include.scope == 'board' %}讨论{% else %}评论{% endif %}</button>
     <button class="button button-primary" type="button" data-community-write hidden>{% if include.scope == 'board' %}发起讨论{% else %}写评论{% endif %}</button>
   </div>
@@ -33,7 +23,7 @@
     <h3 data-community-form-title>写下你的想法</h3>
     <p class="community-notice">饼干身份发言 · 先审核后公开 · 编号用于辨认同一位访客，不代表实名身份</p>
     <label>当前昵称<input name="nickname" readonly aria-describedby="cookie-author-help"></label>
-    <p class="community-notice" id="cookie-author-help">昵称由饼干自动填写；修改昵称请使用上方「我的饼干」。</p>
+    <p class="community-notice" id="cookie-author-help">昵称由饼干自动填写；修改昵称、头像请前往「我的饼干」。</p>
     {% if include.scope == 'board' %}
     <div data-community-topic-fields><label>话题<select name="category"><option value="feedback">问题建议</option><option value="find">寻找游戏</option><option value="chat">闲聊交流</option></select></label><label>标题<input name="title" minlength="2" maxlength="80" required placeholder="一句话说说你想聊的内容"></label></div>
     {% endif %}
@@ -47,6 +37,7 @@
   <noscript><p>启用 JavaScript 后可查看留言和回复，并提交讨论。</p></noscript>
 </section>
 <link rel="stylesheet" href="{{ '/assets/css/community.css' | relative_url }}?v={{ site.time | date: '%s' }}">
-<script src="{{ '/assets/js/identity.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+<script src="{{ '/assets/js/community-auth.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+<script src="{{ '/assets/js/cookie-session.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 <script src="{{ '/assets/js/reactions.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
 <script src="{{ '/assets/js/community.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>

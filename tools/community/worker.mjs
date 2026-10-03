@@ -57,6 +57,8 @@ async function publicApi(request, env, url) {
       ? requestedScope
       : await scope(requestedScope, env);
     const parentId = number(url.searchParams.get("parent"));
+    const entryId = number(url.searchParams.get("entry"));
+    if (parentId && entryId) fail(400, "请分别读取讨论与回复。");
     const before = number(
       url.searchParams.get("before"),
       Number.MAX_SAFE_INTEGER,
@@ -74,6 +76,10 @@ async function publicApi(request, env, url) {
       visibleParent,
     ];
     const args = [before];
+    if (entryId) {
+      clauses.push("e.id=?");
+      args.push(entryId);
+    }
     if (s === "games") clauses.push("e.category='game'");
     else if (s !== "all") {
       clauses.push("e.scope=?");

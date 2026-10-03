@@ -16,6 +16,7 @@
       mounting = false,
       failed = false,
       backupText = "";
+    let lastProfile = null;
     async function api(path, data) {
       const r = await fetch(base + "/api/identity/" + path, {
         method: data ? "POST" : "GET",
@@ -30,6 +31,13 @@
       return value;
     }
     function render() {
+      const fingerprint = JSON.stringify(profile);
+      if (lastProfile !== null && fingerprint !== lastProfile) {
+        try {
+          localStorage.setItem("wc-cookie-changed", String(Date.now()));
+        } catch {}
+      }
+      lastProfile = fingerprint;
       panel.hidden = false;
       summary.textContent = profile
         ? `${profile.nickname} · 饼干 #${profile.public_id}${profile.state === "banned" ? "（已停用）" : ""} · 可改名时间：${new Date(profile.rename_after * 1000).toLocaleString("zh-CN")}`
@@ -91,7 +99,9 @@
         return true;
       } catch (e) {
         failed = true;
-        panel.hidden = false;
+        profile = null;
+        enabled = false;
+        render();
         status.textContent = "饼干服务读取失败：" + e.message;
         return false;
       }
@@ -156,7 +166,7 @@
     }
     function showBackup(data) {
       backup.hidden = false;
-      backupText = `WestCreeper 饼干备份\n编号：${data.identity.public_id}\n恢复码：${data.recovery_code}\n请保密。登录入口：https://westcreeper.com/guestbook/\n`;
+      backupText = `WestCreeper 饼干备份\n编号：${data.identity.public_id}\n恢复码：${data.recovery_code}\n请保密。登录入口：https://westcreeper.com/my-cookie/\n`;
       $("[data-cookie-backup-id]").textContent = data.identity.public_id;
       $("[data-cookie-backup-code]").value = data.recovery_code;
       backup.scrollIntoView({ block: "nearest" });
@@ -303,6 +313,13 @@
     });
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden && !busy && backup.hidden) refresh();
+    });
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted && !busy && backup.hidden) refresh();
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key === "wc-cookie-changed" && !busy && backup.hidden)
+        refresh();
     });
     const ready = refresh();
     return {

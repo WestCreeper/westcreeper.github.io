@@ -141,6 +141,7 @@ function fixture({
       next: null,
     });
   };
+  window.WCLoadTurnstile = async () => window.turnstile;
   vm.runInNewContext(
     readFileSync(
       new URL("../../assets/js/community.js", import.meta.url),

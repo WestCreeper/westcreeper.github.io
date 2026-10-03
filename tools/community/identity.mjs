@@ -1,5 +1,6 @@
 import { fail, json, text, body, number } from "./http.mjs";
 import { verifyChallenge } from "./challenge.mjs";
+import { identityEntries } from "./activity.mjs";
 import avatarCatalog from "../../_data/community_avatars.json" with { type: "json" };
 const avatars = new Set(avatarCatalog.map((a) => a.id));
 function availableName(name, owner = false) {
@@ -135,6 +136,8 @@ export async function identityApi(request, env, url) {
     const row = await visitor(request, env);
     return json({ enabled: true, identity: row ? publicIdentity(row) : null });
   }
+  if (path === "/api/identity/entries" && request.method === "GET")
+    return identityEntries(env, url, await visitor(request, env, true));
   if (request.method !== "POST") fail(405, "不支持此操作。");
   const data = await body(request);
   if (path === "/api/identity/register" || path === "/api/identity/login") {

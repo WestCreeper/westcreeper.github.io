@@ -1,0 +1,16 @@
+  <section class="cookie-panel" data-cookie-panel hidden aria-label="我的饼干">
+    <h3>我的饼干</h3><img class="community-avatar" data-cookie-current-avatar src="{{ '/assets/images/avatars/moss.svg' | relative_url }}" width="40" height="40" alt="当前头像"><p data-cookie-summary role="status"></p>
+    <details data-cookie-avatars><summary>选择我的头像</summary><p class="community-notice">登录后可选择头像，留言板、文章、游戏评论和回复共用。改头像不影响昵称冷却。</p><div class="cookie-avatar-grid" aria-label="默认头像">{% for avatar in site.data.community_avatars %}<button type="button" class="cookie-avatar-option" data-cookie-avatar="{{ avatar.id }}" disabled aria-pressed="false"><img src="{{ '/assets/images/avatars/' | append: avatar.id | append: '.svg' | relative_url }}" width="48" height="48" alt="" loading="lazy"><span>{{ avatar.name }}</span></button>{% endfor %}</div></details>
+    <div class="community-toolbar"><button class="button" type="button" data-cookie-open="register">领取饼干</button><button class="button" type="button" data-cookie-open="login">恢复码登录</button><button class="button" type="button" data-cookie-open="rename" hidden>修改昵称</button><button class="button" type="button" data-cookie-rotate hidden>重置恢复码</button><button class="button" type="button" data-cookie-logout hidden>退出</button></div>
+    <form data-cookie-form hidden>
+      <h4 data-cookie-title></h4>
+      <label data-cookie-name-field>昵称<input name="nickname" maxlength="32" autocomplete="nickname" placeholder="2–24 字，昵称不可重复"></label>
+      <label data-cookie-id-field hidden>饼干编号<input name="public_id" inputmode="numeric" pattern="[0-9]{8}" maxlength="8" autocomplete="username"></label>
+      <label data-cookie-code-field hidden>恢复码<input name="recovery_code" autocomplete="current-password" type="password" maxlength="100" spellcheck="false"></label>
+      <label class="cookie-ack" data-cookie-ack-field><input type="checkbox" name="saved_ack">我会保存编号和恢复码；领取及每次改名后 7 天内不能再改名。</label>
+      <div data-cookie-challenge></div><div class="community-toolbar"><button class="button button-primary" type="submit">确认</button><button class="button" type="button" data-cookie-cancel>取消</button></div>
+    </form>
+    <div data-cookie-backup hidden><strong>请立即保存，这是唯一一次显示此恢复码。</strong><p>编号：<span data-cookie-backup-id></span></p><label>恢复码<input data-cookie-backup-code readonly spellcheck="false"></label><div class="community-toolbar"><button class="button" type="button" data-cookie-download>下载备份</button><button class="button" type="button" data-cookie-saved>我已保存</button></div><p>恢复码相当于登录钥匙，请勿放入留言或发送给别人。</p></div>
+    <p data-cookie-status role="status" aria-live="polite"></p>
+    <p class="community-notice">昵称与 8 位编号会随留言公开。恢复码丢失但此设备仍登录时，可重置恢复码；否则请写信至 <a href="mailto:contact@westcreeper.com">contact@westcreeper.com</a>，提供饼干编号与可核验线索。我们会人工核验，无法确认归属时不能保证找回。请使用纯文本邮件，不附恢复码或附件。</p>
+  </section>

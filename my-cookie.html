@@ -1,0 +1,27 @@
+---
+layout: studio
+title: 我的饼干
+description: 管理你的饼干身份，查看自己的留言与参与的讨论。
+permalink: /my-cookie/
+---
+<div class="container content-page community cookie-center" data-cookie-center data-api="{{ site.data.community.api_url | escape }}" data-site-key="{{ site.data.community.turnstile_site_key | escape }}" data-enabled="{{ site.data.community.enabled }}">
+  <header class="page-intro"><div class="eyebrow">YOUR LITTLE CORNER</div><h1>{% include studio/icon.html name='profile' %}我的饼干</h1><p>一枚饼干，记住你的名字，也串起每一次交流。</p><a class="button" data-cookie-return href="{{ '/guestbook/' | relative_url }}">去留言板</a></header>
+  {% include studio/cookie-panel.html %}
+  <section class="cookie-activity" data-cookie-activity hidden aria-labelledby="cookie-activity-title">
+    <div class="section-heading"><div><div class="eyebrow">YOUR CONVERSATIONS</div><h2 id="cookie-activity-title">我的交流记录</h2></div></div>
+    <p class="community-notice">在这里查看自己的审核状态。待审核、未通过及已收起的留言仅自己可见；站内公开页面仍只展示通过审核的内容。</p>
+    <div class="community-toolbar"><label>查看<select data-cookie-view><option value="mine">我的留言与回复</option><option value="participated">我参与的公开讨论</option></select></label><label data-cookie-state-label>审核状态<select data-cookie-state><option value="all">全部状态</option><option value="pending">待审核</option><option value="approved">已通过</option><option value="rejected">未通过</option><option value="hidden">已收起</option></select></label><button type="button" class="button" data-cookie-reload>刷新</button></div>
+    <p class="community-notice">按留言发布时间倒序排列。已删除的内容不再展示。</p>
+    <p data-cookie-activity-status role="status"></p><div data-cookie-entries></div><button type="button" class="button" data-cookie-more hidden>再看 20 条</button>
+  </section>
+  <div hidden data-cookie-sources>
+    <a data-source-scope="board" href="{{ '/guestbook/' | relative_url }}">留言板</a>
+    {% for game in site.data.games %}<a data-source-scope="game:{{ game.id | escape }}" href="{{ '/swf/games/' | append: game.id | append: '/' | relative_url }}">{{ game.title | escape }}</a>{% endfor %}
+    {% for post in site.posts %}{% assign article_id = post.comment_id | default: post.id %}<a data-source-scope="article:{{ article_id | escape }}" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>{% endfor %}
+  </div>
+  <noscript><p>启用 JavaScript 后可登录、管理饼干并查看自己的交流记录。</p></noscript>
+</div>
+<link rel="stylesheet" href="{{ '/assets/css/community.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+<script src="{{ '/assets/js/community-auth.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+<script src="{{ '/assets/js/identity.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+<script src="{{ '/assets/js/cookie-center.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>

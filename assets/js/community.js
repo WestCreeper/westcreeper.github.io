@@ -1,36 +1,5 @@
 (() => {
-  let turnstilePromise;
-  function loadTurnstile() {
-    if (window.turnstile) return Promise.resolve(window.turnstile);
-    if (!turnstilePromise)
-      turnstilePromise = new Promise((resolve, reject) => {
-        const script = document.createElement("script");
-        const timer = setTimeout(() => {
-          script.remove();
-          turnstilePromise = null;
-          reject(new Error("人机验证加载超时，请关闭表单后重试。"));
-        }, 15000);
-        script.src =
-          "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-        script.async = true;
-        script.onload = () => {
-          clearTimeout(timer);
-          if (window.turnstile) resolve(window.turnstile);
-          else {
-            turnstilePromise = null;
-            reject(new Error("人机验证暂不可用。"));
-          }
-        };
-        script.onerror = () => {
-          clearTimeout(timer);
-          script.remove();
-          turnstilePromise = null;
-          reject(new Error("无法加载人机验证，请检查网络后重新打开表单。"));
-        };
-        document.head.append(script);
-      });
-    return turnstilePromise;
-  }
+  const loadTurnstile = () => window.WCLoadTurnstile();
   function el(tag, value, cls) {
     const node = document.createElement(tag);
     if (value) node.textContent = value;
@@ -64,6 +33,25 @@
     const base = apiURL.origin + apiURL.pathname.replace(/\/$/, "");
     const scope = root.dataset.scope;
     const feed = root.dataset.feed === "all" ? "all" : scope;
+    const requestedDiscussion = new URLSearchParams(
+      window.location?.search || "",
+    ).get("discussion");
+    let discussion = /^[1-9]\d{0,14}$/.test(requestedDiscussion || "")
+      ? requestedDiscussion
+      : null;
+    const allButton = find("[data-community-all]");
+    if (allButton) allButton.hidden = !discussion;
+    function clearDiscussion() {
+      discussion = null;
+      if (allButton) allButton.hidden = true;
+      const url = new URL(window.location.href);
+      url.searchParams.delete("discussion");
+      history.replaceState(null, "", url.pathname + url.search + url.hash);
+    }
+    allButton?.addEventListener("click", () => {
+      clearDiscussion();
+      load();
+    });
     const gameLinks = new Map(
       [...root.querySelectorAll("[data-game-id]")].map((link) => [
         "game:" + link.dataset.gameId,
@@ -276,6 +264,7 @@
       try {
         const data = await api({
           scope: feed,
+          ...(discussion ? { entry: discussion } : {}),
           ...(filter?.value ? { category: filter.value } : {}),
           ...(!reset && cursor ? { before: cursor } : {}),
         });
@@ -425,10 +414,13 @@
     });
     loadButton.addEventListener("click", () => load());
     more.addEventListener("click", () => load(false));
-    filter?.addEventListener("change", () => load());
+    filter?.addEventListener("change", () => {
+      if (discussion) clearDiscussion();
+      load();
+    });
     writeButton.addEventListener("click", () => openForm());
     find("[data-community-cancel]").addEventListener("click", closeForm);
     form.elements.category?.addEventListener("change", hint);
-    if (feed === "all") load();
+    if (feed === "all" || discussion) load();
   }
 })();

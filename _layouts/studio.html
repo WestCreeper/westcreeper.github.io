@@ -32,6 +32,7 @@
         <a href="{{ '/archive.html' | relative_url }}" {% if page.url == '/archive.html' or page.layout == 'article' %}aria-current="page"{% endif %}>{% include studio/icon.html name='book' %}文章</a>
         <a href="{{ '/swf/' | relative_url }}" {% if page.url contains '/swf/' %}aria-current="page"{% endif %}>{% include studio/icon.html name='archive' %}游戏档案馆<span class="nav-dot"></span></a>
         <a href="{{ '/guestbook/' | relative_url }}" {% if page.url == '/guestbook/' %}aria-current="page"{% endif %}>{% include studio/icon.html name='message' %}留言板</a>
+        <a href="{{ '/my-cookie/' | relative_url }}" {% if page.url == '/my-cookie/' %}aria-current="page"{% endif %}>{% include studio/icon.html name='profile' %}我的饼干</a>
         <a href="{{ '/sponsors/' | relative_url }}" {% if page.url == '/sponsors/' %}aria-current="page"{% endif %}>{% include studio/icon.html name='gift' %}赞助名单</a>
         <a href="{{ '/about.html' | relative_url }}" {% if page.url == '/about.html' %}aria-current="page"{% endif %}>{% include studio/icon.html name='profile' %}关于</a>
       </nav>

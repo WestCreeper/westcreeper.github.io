@@ -166,6 +166,45 @@
 .cookie-panel p {
   overflow-wrap: anywhere;
 }
+.cookie-session {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 12px 16px;
+  margin: 20px 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.cookie-session p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.cookie-session [data-cookie-summary] {
+  flex: 1 1 200px;
+}
+.cookie-session [data-cookie-status]:empty {
+  display: none;
+}
+.cookie-session [data-cookie-status] {
+  flex-basis: 100%;
+}
+.cookie-center .cookie-panel {
+  margin-bottom: 48px;
+}
+.cookie-entry .button {
+  margin-top: 8px;
+}
+.cookie-center .page-intro h1 .icon {
+  width: 36px;
+  height: 36px;
+  margin-right: 12px;
+}
+.cookie-center [data-cookie-current-avatar] {
+  width: 64px;
+  height: 64px;
+}
 
 /* Original re-ocd-inspired avatars: square tiles, inset borders, restrained palettes. */
 .community-avatar {
