@@ -3,75 +3,60 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101018">
-  <meta name="description" content="在像素洞穴里收集苔晶、扩建矿站，点亮地心信标。">
-  <title>苔光矿站 · Mosslight</title>
-  <link rel="stylesheet" href="style.css">
-  <script defer src="art.js"></script>
-  <script defer src="game.js"></script>
+  <meta name="theme-color" content="#161914">
+  <meta name="description" content="开采矿块、建造矿车和机器，用爆脉冲击一路挖向基岩。">
+  <title>方块矿镇 · Blockburrow</title>
+  <link rel="stylesheet" href="style.css?v=2">
+  <script defer src="art.js?v=2"></script>
+  <script defer src="game.js?v=2"></script>
 </head>
 <body>
   <div class="shell">
     <header class="topbar">
       <div class="brand">
-        <span class="brand-icon"><canvas width="16" height="16" data-sprite="crystal" aria-hidden="true"></canvas></span>
-        <div><h1>苔光矿站</h1><p>MOSSLIGHT</p></div>
+        <span class="brand-icon"><canvas width="32" height="32" data-icon="brand" aria-hidden="true"></canvas></span>
+        <div><h1>方块矿镇</h1><p>BLOCKBURROW</p></div>
       </div>
       <div class="header-actions">
-        <span class="save-status" id="saveStatus"><i></i><span>本地存档</span></span>
-        <button class="icon-button" id="sound" type="button" aria-label="开启音效" title="开启音效" aria-pressed="false"><canvas width="16" height="16" data-sprite="mute" aria-hidden="true"></canvas></button>
-        <button class="icon-button" id="help" type="button" aria-label="玩法说明" title="玩法说明"><canvas width="16" height="16" data-sprite="help" aria-hidden="true"></canvas></button>
+        <span id="saveStatus" class="save-status"><i></i><span>自动存档</span></span>
+        <button type="button" class="icon-button" id="sound" aria-label="开启音效" title="开启音效" aria-pressed="false"><canvas width="32" height="32" data-icon="mute" aria-hidden="true"></canvas></button>
+        <button type="button" class="icon-button" id="help" aria-label="玩法说明" title="玩法说明">?</button>
       </div>
     </header>
 
     <main>
-      <div class="resource-bar" aria-label="矿站资源">
-        <div class="resource primary">
-          <canvas width="16" height="16" data-sprite="crystal" aria-hidden="true"></canvas>
-          <div><span>苔晶库存</span><strong id="balance">0</strong></div>
-        </div>
-        <div class="resource">
-          <canvas width="16" height="16" data-sprite="bolt" aria-hidden="true"></canvas>
-          <div><span>自动产量</span><strong id="rate">0 <small>/ 秒</small></strong></div>
-        </div>
-        <div class="resource">
-          <canvas width="16" height="16" data-sprite="pick" aria-hidden="true"></canvas>
-          <div><span>手动产量</span><strong id="power">1 <small>/ 次</small></strong></div>
-        </div>
-        <div class="resource">
-          <canvas width="16" height="16" data-sprite="star" aria-hidden="true"></canvas>
-          <div><span>信标星屑</span><strong id="stars">0</strong></div>
-        </div>
+      <div class="resource-bar" aria-label="矿镇库存">
+        <div class="resource primary"><span class="resource-icon"><canvas width="32" height="32" data-icon="ore" aria-hidden="true"></canvas></span><div><span>矿料库存</span><strong id="balance">0</strong></div></div>
+        <div class="resource"><span class="resource-icon"><canvas width="32" height="32" data-icon="gear" aria-hidden="true"></canvas></span><div><span>自动产量</span><strong><span id="rate">0</span><small> / 秒</small></strong></div></div>
+        <div class="resource"><span class="resource-icon"><canvas width="32" height="32" data-icon="pick" aria-hidden="true"></canvas></span><div><span>镐击力</span><strong><span id="power">1</span><small> / 击</small></strong></div></div>
+        <div class="resource"><span class="resource-icon"><canvas width="32" height="32" data-icon="core" aria-hidden="true"></canvas></span><div><span>基岩晶核</span><strong id="cores">0</strong></div></div>
       </div>
 
       <div class="workspace">
         <section class="mining-frame" aria-labelledby="sectorTitle">
           <div class="mine-top">
-            <div><p class="sector-index" id="sectorIndex">矿层 01</p><h2 id="sectorTitle">微光洞穴</h2></div>
-            <span class="depth"><canvas width="16" height="16" data-sprite="depth" aria-hidden="true"></canvas><span id="depth">−24 m</span></span>
+            <div class="sector"><span class="mine-dot"></span><div><p id="sectorIndex">地表入口</p><h2 id="sectorTitle">草岩矿口</h2></div></div>
+            <span class="depth" id="depth">−12 m</span>
           </div>
           <div class="mine-view" id="mineView">
-            <canvas id="cave" width="400" height="230" aria-hidden="true"></canvas>
+            <canvas id="cave" width="480" height="270" aria-hidden="true"></canvas>
+            <div class="vein" id="vein" aria-label="矿脉"></div>
+            <canvas id="effects" width="480" height="270" aria-hidden="true"></canvas>
+            <div class="scene-hud"><span id="combo" class="combo">连击 ×0</span><span class="chain-track"><span id="chainBar"></span></span></div>
+            <div class="scene-label" id="veinLabel">点击矿块开始开采</div>
             <div class="float-layer" id="floatLayer" aria-hidden="true"></div>
-            <div class="scene-caption"><span></span><span id="sectorFlavor">矿脉正在发光</span></div>
           </div>
           <div class="mine-controls">
-            <button class="mine-button" id="mine" type="button">
-              <canvas width="16" height="16" data-sprite="pick-dark" aria-hidden="true"></canvas>
-              <span>开采苔晶</span><span class="mine-yield" id="mineYield">+1</span>
-            </button>
-            <span class="shortcut"><kbd>SPACE</kbd> 也可开采</span>
+            <button class="mine-button" id="mine" type="button"><canvas width="32" height="32" data-icon="pick-dark" aria-hidden="true"></canvas><span>挥镐</span><kbd>SPACE</kbd><small class="touch-hint">可长按</small></button>
+            <button class="pulse-button" id="pulse" type="button" aria-label="爆脉冲击，能量 0%" aria-disabled="true"><canvas width="32" height="32" data-icon="pulse" aria-hidden="true"></canvas><span class="pulse-copy"><strong>爆脉冲击</strong><span class="charge-track"><span id="chargeBar"></span></span></span><span id="chargeValue">0%</span><kbd>F</kbd></button>
           </div>
         </section>
 
         <section class="station-frame" aria-labelledby="stationTitle">
-          <div class="station-heading">
-            <span class="station-icon"><canvas width="16" height="16" data-sprite="gear" aria-hidden="true"></canvas></span>
-            <h2 id="stationTitle">矿站工坊</h2>
-          </div>
-          <div class="tabs" role="tablist" aria-label="矿站工坊">
-            <button id="facilitiesTab" type="button" role="tab" aria-controls="facilities" aria-selected="true">设施</button>
-            <button id="explorationTab" type="button" role="tab" aria-controls="exploration" aria-selected="false" tabindex="-1">勘探</button>
+          <div class="station-heading"><span class="station-icon"><canvas width="32" height="32" data-icon="workshop" aria-hidden="true"></canvas></span><div><h2 id="stationTitle">矿镇工坊</h2><p>打造工具，启动机械</p></div></div>
+          <div class="tabs" role="tablist" aria-label="矿镇工坊">
+            <button id="facilitiesTab" type="button" role="tab" aria-controls="facilities" aria-selected="true">工具与设备</button>
+            <button id="explorationTab" type="button" role="tab" aria-controls="exploration" aria-selected="false" tabindex="-1">矿层地图</button>
           </div>
           <div class="station-content" id="facilities" role="tabpanel" aria-labelledby="facilitiesTab"></div>
           <div class="station-content" id="exploration" role="tabpanel" aria-labelledby="explorationTab" hidden></div>
@@ -79,21 +64,21 @@
       </div>
 
       <section class="mission" aria-labelledby="missionTitle">
-        <div class="mission-icon"><canvas width="16" height="16" data-sprite="flag" aria-hidden="true"></canvas></div>
-        <div class="mission-info"><h2 id="missionTitle">当前目标</h2><p id="missionText">累计开采 12 苔晶，为第一把精炼矿镐攒钱</p></div>
-        <div class="mission-meter"><span id="missionCount">0 / 12</span><div class="progress" id="missionBar" role="progressbar" aria-label="当前目标进度" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0"><div></div></div></div>
+        <span class="mission-icon"><canvas width="32" height="32" data-icon="flag" aria-hidden="true"></canvas></span>
+        <div class="mission-info"><h2 id="missionTitle">当前目标</h2><p id="missionText">敲开三块矿石</p></div>
+        <div class="mission-meter"><span id="missionCount">0 / 3</span><div class="progress" id="missionBar" role="progressbar" aria-label="当前目标进度" aria-valuemin="0" aria-valuenow="0" aria-valuemax="3"><div></div></div></div>
       </section>
-      <footer><span id="lastEvent" role="status"></span><span>本轮累计 <b id="total">0</b> 苔晶</span></footer>
+      <footer><span id="lastEvent" role="status"></span><span>本轮开采 <b id="total">0</b> 矿料</span></footer>
     </main>
   </div>
 
   <dialog id="dialog" aria-labelledby="dialogTitle">
     <form method="dialog">
-      <div class="dialog-title"><h2 id="dialogTitle"></h2><button class="icon-button" value="cancel" aria-label="关闭" autofocus>×</button></div>
+      <div class="dialog-title"><h2 id="dialogTitle"></h2><button class="icon-button" value="cancel" aria-label="关闭">×</button></div>
       <div id="dialogBody"></div>
       <div class="dialog-actions"><button type="submit" class="dialog-dismiss" value="cancel" id="dialogDismiss">知道了</button><button type="submit" class="dialog-confirm" value="confirm" id="dialogConfirm" hidden>点亮信标</button></div>
     </form>
   </dialog>
-  <noscript>请开启浏览器的 JavaScript 以游玩苔光矿站。</noscript>
+  <noscript>请开启浏览器的 JavaScript 以游玩方块矿镇。</noscript>
 </body>
 </html>

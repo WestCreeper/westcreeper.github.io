@@ -1,145 +1,127 @@
 'use strict';
 
-const SAVE_KEY = 'mosslight-outpost-v1';
+const SAVE_KEY = 'blockburrow-mine-v2';
+const LEGACY_KEY = 'mosslight-outpost-v1';
 const OFFLINE_LIMIT = 8 * 60 * 60;
-const BEACON_TARGET = 24000;
+const BEACON_TARGET = 23000;
+const COMBO_LENGTH = 5500;
+const MAX_CHAIN = 8;
 const MAX_LEVEL = 200;
+const HOLD_INTERVAL = 175;
 const sectors = [
-  { name: '微光洞穴', depth: 24, threshold: 0, boost: 1, flavor: '苔晶矿脉正在发光' },
-  { name: '紫晶回廊', depth: 78, threshold: 75, boost: 1.15, flavor: '岩壁映着淡紫色的光' },
-  { name: '琥珀断层', depth: 162, threshold: 450, boost: 1.4, flavor: '裂隙里传来暖风' },
-  { name: '荧菌深井', depth: 306, threshold: 2400, boost: 1.85, flavor: '荧菌沿着岩缝蔓延' },
-  { name: '地心遗迹', depth: 512, threshold: 12000, boost: 2.5, flavor: '沉睡的信标就在前方' }
+  { name: '草岩矿口', subtitle: '地表入口', depth: 12, threshold: 0, boost: 1, deck: ['stone', 'stone', 'stone', 'coal', 'coal', 'copper', 'copper', 'jade'] },
+  { name: '铜叶地窟', subtitle: '矿层 02', depth: 48, threshold: 170, boost: 1.24, deck: ['stone', 'coal', 'coal', 'copper', 'copper', 'copper', 'jade', 'amber'] },
+  { name: '赤岩峡井', subtitle: '矿层 03', depth: 116, threshold: 720, boost: 1.57, deck: ['coal', 'copper', 'copper', 'jade', 'jade', 'amber', 'amber', 'stone'] },
+  { name: '翡翠裂谷', subtitle: '矿层 04', depth: 236, threshold: 2900, boost: 2.05, deck: ['coal', 'copper', 'jade', 'jade', 'jade', 'amber', 'amber', 'core'] },
+  { name: '基岩穹窿', subtitle: '矿层 05', depth: 390, threshold: 10800, boost: 2.65, deck: ['copper', 'copper', 'jade', 'jade', 'amber', 'amber', 'core', 'core'] }
 ];
-const upgrades = [
-  { id: 'pick', title: '精炼矿镐', detail: '手动 +1.5 / 次', cost: 12, growth: 1.55, threshold: 0, click: 1.5, idle: 0 },
-  { id: 'beetle', title: '矿工甲虫', detail: '自动 +0.7 / 秒', cost: 25, growth: 1.42, threshold: 25, click: 0, idle: .7 },
-  { id: 'drill', title: '共振钻机', detail: '自动 +4 / 秒', cost: 145, growth: 1.54, threshold: 170, click: 0, idle: 4 },
-  { id: 'forge', title: '地热熔炉', detail: '自动 +18 / 秒，手动 +3 / 次', cost: 850, growth: 1.62, threshold: 1100, click: 3, idle: 18 }
+const minerals = {
+  stone: { name: '页岩', health: 2, value: 6 },
+  coal: { name: '煤纹矿', health: 3, value: 10 },
+  copper: { name: '赤铜矿', health: 4, value: 17 },
+  jade: { name: '翠晶矿', health: 5, value: 28, rare: true },
+  amber: { name: '琥珀矿', health: 7, value: 46, rare: true },
+  core: { name: '紫辉矿', health: 9, value: 72, rare: true }
+};
+const facilities = [
+  { id: 'pick', name: '精钢矿镐', description: '每级 +1 镐击力', cost: 18, growth: 1.62, threshold: 0 },
+  { id: 'cart', name: '轨道矿车', description: '装矿并送回库存', cost: 42, growth: 1.50, threshold: 28, cycle: 2.8, output: 12 },
+  { id: 'drill', name: '活塞钻机', description: '连续钻进坚硬矿层', cost: 190, growth: 1.54, threshold: 150, cycle: 2.1, output: 30 },
+  { id: 'forge', name: '鼓风熔炉', description: '额外冶炼，每级手挖 +9%', cost: 680, growth: 1.62, threshold: 510, cycle: 3.6, output: 105 }
 ];
-
-const byId = id => document.getElementById(id);
+const machines = facilities.filter(facility => facility.cycle);
 const ui = Object.fromEntries([
-  'balance', 'rate', 'power', 'stars', 'sectorIndex', 'sectorTitle', 'depth', 'sectorFlavor',
-  'cave', 'mine', 'mineYield', 'floatLayer', 'facilities', 'exploration', 'facilitiesTab',
-  'explorationTab', 'missionText', 'missionCount', 'missionBar', 'total',
-  'lastEvent', 'saveStatus', 'help', 'sound', 'dialog', 'dialogTitle', 'dialogBody',
-  'dialogDismiss', 'dialogConfirm'
-].map(id => [id, byId(id)]));
+  'balance', 'rate', 'power', 'cores', 'sectorIndex', 'sectorTitle', 'depth', 'cave', 'effects', 'vein', 'veinLabel',
+  'combo', 'chainBar', 'floatLayer', 'mine', 'pulse', 'chargeBar', 'chargeValue', 'facilities', 'exploration',
+  'facilitiesTab', 'explorationTab', 'missionText', 'missionCount', 'missionBar', 'total', 'lastEvent',
+  'saveStatus', 'help', 'sound', 'dialog', 'dialogTitle', 'dialogBody', 'dialogDismiss', 'dialogConfirm'
+].map(id => [id, document.getElementById(id)]));
 
-function emptySave(stars = 0, sound = false, now = Date.now()) {
-  return {
-    balance: 0, total: 0, sector: 0, deepest: 0, stars, sound, savedAt: now,
-    levels: Object.fromEntries(upgrades.map(upgrade => [upgrade.id, 0]))
-  };
-}
-
-function validNumber(value, fallback = 0) {
-  return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : fallback;
-}
-
-function readSave(now) {
-  const fresh = emptySave(0, false, now);
-  try {
-    const data = JSON.parse(localStorage.getItem(SAVE_KEY));
-    if (!data || typeof data !== 'object') return fresh;
-    fresh.total = validNumber(data.total);
-    fresh.balance = Math.min(fresh.total, validNumber(data.balance));
-    fresh.stars = Math.min(1e9, Math.floor(validNumber(data.stars)));
-    fresh.sound = data.sound === true;
-    fresh.savedAt = Math.min(now, validNumber(data.savedAt, now));
-    const highest = unlockedSector(fresh.total);
-    fresh.sector = Math.min(highest, Math.floor(validNumber(data.sector)));
-    fresh.deepest = Math.min(highest, Math.max(fresh.sector, Math.floor(validNumber(data.deepest))));
-    for (const upgrade of upgrades) {
-      fresh.levels[upgrade.id] = Math.min(MAX_LEVEL, Math.floor(validNumber(data.levels?.[upgrade.id])));
-    }
-  } catch {
-    // A browser can block storage, and a save can be unreadable. A fresh run still works.
-  }
-  return fresh;
-}
-
-const started = Date.now();
-let state = readSave(started);
-let lastTick = state.savedAt;
-let lastSave = started;
-let dirty = false;
-let storageFailed = null;
-let selectedTab = 'facilities';
-let scene;
-let bursts = [];
-let lastFrame = 0;
-let pressTimer;
-let audio;
+const number = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 1 });
+const exact = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 0 });
 const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const standardNumber = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 2 });
-const integerNumber = new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 0 });
+const visual = Art.effects(ui.effects);
+const start = Date.now();
+const loaded = readSave(start);
+let state = loaded.state;
+let lastTick = state.savedAt;
+let lastSave = start;
+let dirty = false;
+let storageFailed;
+let selectedTab = 'facilities';
+let activeSlot = 1;
+let chain = 0;
+let chainUntil = 0;
+let lastHit = -Infinity;
+let holdUntil = Infinity;
+let holding = null;
+let lastFrame = -Infinity;
+let lastInterface = -Infinity;
+let baseScene;
+let blocks = [];
+let audio;
+let impactNoise;
 
-function format(value) {
-  if (value >= 1e13) return value.toExponential(2);
-  if (value >= 1e8) return `${standardNumber.format(value / 1e8)}亿`;
-  if (value >= 1e4) return `${standardNumber.format(value / 1e4)}万`;
-  return standardNumber.format(value);
+function bounded(value, fallback = 0, ceiling = 1e30) {
+  return Number.isFinite(value) && value >= 0 ? Math.min(value, ceiling) : fallback;
 }
 
-function exact(value) {
-  return integerNumber.format(Math.floor(value));
+function whole(value, fallback = 0, ceiling = 1e30) {
+  return Math.floor(bounded(value, fallback, ceiling));
 }
 
 function unlockedSector(total) {
   return sectors.findLastIndex(sector => sector.threshold <= total);
 }
 
-function production() {
-  let manual = 1;
-  let passive = 0;
-  for (const upgrade of upgrades) {
-    manual += upgrade.click * state.levels[upgrade.id];
-    passive += upgrade.idle * state.levels[upgrade.id];
+function blank(now, cores = 0, sound = false) {
+  return {
+    balance: 0, total: 0, sector: 0, deepest: 0, cores, sound,
+    breaks: 0, pulses: 0, charge: 0, seed: 5, savedAt: now,
+    levels: Object.fromEntries(facilities.map(facility => [facility.id, 0])),
+    phases: Object.fromEntries(machines.map(machine => [machine.id, 0]))
+  };
+}
+
+function readSave(now) {
+  const clean = blank(now);
+  let migrated = false;
+  try {
+    const current = JSON.parse(localStorage.getItem(SAVE_KEY));
+    const legacy = current ? null : JSON.parse(localStorage.getItem(LEGACY_KEY));
+    const data = current || legacy;
+    if (!data || typeof data !== 'object') return { state: clean, migrated };
+    migrated = !!legacy;
+    clean.total = whole(data.total);
+    clean.balance = Math.min(clean.total, whole(data.balance));
+    const maxSector = unlockedSector(clean.total);
+    clean.sector = whole(data.sector, 0, maxSector);
+    clean.deepest = Math.max(clean.sector, whole(data.deepest, 0, maxSector));
+    clean.cores = whole(migrated ? data.stars : data.cores, 0, 1e9);
+    clean.sound = data.sound === true;
+    clean.savedAt = bounded(data.savedAt, now, now);
+    clean.breaks = whole(data.breaks, migrated ? Math.floor(clean.total / 6) : 0);
+    clean.pulses = whole(data.pulses);
+    clean.charge = whole(data.charge, 0, 100);
+    clean.seed = whole(data.seed, clean.seed, 0xffffffff);
+    if (Array.isArray(data.vein) && data.vein.length === Art.slots.length) clean.vein = data.vein;
+    for (const facility of facilities) {
+      const oldId = migrated && facility.id === 'cart' ? 'beetle' : facility.id;
+      clean.levels[facility.id] = whole(data.levels?.[oldId], 0, MAX_LEVEL);
+    }
+    for (const machine of machines) {
+      clean.phases[machine.id] = bounded(data.phases?.[machine.id], 0, .999999);
+    }
+  } catch {
+    // A damaged or unavailable browser save leaves the game playable.
   }
-  const multiplier = sectors[state.sector].boost * (1 + state.stars * .45);
-  return { click: manual * multiplier, idle: passive * multiplier };
-}
-
-function cost(upgrade) {
-  return Math.ceil(upgrade.cost * (upgrade.growth ** state.levels[upgrade.id]));
-}
-
-function setText(element, value) {
-  const text = String(value);
-  if (element.textContent !== text) element.textContent = text;
-}
-
-function announce(message) {
-  setText(ui.lastEvent, message);
-}
-
-function credit(amount) {
-  if (amount <= 0) return;
-  const previous = unlockedSector(state.total);
-  state.balance += amount;
-  state.total += amount;
-  dirty = true;
-  const current = unlockedSector(state.total);
-  if (current > previous) announce(`已发现${sectors[current].name}，在「勘探」中进入。`);
-}
-
-function settle(now, offline = false) {
-  const elapsed = Math.min(OFFLINE_LIMIT, Math.max(0, now - lastTick) / 1000);
-  lastTick = now;
-  const earned = elapsed * production().idle;
-  credit(earned);
-  if (offline && elapsed >= 15 && earned >= 1) {
-    const minutes = Math.floor(elapsed / 60);
-    const time = minutes ? `${minutes} 分钟` : `${Math.floor(elapsed)} 秒`;
-    announce(`离开 ${time}期间，设施开采了 ${format(earned)} 苔晶。`);
-  }
+  return { state: clean, migrated };
 }
 
 function save(now = Date.now()) {
   state.savedAt = now;
   lastSave = now;
+  state.vein = blocks.map(({ type, seed, remaining }) => ({ type, seed, remaining }));
   let failed = false;
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify(state));
@@ -150,238 +132,583 @@ function save(now = Date.now()) {
   if (failed === storageFailed) return;
   storageFailed = failed;
   ui.saveStatus.toggleAttribute('data-error', failed);
-  setText(ui.saveStatus.lastElementChild, failed ? '存档不可用' : '本地存档');
+  setText(ui.saveStatus.lastElementChild, failed ? '存档不可用' : '自动存档');
 }
 
-function canvasMarkup(name) {
-  return `<canvas width="16" height="16" data-sprite="${name}" aria-hidden="true"></canvas>`;
+function format(value) {
+  if (value >= 1e12) return value.toExponential(1);
+  if (value >= 1e8) return number.format(value / 1e8) + '亿';
+  if (value >= 1e4) return number.format(value / 1e4) + '万';
+  return number.format(value);
 }
 
-function makeRow(sprite, name, details, action, classes = 'buy') {
+function setText(element, value) {
+  const string = String(value);
+  if (element.textContent !== string) element.textContent = string;
+}
+
+function announce(message) {
+  setText(ui.lastEvent, message);
+}
+
+function multiplier() {
+  return sectors[state.sector].boost * (1 + state.cores * .45);
+}
+
+function power() {
+  return 1 + state.levels.pick;
+}
+
+function price(facility) {
+  return Math.ceil(facility.cost * facility.growth ** state.levels[facility.id]);
+}
+
+function machineYield(machine) {
+  return Math.round(machine.output * state.levels[machine.id] * multiplier());
+}
+
+function credit(amount) {
+  if (amount <= 0) return;
+  const prior = unlockedSector(state.total);
+  state.total += amount;
+  state.balance += amount;
+  dirty = true;
+  const current = unlockedSector(state.total);
+  if (current > prior) announce('已发现' + sectors[current].name + '，前往「矿层地图」进入。');
+}
+
+function tickMachines(now, offline = false) {
+  const seconds = Math.min(OFFLINE_LIMIT, Math.max(0, now - lastTick) / 1000);
+  lastTick = now;
+  if (!seconds) return 0;
+  let income = 0;
+  for (const machine of machines) {
+    if (!state.levels[machine.id]) continue;
+    const cycles = state.phases[machine.id] + seconds / machine.cycle;
+    const completed = Math.floor(cycles);
+    state.phases[machine.id] = cycles - completed;
+    dirty = true;
+    if (!completed) continue;
+    const amount = completed * machineYield(machine);
+    income += amount;
+    if (!offline) showMachinePayout(machine.id, amount);
+  }
+  credit(income);
+  if (offline && seconds >= 15 && income >= 1) {
+    const time = seconds >= 60 ? Math.floor(seconds / 60) + ' 分钟' : Math.floor(seconds) + ' 秒';
+    announce('离开 ' + time + '期间，设备运回 ' + format(income) + ' 矿料。');
+  }
+  return income;
+}
+
+function newBlock(index, initialType) {
+  state.seed = (Math.imul(state.seed, 1664525) + 1013904223) >>> 0;
+  const deck = sectors[state.sector].deck;
+  const type = initialType ?? deck[(state.seed >>> 17) % deck.length];
+  const hardness = minerals[type].health + Math.floor(state.sector / 2);
+  return {
+    index, seed: state.seed, type, hardness, remaining: hardness, nextAt: 0
+  };
+}
+
+function renderBlock(index) {
+  const block = blocks[index];
+  const button = blockButtons[index];
+  const name = minerals[block.type].name;
+  button.toggleAttribute('data-active', index === activeSlot);
+  button.toggleAttribute('data-broken', block.nextAt > 0);
+  button.setAttribute('aria-label', name + '，' + (block.nextAt ? '补充中' : '耐久 ' + block.remaining + ' / ' + block.hardness));
+  if (!block.nextAt) Art.tile(button.firstElementChild, block.type, block.seed, 1 - block.remaining / block.hardness);
+}
+
+function renderVeinLabel() {
+  const block = blocks[activeSlot];
+  const mineral = minerals[block.type];
+  const label = mineral.name + (block.nextAt ? ' · 露出下一块矿石' : ' · 耐久 ' + block.remaining + ' / ' + block.hardness);
+  setText(ui.veinLabel, label);
+}
+
+function changeSlot(index) {
+  if (index === activeSlot) return;
+  const prior = activeSlot;
+  activeSlot = index;
+  renderBlock(prior);
+  renderBlock(index);
+  renderVeinLabel();
+}
+
+function resetMine(restoreVein = false) {
+  baseScene = Art.prepareScene(state.sector);
+  activeSlot = 1;
+  chain = 0;
+  chainUntil = 0;
+  lastHit = -Infinity;
+  visual.clear();
+  ui.floatLayer.replaceChildren();
+  const firstTypes = state.sector === 0 && !state.breaks ? ['stone', 'coal', 'copper'] : [];
+  blocks = Art.slots.map((_, index) => {
+    const previous = restoreVein && state.vein?.[index];
+    if (!previous || !Object.hasOwn(minerals, previous.type) || !whole(previous.remaining)) {
+      return newBlock(index, firstTypes[index]);
+    }
+    const hardness = minerals[previous.type].health + Math.floor(state.sector / 2);
+    return { index, type: previous.type, seed: whole(previous.seed, 1, 0xffffffff), hardness, remaining: Math.min(hardness, whole(previous.remaining)), nextAt: 0 };
+  });
+  blocks.forEach(block => renderBlock(block.index));
+  const sector = sectors[state.sector];
+  setText(ui.sectorIndex, sector.subtitle);
+  setText(ui.sectorTitle, sector.name);
+  setText(ui.depth, '−' + sector.depth + ' m');
+  renderVeinLabel();
+  renderScene();
+}
+
+function replenish(now) {
+  for (const block of blocks) {
+    if (!block.nextAt || block.nextAt > now) continue;
+    blocks[block.index] = newBlock(block.index);
+    renderBlock(block.index);
+    if (block.index === activeSlot) renderVeinLabel();
+  }
+}
+
+function floatAt(label, x, y, kind = '') {
+  const node = document.createElement('span');
+  node.className = 'float-label' + (kind ? ' ' + kind : '');
+  node.style.left = 100 * x / 480 + '%';
+  node.style.top = 100 * y / 270 + '%';
+  node.textContent = label;
+  node.addEventListener('animationend', () => node.remove(), { once: true });
+  if (ui.floatLayer.childElementCount >= 20) ui.floatLayer.firstElementChild.remove();
+  ui.floatLayer.append(node);
+}
+
+function restartAnimation(element, name) {
+  if (motion.matches) return;
+  element.classList.remove(name);
+  void element.offsetWidth;
+  element.classList.add(name);
+}
+
+function showMachinePayout(id, amount) {
+  const now = performance.now();
+  const point = Art.machinePoint(id, id === 'cart' ? 0 : 1);
+  const x = point.x + (id === 'drill' ? 41 : 16);
+  const y = point.y - 7;
+  if (!motion.matches) {
+    const tint = id === 'forge' ? Art.ores.amber : id === 'drill' ? Art.ores.copper : Art.ores.jade;
+    visual.chips(x, y + 5, tint, 12, .72, now);
+    visual.ring(x, y + 13, tint[3], 27, now);
+  }
+  floatAt('+' + format(amount), x, y, 'machine');
+}
+
+function breakBlock(block, now, blast = false) {
+  const data = minerals[block.type];
+  const x = Art.slots[block.index];
+  chain = Math.min(MAX_CHAIN, now < chainUntil ? chain + 1 : 1);
+  chainUntil = now + COMBO_LENGTH;
+  const surge = chain === 4 || chain === MAX_CHAIN;
+  const streak = 1 + (chain - 1) * .14 + (surge ? .31 : 0);
+  const amount = Math.ceil(data.value * streak * multiplier() * (1 + state.levels.forge * .09));
+  block.nextAt = now + 155;
+  block.remaining = 0;
+  state.breaks += 1;
+  credit(amount);
+  if (!blast) {
+    state.charge = Math.min(100, state.charge + (data.rare ? 31 : 23));
+    if (state.charge === 100) announce('爆脉冲击已充能，可一次炸开整排矿块。');
+  }
+  renderBlock(block.index);
+  if (!motion.matches) {
+    const tint = Art.ores[block.type];
+    visual.chips(x, 185, tint, blast ? 30 : surge || data.rare ? 42 : 22, blast ? 1.7 : 1.26, now);
+    visual.chips(x, 187, Art.ores.stone, 10, 1, now);
+    if (surge || data.rare) visual.ring(x, 183, tint[4], 48, now);
+  }
+  if (!blast) {
+    floatAt((surge ? '暴击 ' : '') + '+' + format(amount), x, 160, surge || data.rare ? 'rare' : '');
+    play(surge || data.rare ? 'rare' : 'break');
+  }
+  return amount;
+}
+
+function strike(now = performance.now()) {
+  if (ui.dialog.open || now < lastHit + 105) return;
+  replenish(now);
+  const block = blocks[activeSlot];
+  if (block.nextAt) return;
+  lastHit = now;
+  const x = Art.slots[activeSlot];
+  const level = state.levels.pick;
+  if (!motion.matches) visual.swing(x, 181, level, now);
+  restartAnimation(blockButtons[activeSlot], 'hit');
+  block.remaining = Math.max(0, block.remaining - power());
+  dirty = true;
+  if (block.remaining === 0) {
+    breakBlock(block, now);
+    restartAnimation(ui.balance, 'gain');
+  } else {
+    if (!motion.matches) visual.chips(x, 184, Art.ores[block.type], 8, .68, now);
+    renderBlock(activeSlot);
+    play('hit');
+  }
+  renderVeinLabel();
+  render();
+}
+
+function pulse(now = performance.now()) {
+  if (state.charge < 100 || ui.dialog.open) return;
+  replenish(now);
+  const targets = blocks.filter(block => !block.nextAt);
+  if (!targets.length) return;
+  state.charge = 0;
+  state.pulses += 1;
+  const amount = targets.reduce((sum, block) => sum + breakBlock(block, now, true), 0);
+  if (!motion.matches) {
+    visual.ring(240, 185, '#adf1c5', 202, now);
+    visual.ring(240, 185, '#f5d783', 142, now);
+    visual.chips(240, 178, Art.ores.jade, 38, 2, now);
+  }
+  floatAt('爆脉 +' + format(amount), 240, 141, 'blast');
+  restartAnimation(ui.balance, 'gain');
+  announce('冲击波破开 ' + targets.length + ' 块矿石，收获 ' + format(amount) + ' 矿料。');
+  play('pulse');
+  renderVeinLabel();
+  render();
+}
+
+function beginHold(source, index = activeSlot) {
+  if (holding !== null) return;
+  changeSlot(index);
+  const now = performance.now();
+  holding = source;
+  holdUntil = now + HOLD_INTERVAL;
+  ui.mine.classList.add('pressed');
+  strike(now);
+}
+
+function endHold(source = holding) {
+  if (holding !== source) return;
+  holding = null;
+  holdUntil = Infinity;
+  ui.mine.classList.remove('pressed');
+}
+
+function bindMiningButton(button, index) {
+  button.addEventListener('pointerdown', event => {
+    if (!event.isPrimary || event.button !== 0 || holding !== null) return;
+    button.setPointerCapture(event.pointerId);
+    beginHold(event.pointerId, index);
+  });
+  for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) {
+    button.addEventListener(event, pointer => endHold(pointer.pointerId));
+  }
+  button.addEventListener('click', event => {
+    if (event.detail !== 0) return;
+    if (index !== undefined) changeSlot(index);
+    strike();
+  });
+}
+
+const blockButtons = Art.slots.map((x, index) => {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'ore-tile';
+  button.style.setProperty('--slot', 100 * x / 480 + '%');
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 48;
+  canvas.setAttribute('aria-hidden', 'true');
+  button.append(canvas);
+  bindMiningButton(button, index);
+  ui.vein.append(button);
+  return button;
+});
+
+function makeRow(icon, title, className = '') {
   const row = document.createElement('article');
   row.className = 'upgrade';
-  row.innerHTML = `<span class="upgrade-icon">${canvasMarkup(sprite)}</span><div><h3>${name}</h3><p>${details}</p></div><button type="button" class="${classes}">${action}</button>`;
-  return { row, description: row.querySelector('p'), button: row.querySelector('button') };
+  row.innerHTML = '<span class="upgrade-icon"><canvas width="32" height="32" aria-hidden="true"></canvas><span class="upgrade-meter" aria-hidden="true"><span></span></span></span><div><h3></h3><p></p></div><button type="button" class="buy ' + className + '"></button>';
+  setText(row.querySelector('h3'), title);
+  const preview = row.querySelector('canvas');
+  Art.icon(preview, icon);
+  return { row, preview, description: row.querySelector('p'), button: row.querySelector('button'), meter: row.querySelector('.upgrade-meter > span') };
 }
 
-const upgradeRows = upgrades.map(upgrade => {
-  const entry = makeRow(upgrade.id, upgrade.title, '', `${canvasMarkup('crystal')}<span></span>`);
-  entry.amount = entry.button.lastElementChild;
-  entry.icon = entry.button.firstElementChild;
-  entry.button.addEventListener('click', () => buy(upgrade));
+const workshop = facilities.map(facility => {
+  const entry = makeRow(facility.id, facility.name);
+  entry.button.addEventListener('click', () => buy(facility));
   ui.facilities.append(entry.row);
   return entry;
 });
 
-const sectorRows = sectors.map((sector, index) => {
-  const entry = makeRow('depth', sector.name, `−${sector.depth} m`, '', 'buy sector-action');
-  entry.button.addEventListener('click', () => enterSector(index));
+const map = sectors.map((sector, index) => {
+  const entry = makeRow('map', sector.name, 'sector-action');
+  entry.button.addEventListener('click', () => enter(index));
   ui.exploration.append(entry.row);
   return entry;
 });
 
-const beacon = makeRow('beacon', '地心信标', '', '点亮', 'beacon-button');
+const beacon = makeRow('core', '基岩信标', 'sector-action beacon-button');
 beacon.button.addEventListener('click', () => {
-  if (!canLightBeacon()) return;
-  showDialog('点亮地心信标', [
-    `这次会获得 ${exact(beaconReward())} 枚星屑。每枚永久增加 45% 的手动和自动产量。`,
-    '点亮后会从微光洞穴开始新一轮。库存、设施和矿层进度将重置，星屑会保留。'
+  if (!canRebuild()) return;
+  showDialog('点亮基岩信标', [
+    '本次获得 ' + exact.format(coreReward()) + ' 枚基岩晶核。每枚晶核使开采和设备产量永久增加 45%。',
+    '点亮信标后，矿料、设备和矿层进度会重置，从草岩矿口开始新一轮。'
   ], true);
 });
 ui.exploration.append(beacon.row);
-document.querySelectorAll('canvas[data-sprite]').forEach(canvas => Art.sprite(canvas));
 
-function beaconReward() {
-  return Math.floor(Math.sqrt(state.total / 12000));
+function buy(facility) {
+  const now = Date.now();
+  tickMachines(now);
+  const cost = price(facility);
+  const level = state.levels[facility.id];
+  if (state.total < facility.threshold || state.balance < cost || level >= MAX_LEVEL) return;
+  state.balance -= cost;
+  state.levels[facility.id] += 1;
+  if (facility.id === 'pick') {
+    Art.icon(workshop[0].preview, 'pick', state.levels.pick);
+    Art.icon(ui.power.closest('.resource').querySelector('canvas'), 'pick', state.levels.pick);
+  } else {
+    const point = Art.machinePoint(facility.id, state.phases[facility.id]);
+    if (!motion.matches) {
+      const time = performance.now();
+      visual.ring(point.x + 12, point.y + 10, '#c6ec9a', 53, time);
+      visual.chips(point.x + 12, point.y + 10, Art.ores.jade, 26, 1, time);
+    }
+    floatAt('Lv.' + state.levels[facility.id] + ' 启动', point.x + 16, point.y - 7, 'machine');
+  }
+  announce(facility.name + '升至 Lv.' + state.levels[facility.id] + (level || !facility.cycle ? '。' : '，开始运转。'));
+  play('buy');
+  save(now);
+  renderScene();
+  render();
+  ui.mine.focus({ preventScroll: true, focusVisible: false });
 }
 
-function canLightBeacon() {
+function enter(index) {
+  const now = Date.now();
+  tickMachines(now);
+  if (state.total < sectors[index].threshold || state.sector === index) return;
+  endHold();
+  state.sector = index;
+  state.deepest = Math.max(state.deepest, index);
+  resetMine();
+  announce('已进入' + sectors[index].name + '。');
+  play('buy');
+  save(now);
+  render();
+}
+
+function coreReward() {
+  return Math.floor(Math.sqrt(state.total / (BEACON_TARGET / 2)));
+}
+
+function canRebuild() {
   return state.deepest === sectors.length - 1 && state.total >= BEACON_TARGET;
 }
 
-function renderFacilities() {
-  upgrades.forEach((upgrade, index) => {
-    const { row, description, button, amount, icon } = upgradeRows[index];
-    const level = state.levels[upgrade.id];
-    const locked = state.total < upgrade.threshold;
+function rebuild() {
+  if (ui.dialog.returnValue !== 'confirm' || !canRebuild()) return;
+  const now = Date.now();
+  tickMachines(now);
+  const reward = coreReward();
+  state = blank(now, Math.min(1e9, state.cores + reward), state.sound);
+  lastTick = now;
+  Art.icon(workshop[0].preview, 'pick');
+  Art.icon(ui.power.closest('.resource').querySelector('canvas'), 'pick');
+  resetMine();
+  selectTab('facilities');
+  save(now);
+  announce('信标已点亮，获得 ' + exact.format(reward) + ' 枚晶核。');
+  play('pulse');
+  ui.mine.focus();
+}
+
+function showDialog(title, paragraphs, confirm = false) {
+  endHold();
+  ui.dialog.returnValue = '';
+  setText(ui.dialogTitle, title);
+  ui.dialogBody.replaceChildren(...paragraphs.map(text => {
+    const p = document.createElement('p');
+    p.textContent = text;
+    return p;
+  }));
+  setText(ui.dialogDismiss, confirm ? '继续挖矿' : '知道了');
+  ui.dialogConfirm.hidden = !confirm;
+  ui.dialog.showModal();
+}
+
+function renderWorkshop() {
+  facilities.forEach((facility, index) => {
+    const { row, description, button, meter } = workshop[index];
+    const level = state.levels[facility.id];
+    const running = !!facility.cycle && level > 0;
+    const locked = state.total < facility.threshold && level === 0;
     const capped = level >= MAX_LEVEL;
-    const price = cost(upgrade);
+    const cost = price(facility);
     row.toggleAttribute('data-locked', locked);
-    button.toggleAttribute('data-locked', locked);
-    button.disabled = locked || capped || state.balance < price;
-    setText(description, locked ? `累计 ${exact(upgrade.threshold)} 解锁` : `${upgrade.detail} · Lv.${level}`);
-    setText(amount, capped ? '满级' : locked ? '' : format(price));
-    icon.hidden = capped;
-    const iconName = locked ? 'lock' : 'crystal';
-    if (icon.dataset.sprite !== iconName) {
-      icon.dataset.sprite = iconName;
-      Art.sprite(icon);
-    }
-    button.setAttribute('aria-label', locked ? `${upgrade.title}尚未解锁` : capped ? `${upgrade.title}已满级` : `升级${upgrade.title}，花费 ${exact(price)} 苔晶`);
+    row.toggleAttribute('data-running', running);
+    button.disabled = locked || capped || state.balance < cost;
+    setText(button, locked ? '未解锁' : capped ? '满级' : format(cost));
+    button.setAttribute('aria-label', locked ? facility.name + '尚未解锁' : capped ? facility.name + '已满级' : '升级' + facility.name + '，花费 ' + exact.format(cost) + ' 矿料');
+    const effect = running ? '+' + format(machineYield(facility)) + ' / ' + facility.cycle + ' 秒' + (facility.id === 'forge' ? ' · 手挖 +' + level * 9 + '%' : '') : facility.description;
+    const activation = locked ? ' · 累计 ' + exact.format(facility.threshold) + ' 解锁' : ' · Lv.' + level;
+    setText(description, effect + activation);
+    if (running) meter.style.width = state.phases[facility.id] * 100 + '%';
   });
 }
 
-function renderExploration() {
+function renderMap() {
   sectors.forEach((sector, index) => {
-    const { row, description, button } = sectorRows[index];
+    const { row, description, button } = map[index];
     const locked = state.total < sector.threshold;
     row.toggleAttribute('data-locked', locked);
     button.disabled = locked || state.sector === index;
-    setText(description, locked ? `−${sector.depth} m · 累计 ${exact(sector.threshold)} 解锁` : `−${sector.depth} m · 产量 ×${sector.boost}`);
     setText(button, locked ? '未解锁' : state.sector === index ? '所在矿层' : '进入');
-    button.setAttribute('aria-label', `${sector.name}，${button.textContent}`);
+    button.setAttribute('aria-label', sector.name + '，' + button.textContent);
+    setText(description, '−' + sector.depth + ' m · ' + (locked ? '累计 ' + exact.format(sector.threshold) + ' 解锁' : '产量 ×' + sector.boost));
   });
-  beacon.button.disabled = !canLightBeacon();
-  setText(beacon.description, canLightBeacon() ? `可获得 ${exact(beaconReward())} 枚永久星屑` : `到达地心遗迹并累计 ${exact(BEACON_TARGET)}`);
-}
-
-function currentMission() {
-  const steps = [
-    [12, '累计开采 12 苔晶，为第一把精炼矿镐攒钱'],
-    [25, '累计开采 25 苔晶，解锁矿工甲虫'],
-    [75, '累计开采 75 苔晶，发现紫晶回廊', 1],
-    [170, '累计开采 170 苔晶，解锁共振钻机'],
-    [450, '累计开采 450 苔晶，发现琥珀断层', 2],
-    [1100, '累计开采 1,100 苔晶，解锁地热熔炉'],
-    [2400, '累计开采 2,400 苔晶，发现荧菌深井', 3],
-    [12000, '累计开采 12,000 苔晶，发现地心遗迹', 4],
-    [BEACON_TARGET, '累计开采 24,000 苔晶，为地心信标充能']
-  ];
-  for (const [target, text, sector] of steps) {
-    if (state.total < target) return { target, text };
-    if (sector !== undefined && state.deepest < sector) {
-      return { target, text: `在「勘探」中进入${sectors[sector].name}` };
-    }
-  }
-  return { target: BEACON_TARGET, text: `在「勘探」中点亮信标，领取 ${exact(beaconReward())} 枚星屑` };
-}
-
-function renderMission() {
-  const { target, text } = currentMission();
-  const progress = Math.min(state.total, target);
-  setText(ui.missionText, text);
-  setText(ui.missionCount, `${exact(progress)} / ${exact(target)}`);
-  ui.missionBar.setAttribute('aria-valuemax', target);
-  ui.missionBar.setAttribute('aria-valuenow', Math.floor(progress));
-  ui.missionBar.firstElementChild.style.width = `${100 * progress / target}%`;
-}
-
-function render() {
-  const { click, idle } = production();
-  setText(ui.balance, format(Math.floor(state.balance)));
-  setText(ui.stars, format(state.stars));
-  setText(ui.mineYield, `+${format(click)}`);
-  setText(ui.total, format(Math.floor(state.total)));
-  ui.rate.firstChild.nodeValue = `${format(idle)} `;
-  ui.power.firstChild.nodeValue = `${format(click)} `;
-  renderMission();
-  if (selectedTab === 'facilities') renderFacilities();
-  else renderExploration();
-}
-
-function updateScene() {
-  const sector = sectors[state.sector];
-  setText(ui.sectorTitle, sector.name);
-  setText(ui.sectorIndex, `矿层 ${String(state.sector + 1).padStart(2, '0')}`);
-  setText(ui.depth, `−${sector.depth} m`);
-  setText(ui.sectorFlavor, sector.flavor);
-  scene = Art.prepareScene(ui.cave, state.sector, state.levels);
-  bursts = [];
-  Art.drawFrame(ui.cave, scene, 0, bursts);
-}
-
-function draw(time) {
-  if (!motion.matches && time - lastFrame >= 50) {
-    bursts = bursts.filter(burst => time - burst.time < 560);
-    Art.drawFrame(ui.cave, scene, time, bursts);
-    lastFrame = time;
-  }
-  requestAnimationFrame(draw);
-}
-
-function mine() {
-  settle(Date.now());
-  const amount = production().click;
-  credit(amount);
-  if (!motion.matches) bursts.push(Art.miningBurst(scene, performance.now()));
-  const label = document.createElement('span');
-  label.className = 'float-label';
-  label.textContent = `+${format(amount)}`;
-  label.style.left = `${46 + Math.random() * 11}%`;
-  label.style.top = `${48 + Math.random() * 12}%`;
-  label.addEventListener('animationend', () => label.remove(), { once: true });
-  if (ui.floatLayer.childElementCount >= 20) ui.floatLayer.firstElementChild.remove();
-  ui.floatLayer.append(label);
-  ui.mine.classList.add('pressed');
-  clearTimeout(pressTimer);
-  pressTimer = setTimeout(() => ui.mine.classList.remove('pressed'), 100);
-  playTone([233, 349], .05);
-  render();
-}
-
-function buy(upgrade) {
-  const now = Date.now();
-  settle(now);
-  const price = cost(upgrade);
-  if (state.total < upgrade.threshold || state.balance < price || state.levels[upgrade.id] >= MAX_LEVEL) return;
-  state.balance -= price;
-  state.levels[upgrade.id] += 1;
-  announce(`${upgrade.title}已升到 Lv.${state.levels[upgrade.id]}。`);
-  if (upgrade.id !== 'pick') updateScene();
-  playTone([440, 588], .085);
-  save(now);
-  render();
-}
-
-function enterSector(index) {
-  const now = Date.now();
-  settle(now);
-  if (state.total < sectors[index].threshold || state.sector === index) return;
-  state.sector = index;
-  state.deepest = Math.max(state.deepest, index);
-  announce(`已进入${sectors[index].name}。`);
-  updateScene();
-  playTone([294, 440, 587], .115);
-  save(now);
-  render();
+  beacon.button.disabled = !canRebuild();
+  setText(beacon.button, '点亮');
+  setText(beacon.description, canRebuild() ? '可获得 ' + exact.format(coreReward()) + ' 枚永久晶核' : '到达基岩穹窿并累计 ' + exact.format(BEACON_TARGET));
 }
 
 function selectTab(name) {
   selectedTab = name;
   for (const tab of ['facilities', 'exploration']) {
     const selected = name === tab;
-    ui[`${tab}Tab`].setAttribute('aria-selected', selected);
-    ui[`${tab}Tab`].tabIndex = selected ? 0 : -1;
+    ui[tab + 'Tab'].setAttribute('aria-selected', selected);
+    ui[tab + 'Tab'].tabIndex = selected ? 0 : -1;
     ui[tab].hidden = !selected;
   }
   render();
 }
 
-function showDialog(title, paragraphs, confirm = false) {
-  ui.dialog.returnValue = '';
-  setText(ui.dialogTitle, title);
-  ui.dialogBody.replaceChildren(...paragraphs.map(text => {
-    const paragraph = document.createElement('p');
-    paragraph.textContent = text;
-    return paragraph;
-  }));
-  setText(ui.dialogDismiss, confirm ? '继续开采' : '知道了');
-  ui.dialogConfirm.hidden = !confirm;
-  ui.dialog.showModal();
+function mission() {
+  if (state.breaks < 3) return ['敲开三块矿石', state.breaks, 3];
+  if (!state.levels.pick) return ['打造精钢矿镐，一击打掉更多耐久', state.balance, facilities[0].cost];
+  if (!state.levels.cart) return ['造一辆轨道矿车，开始自动运矿', state.balance, facilities[1].cost];
+  if (!state.pulses) return [state.charge < 100 ? '接着破块，为爆脉冲击充能' : '释放一次爆脉冲击', state.charge, 100];
+  for (let index = 1; index < sectors.length; index += 1) {
+    if (state.deepest >= index) continue;
+    const sector = sectors[index];
+    return [state.total < sector.threshold ? '继续采矿，发现' + sector.name : '在「矿层地图」中进入' + sector.name, state.total, sector.threshold];
+  }
+  return [canRebuild() ? '点亮基岩信标，获得永久增产的晶核' : '累计开采 ' + exact.format(BEACON_TARGET) + ' 矿料，为基岩信标充能', state.total, BEACON_TARGET];
 }
 
-function lightBeacon() {
-  if (ui.dialog.returnValue !== 'confirm' || !canLightBeacon()) return;
-  const now = Date.now();
-  settle(now);
-  const reward = beaconReward();
-  state = emptySave(Math.min(1e9, state.stars + reward), state.sound, now);
-  updateScene();
-  selectTab('facilities');
-  save(now);
-  announce(`信标点亮！获得 ${exact(reward)} 枚星屑，新一轮开采已开始。`);
-  playTone([392, 523, 659, 784], .16);
-  ui.mine.focus();
+function renderMission() {
+  const [goal, progress, target] = mission();
+  const filled = Math.min(progress, target);
+  setText(ui.missionText, goal);
+  setText(ui.missionCount, exact.format(filled) + ' / ' + exact.format(target));
+  ui.missionBar.setAttribute('aria-valuemax', target);
+  ui.missionBar.setAttribute('aria-valuenow', Math.floor(filled));
+  ui.missionBar.firstElementChild.style.width = 100 * filled / target + '%';
+}
+
+function renderCombo(now = performance.now()) {
+  const remaining = Math.max(0, (chainUntil - now) / COMBO_LENGTH);
+  const count = remaining ? chain : 0;
+  setText(ui.combo, '连击 ×' + count);
+  ui.combo.toggleAttribute('data-hot', count >= 4);
+  ui.chainBar.style.width = 100 * remaining + '%';
+}
+
+function render() {
+  setText(ui.balance, format(state.balance));
+  setText(ui.total, format(state.total));
+  setText(ui.rate, format(machines.reduce((sum, machine) => sum + machineYield(machine) / machine.cycle, 0)));
+  setText(ui.power, power());
+  setText(ui.cores, format(state.cores));
+  setText(ui.chargeValue, state.charge + '%');
+  ui.chargeBar.style.width = state.charge + '%';
+  ui.pulse.toggleAttribute('data-ready', state.charge === 100);
+  ui.pulse.setAttribute('aria-disabled', state.charge !== 100);
+  ui.pulse.setAttribute('aria-label', '爆脉冲击，能量 ' + state.charge + '%');
+  renderCombo();
+  renderMission();
+  if (selectedTab === 'facilities') renderWorkshop();
+  else renderMap();
+}
+
+function renderScene() {
+  Art.scene(ui.cave, baseScene, state.levels, state.phases, motion.matches);
+}
+
+function animation(now) {
+  if (now - lastFrame >= 32) {
+    lastFrame = now;
+    const current = Date.now();
+    tickMachines(current);
+    replenish(now);
+    if (holding !== null && now >= holdUntil) {
+      holdUntil = now + HOLD_INTERVAL;
+      strike(now);
+    }
+    renderScene();
+    if (!motion.matches) visual.draw(now);
+    renderCombo(now);
+    if (dirty && current - lastSave >= 5000) save(current);
+    if (now - lastInterface >= 120) {
+      render();
+      lastInterface = now;
+    }
+  }
+  requestAnimationFrame(animation);
+}
+
+const notes = {
+  hit: { tones: [164], duration: .048, volume: .036, noise: .035 },
+  break: { tones: [207, 311], duration: .065, volume: .048, noise: .09 },
+  rare: { tones: [330, 495, 659], duration: .091, volume: .055, noise: .09 },
+  pulse: { tones: [110, 220, 330, 523, 784], duration: .135, volume: .08, noise: .16 },
+  buy: { tones: [311, 415, 622], duration: .084, volume: .05, noise: 0 }
+};
+
+function play(kind) {
+  if (!state.sound || !window.AudioContext) return;
+  try {
+    audio ||= new AudioContext();
+    if (audio.state === 'suspended') audio.resume().catch(() => {});
+    const attack = notes[kind];
+    const startAt = audio.currentTime;
+    attack.tones.forEach((pitch, index) => {
+      const at = startAt + index * attack.duration * .6;
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+      oscillator.frequency.value = pitch;
+      oscillator.type = kind === 'hit' ? 'square' : 'triangle';
+      gain.gain.setValueAtTime(.0001, at);
+      gain.gain.exponentialRampToValueAtTime(attack.volume, at + .006);
+      gain.gain.exponentialRampToValueAtTime(.0001, at + attack.duration);
+      oscillator.connect(gain).connect(audio.destination);
+      oscillator.start(at);
+      oscillator.stop(at + attack.duration);
+    });
+    if (attack.noise) {
+      if (!impactNoise) {
+        impactNoise = audio.createBuffer(1, Math.floor(audio.sampleRate * .27), audio.sampleRate);
+        const samples = impactNoise.getChannelData(0);
+        for (let i = 0; i < samples.length; i += 1) samples[i] = Math.random() * 2 - 1;
+      }
+      const debris = audio.createBufferSource();
+      const gain = audio.createGain();
+      const lowpass = audio.createBiquadFilter();
+      debris.buffer = impactNoise;
+      lowpass.type = 'lowpass';
+      lowpass.frequency.value = kind === 'hit' ? 980 : 460;
+      gain.gain.setValueAtTime(attack.noise, startAt);
+      gain.gain.exponentialRampToValueAtTime(.0001, startAt + attack.duration * 1.2);
+      debris.connect(lowpass).connect(gain).connect(audio.destination);
+      debris.start(startAt);
+      debris.stop(startAt + attack.duration * 1.2);
+    }
+  } catch {
+    // Mining works in browsers that block sound.
+  }
 }
 
 function renderSound() {
@@ -389,85 +716,78 @@ function renderSound() {
   ui.sound.setAttribute('aria-pressed', state.sound);
   ui.sound.setAttribute('aria-label', label);
   ui.sound.title = label;
-  Art.sprite(ui.sound.firstElementChild, state.sound ? 'sound' : 'mute');
+  Art.icon(ui.sound.firstElementChild, state.sound ? 'sound' : 'mute');
 }
 
-function playTone(notes, duration) {
-  if (!state.sound || !window.AudioContext) return;
-  try {
-    audio ||= new AudioContext();
-    if (audio.state === 'suspended') audio.resume().catch(() => {});
-    const start = audio.currentTime;
-    notes.forEach((pitch, index) => {
-      const oscillator = audio.createOscillator();
-      const volume = audio.createGain();
-      const time = start + index * duration * .84;
-      oscillator.type = 'triangle';
-      oscillator.frequency.value = pitch;
-      volume.gain.setValueAtTime(.0001, time);
-      volume.gain.exponentialRampToValueAtTime(.055, time + .009);
-      volume.gain.exponentialRampToValueAtTime(.0001, time + duration);
-      oscillator.connect(volume).connect(audio.destination);
-      oscillator.start(time);
-      oscillator.stop(time + duration);
-    });
-  } catch {
-    // Audio availability does not affect mining.
-  }
-}
-
-ui.mine.addEventListener('click', mine);
-ui.help.addEventListener('click', () => showDialog('矿站手册', [
-  '点击「开采苔晶」或按空格来开采。把苔晶花在设施上，提高每次开采量或每秒产量。',
-  '累计产量达到目标后，「勘探」会解锁新矿层。进入深层可提高所有产量。',
-  '在地心遗迹点亮信标可以拿到永久增产的星屑。进度保存在当前浏览器，离开游戏时最多累计 8 小时自动产量。'
-]));
+document.querySelectorAll('canvas[data-icon]').forEach(canvas => Art.icon(canvas));
+bindMiningButton(ui.mine);
+ui.pulse.addEventListener('click', () => pulse());
 ui.sound.addEventListener('click', () => {
-  settle(Date.now());
   state.sound = !state.sound;
   renderSound();
-  playTone([392, 523], .08);
-  save();
+  play('buy');
+  const now = Date.now();
+  tickMachines(now);
+  save(now);
 });
-ui.dialog.addEventListener('close', lightBeacon);
+ui.help.addEventListener('click', () => showDialog('矿镇手册', [
+  '点击矿块可选中并敲击。按住矿块、挥镐按钮或空格可以连续开采，数字键 1–3 切换目标。',
+  '连续破块可叠加连击和充能。能量满时按 F 或点「爆脉冲击」，能炸开当前整排矿块。',
+  '矿车、钻机和熔炉会在画面中按各自周期运转。矿镇可离线工作 8 小时，进度在当前浏览器自动保存。'
+]));
+ui.dialog.addEventListener('close', rebuild);
 for (const name of ['facilities', 'exploration']) {
-  ui[`${name}Tab`].addEventListener('click', () => selectTab(name));
-  ui[`${name}Tab`].addEventListener('keydown', event => {
+  const tab = ui[name + 'Tab'];
+  tab.addEventListener('click', () => selectTab(name));
+  tab.addEventListener('keydown', event => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
     event.preventDefault();
     const next = event.key === 'Home' ? 'facilities' : event.key === 'End' ? 'exploration' : name === 'facilities' ? 'exploration' : 'facilities';
     selectTab(next);
-    ui[`${next}Tab`].focus();
+    ui[next + 'Tab'].focus();
   });
 }
+
 document.addEventListener('keydown', event => {
-  if (event.code !== 'Space' || event.ctrlKey || event.altKey || event.metaKey || ui.dialog.open) return;
-  if (event.target !== ui.mine && event.target.closest?.('button, input, select, textarea, a, [contenteditable]')) return;
-  event.preventDefault();
-  mine();
+  if (event.altKey || event.ctrlKey || event.metaKey || ui.dialog.open || event.target.closest?.('input,textarea,[contenteditable]')) return;
+  if (event.code === 'KeyF' && !event.repeat) {
+    event.preventDefault();
+    pulse();
+  } else if (/^Digit[1-3]$/.test(event.code) && !event.repeat) {
+    const index = Number(event.code.slice(-1)) - 1;
+    changeSlot(index);
+    if (blockButtons.includes(document.activeElement)) blockButtons[index].focus({ preventScroll: true });
+  } else if (event.code === 'Space') {
+    const focused = event.target.closest?.('button,a,[role=tab]');
+    if (focused && focused !== ui.mine && !blockButtons.includes(focused)) return;
+    event.preventDefault();
+    if (!event.repeat) beginHold('keyboard', blockButtons.includes(focused) ? blockButtons.indexOf(focused) : activeSlot);
+  }
 });
+document.addEventListener('keyup', event => {
+  if (event.code === 'Space') endHold('keyboard');
+});
+window.addEventListener('blur', () => endHold());
 document.addEventListener('visibilitychange', () => {
+  endHold();
   const now = Date.now();
-  settle(now, !document.hidden);
+  tickMachines(now, true);
   save(now);
   if (!document.hidden) render();
 });
 window.addEventListener('pagehide', () => {
   const now = Date.now();
-  settle(now);
+  tickMachines(now, true);
   save(now);
 });
+motion.addEventListener('change', () => visual.clear());
 
-settle(started, true);
-save(started);
-updateScene();
+const offlineIncome = tickMachines(start, true);
+if (loaded.migrated && !offlineIncome) announce('已继承苔光矿站的矿料、设施和晶核。');
+resetMine(true);
+Art.icon(workshop[0].preview, 'pick', state.levels.pick);
+Art.icon(ui.power.closest('.resource').querySelector('canvas'), 'pick', state.levels.pick);
 renderSound();
 render();
-requestAnimationFrame(draw);
-setInterval(() => {
-  if (document.hidden) return;
-  const now = Date.now();
-  settle(now);
-  if (dirty && now - lastSave >= 5000) save(now);
-  render();
-}, 160);
+save(start);
+requestAnimationFrame(animation);
